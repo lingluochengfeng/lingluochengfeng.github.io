@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="cache," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="SpringBoot与缓存JSR107简介JSR-107缓存规范（使用较少）、Spring缓存抽象、整合Redis  CachingProvider：定义了创建、配置、获取、管理和控制多个CacheManager。一个应用可以在运行期间访问多个CachingProvider CacheManager：定义了创建、配置、获取、管理和控制多个唯一命名的Cache，这些Cache存在于CacheMana">
+<meta name="keywords" content="cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot与缓存">
+<meta property="og:url" content="http://blog.letmefly.cc/2019/08/10/SpringBoot与缓存/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="SpringBoot与缓存JSR107简介JSR-107缓存规范（使用较少）、Spring缓存抽象、整合Redis  CachingProvider：定义了创建、配置、获取、管理和控制多个CacheManager。一个应用可以在运行期间访问多个CachingProvider CacheManager：定义了创建、配置、获取、管理和控制多个唯一命名的Cache，这些Cache存在于CacheMana">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-15T03:29:29.592Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot与缓存">
+<meta name="twitter:description" content="SpringBoot与缓存JSR107简介JSR-107缓存规范（使用较少）、Spring缓存抽象、整合Redis  CachingProvider：定义了创建、配置、获取、管理和控制多个CacheManager。一个应用可以在运行期间访问多个CachingProvider CacheManager：定义了创建、配置、获取、管理和控制多个唯一命名的Cache，这些Cache存在于CacheMana">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2019/08/10/SpringBoot与缓存/"/>
+
+
+
+
+
+  <title>SpringBoot与缓存 | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2019/08/10/SpringBoot与缓存/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot与缓存</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-10T19:15:15+08:00">
+                2019-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SpringBoot与缓存"><a href="#SpringBoot与缓存" class="headerlink" title="SpringBoot与缓存"></a>SpringBoot与缓存</h1><h2 id="JSR107简介"><a href="#JSR107简介" class="headerlink" title="JSR107简介"></a>JSR107简介</h2><p>JSR-107缓存规范（使用较少）、Spring缓存抽象、整合Redis</p>
+<ul>
+<li>CachingProvider：定义了创建、配置、获取、管理和控制多个CacheManager。一个应用可以在运行期间访问多个CachingProvider</li>
+<li>CacheManager：定义了创建、配置、获取、管理和控制多个唯一命名的Cache，这些Cache存在于CacheManager的上下文中。一个CacheManager只能被一个CachingProvider所拥有。</li>
+<li>Cache是一个类似Map的数据结构并临时存储以Key为索引的值。一个Cache仅被一个CaCheManager所拥有</li>
+<li>Entry是一个存储在Cache中的key-value对</li>
+<li>Expiry：每个存储在Cache中的条目有一个定义的有效期。一旦超过这个时间，条目为过期的状态。一旦过期，条目将不可访问、更新和删除。缓存有效期可以通过ExpiryPolicy来设置。</li>
+</ul>
+<h2 id="基于Spring抽象缓存简介"><a href="#基于Spring抽象缓存简介" class="headerlink" title="基于Spring抽象缓存简介"></a>基于Spring抽象缓存简介</h2><p>Spring3.1开始定义了org.springframework.cache.Cache和org.springframework.cache.CacheManager接口来统一不同的缓存技术；并支持使用JCache(JSR-107)注解简化我们开发；</p>
+<ul>
+<li>Cache接口为缓存的组件规范定义，包含缓存的各种操作集合；</li>
+<li>Cache接口下Spring提供了各种xxxCache的实现；如RedisCache，EhCache,ConcurrentMapCache等</li>
+<li>每次调用需要缓存功能的方法时，Spring会检查指定参数的目标方法是否已经被调用过；如果有就直接从缓存中获取方法调用后的结果，如果没有就调用方法并缓存结果后返回给用户。下次调用直接从缓存中获取。</li>
+<li>使用Spring缓存抽象时我们需要关注以下两点：<ul>
+<li>1、确定方法需要被缓存以及它们的缓存策略</li>
+<li>2、从缓存中读取之前缓存存储的数据</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>注解</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cache</td>
+<td>缓存接口，定义缓存操作。实现：RedisCache、EhCache、ConcurrentMapCache等</td>
+</tr>
+<tr>
+<td>CacheManager</td>
+<td>缓存管理器，管理各种缓存(Cache)组件</td>
+</tr>
+<tr>
+<td>@Cacheable</td>
+<td>主要针对方法配置，能够根据方法的请求参数对其结果进行缓存</td>
+</tr>
+<tr>
+<td>@CacheEvict</td>
+<td>清空缓存</td>
+</tr>
+<tr>
+<td>@CachePut</td>
+<td>保证方法被调用，又希望结果被缓存</td>
+</tr>
+<tr>
+<td>@EnableCaching</td>
+<td>开启基于注解的缓存</td>
+</tr>
+<tr>
+<td>KeyGenerator</td>
+<td>缓存数据时key生成策略</td>
+</tr>
+<tr>
+<td>serialize</td>
+<td>缓存数据时value序列化策略</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基本环境搭建"><a href="#基本环境搭建" class="headerlink" title="基本环境搭建"></a>基本环境搭建</h2><p>需要引入的四个模块，web模块、spring abstract模块，mysql模块以及MyBatis模块</p>
+<p>application.yml文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    url: jdbc:mysql://localhost:3306/spring_cache</span><br><span class="line">    username: root</span><br><span class="line">    password: root</span><br><span class="line">mybatis:</span><br><span class="line">  configuration:</span><br><span class="line">#  开启驼峰命名匹配规则</span><br><span class="line">    map-underscore-to-camel-case: true</span><br><span class="line">#    driver-class-name: com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure>
+<p>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 搭建基本环境</span><br><span class="line"> * 1、导入数据库文件,创建出两张表，department和employee</span><br><span class="line"> * 2、创建JavaBean封装数据</span><br><span class="line"> * 3、整合MyBatis数据库</span><br><span class="line"> *  （1）配置数据库信息</span><br><span class="line"> *   (2)使用注解版的MyBatis：</span><br><span class="line"> *     （a）@MapperScan指定需要扫描的mapper接口所在的包</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1、新建数据表  </li>
+<li>2、创建JavaBean封装数据</li>
+</ul>
+<p>Department.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.bean;</span><br><span class="line"></span><br><span class="line">public class Department &#123;</span><br><span class="line"></span><br><span class="line">    private Integer id;</span><br><span class="line"></span><br><span class="line">    private String departmentName;</span><br><span class="line"></span><br><span class="line">    public Department() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Department(Integer id, String departmentName) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">        this.departmentName = departmentName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getDepartmentName() &#123;</span><br><span class="line">        return departmentName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setDepartmentName(String departmentName) &#123;</span><br><span class="line">        this.departmentName = departmentName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Department&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, departmentName=&apos;&quot; + departmentName + &apos;\&apos;&apos; +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>employee.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.bean;</span><br><span class="line"></span><br><span class="line">public class Employee &#123;</span><br><span class="line"></span><br><span class="line">    private Integer id;</span><br><span class="line"></span><br><span class="line">    private String lastName;</span><br><span class="line"></span><br><span class="line">    private String email;</span><br><span class="line"></span><br><span class="line">    private Integer gender; // 性别：1：男    2：女</span><br><span class="line"></span><br><span class="line">    private Integer dId;</span><br><span class="line"></span><br><span class="line">    public Employee() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Employee(Integer id, String lastName, String email, Integer gender, Integer dId) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">        this.lastName = lastName;</span><br><span class="line">        this.email = email;</span><br><span class="line">        this.gender = gender;</span><br><span class="line">        this.dId = dId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getLastName() &#123;</span><br><span class="line">        return lastName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setLastName(String lastName) &#123;</span><br><span class="line">        this.lastName = lastName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getEmail() &#123;</span><br><span class="line">        return email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setEmail(String email) &#123;</span><br><span class="line">        this.email = email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getGender() &#123;</span><br><span class="line">        return gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setGender(Integer gender) &#123;</span><br><span class="line">        this.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getdId() &#123;</span><br><span class="line">        return dId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setdId(Integer dId) &#123;</span><br><span class="line">        this.dId = dId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Employee&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, lastName=&apos;&quot; + lastName + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, email=&apos;&quot; + email + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, gender=&quot; + gender +</span><br><span class="line">                &quot;, dId=&quot; + dId +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>3、创建Mapper和Service</li>
+</ul>
+<p>DepartmentMapper.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.mapper;</span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.annotations.Mapper;</span><br><span class="line"></span><br><span class="line">@Mapper</span><br><span class="line">public interface DepartmentMapper &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DepartmentService.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>EmployeeMapper.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.mapper;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import org.apache.ibatis.annotations.*;</span><br><span class="line"></span><br><span class="line">@Mapper</span><br><span class="line">public interface EmployeeMapper &#123;</span><br><span class="line"></span><br><span class="line">    @Select(&quot;select * from employee where id=#&#123;id&#125;&quot;)</span><br><span class="line">    Employee getEmpById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Update(&quot;update employee set lastName=#&#123;lastName&#125;, email=#&#123;email&#125;,&quot; +</span><br><span class="line">            &quot;gender=#&#123;gender&#125;,d_id=#&#123;dId&#125; where id=#&#123;id&#125;&quot;)</span><br><span class="line">    void updateEmp(Employee employee);</span><br><span class="line"></span><br><span class="line">    @Delete(&quot;delete from employee where id=#&#123;id&#125;&quot;)</span><br><span class="line">    void deleteEmpById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Insert(&quot;insert into employee(lastName,email,gender,d_id) values(#&#123;lastName&#125;,&quot; +</span><br><span class="line">            &quot;#&#123;email&#125;,#&#123;gender&#125;,#&#123;dId&#125;)&quot;)</span><br><span class="line">    void insertEmployee(Employee employee);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>EmployeeService.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编写Controller</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.controller;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import com.usst.springboot01cache.service.EmployeeService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class EmployeeController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeService employeeService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp/&#123;id&#125;&quot;)</span><br><span class="line">    public Employee getEmp(@PathVariable(&quot;id&quot;) Integer id)&#123;</span><br><span class="line">        Employee emp = employeeService.getEmp(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主启动程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache;</span><br><span class="line"></span><br><span class="line">import org.mybatis.spring.annotation.MapperScan;</span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 搭建基本环境</span><br><span class="line"> * 1、导入数据库文件,创建出两张表，department和employee</span><br><span class="line"> * 2、创建JavaBean封装数据</span><br><span class="line"> * 3、整合MyBatis数据库</span><br><span class="line"> *  （1）配置数据库信息</span><br><span class="line"> *   (2)使用注解版的MyBatis：</span><br><span class="line"> *     （a）@MapperScan指定需要扫描的mapper接口所在的包</span><br><span class="line"> */</span><br><span class="line">@MapperScan(&quot;com.usst.springboot01cache.mapper&quot;)</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class Springboot01cacheApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Springboot01cacheApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Cacheable初体验"><a href="#Cacheable初体验" class="headerlink" title="@Cacheable初体验"></a>@Cacheable初体验</h2><p>修改主配置类，添加相应的注解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache;</span><br><span class="line"></span><br><span class="line">import org.mybatis.spring.annotation.MapperScan;</span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cache.annotation.EnableCaching;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 一、搭建基本环境</span><br><span class="line"> * 1、导入数据库文件,创建出两张表，department和employee</span><br><span class="line"> * 2、创建JavaBean封装数据</span><br><span class="line"> * 3、整合MyBatis数据库</span><br><span class="line"> *  （1）配置数据库信息</span><br><span class="line"> *   (2)使用注解版的MyBatis：</span><br><span class="line"> *     （a）@MapperScan指定需要扫描的mapper接口所在的包</span><br><span class="line"> *</span><br><span class="line"> * 二、快速体验缓存</span><br><span class="line"> *  步骤：</span><br><span class="line"> *      1、开启基于注解的缓存</span><br><span class="line"> *      2、标注缓存注解即可</span><br><span class="line"> *          /@Cacheable</span><br><span class="line"> *          /@CacheEvict</span><br><span class="line"> *          /@CachePut</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">@MapperScan(&quot;com.usst.springboot01cache.mapper&quot;)</span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableCaching</span><br><span class="line">public class Springboot01cacheApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Springboot01cacheApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主程序入口添加@Cacheable的注解</p>
+<p>在Service层中对某个方法进行缓存,具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">        import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">        import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">        import org.springframework.cache.annotation.Cacheable;</span><br><span class="line">        import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将方法的运行结果进行缓存，以后如果再有相同的数据，直接从缓存获取，不用调用方法</span><br><span class="line">     *</span><br><span class="line">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span><br><span class="line">     * 每一个缓存有自己唯一一个名字</span><br><span class="line">     *</span><br><span class="line">     * 几个属性：</span><br><span class="line">     *  cacheNames/value:指定缓存的名字；</span><br><span class="line">     *  key：缓存数据使用的key，可以用它来指定。默认是使用方法参数的值，1-方法的返回值</span><br><span class="line">     *      编写SpEL: #id；参数id的值   #root.args[0]</span><br><span class="line">     *  keyGenerator: key的生成器；也可以自己指定key的生成器的组件id</span><br><span class="line">     *      key/keyGenerator: 二选一使用</span><br><span class="line">     *  cacheManager：指定缓存管理器，或者cacheResolver指定获取解析器</span><br><span class="line">     *  condition: 指定符合条件的情况下才缓存</span><br><span class="line">     *  unless: 否定缓存，当unless指定的条件为true，方法的返回值就不会被缓存；可以获取到结果进行判定</span><br><span class="line">     *      unless = &quot;#result == null &quot;</span><br><span class="line">     *  sync: 是否使用异步模式</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    @Cacheable(value = &quot;emp&quot;)</span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法名上添加@Cacheable注解，value/cacheNames用于指定缓存的名字，还有其他属性，后面的章节再做解释.</p>
+<h2 id="缓存工作原理-amp-Cacheable"><a href="#缓存工作原理-amp-Cacheable" class="headerlink" title="缓存工作原理&amp;@Cacheable"></a>缓存工作原理&amp;@Cacheable</h2><pre><code>*  原理：
+*      1、自动配置类：CacheAutoConfiguration
+*      2、缓存的配置类：org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration
+*      3、哪个配置类生效？ SimpleCacheConfiguration
+*
+*      4、给容器注册了一个CacheManager：ConcurrentMapCacheManager
+*      5、可以获取和创建ConcurrentMapCache类型的缓存组件：其作用是将数据保存在ConcurrentMap中；
+*
+*      运行过程：
+*      、@Cahceable
+*      1、方法运行之前，先去查询Cache（缓存组件），按照cacheNames指定的名字获取；
+*          （CacheManager先获取相应的缓存），如果没有，第一次获取缓存会自动创建出来；
+*      2、去Cache中查找缓存的内容，使用一个key，默认是方法的参数；
+*          key是按照某种策略生成的，默认是使用keyGenerator生成的，默认使用SimpleKeyGenerator生成key
+*          SimpleKeyGenerator生成key的默认策略；
+*              如果没有参数：key = new SimpleKey();
+*              如果有一个参数：key = 参数值
+*              如果有多个参数：key = new SimpleKey(params);
+*      3、没有查到缓存就调用目标方法；
+*      4、将目标方法返回的结果，放进缓存中
+*
+*      @Cacheable标注的方法：方法执行之前先检查缓存中有没有这个数据，
+*      默认按照参数的值作为key去查询缓存，如果没有，就将运行方法并将结果放入缓存
+*      核心：
+*          （1）使用CacheManager[ConcurrentMapCacheManager]按照名字得到Cache[ConcurrentMapCache]组件
+*          （2）key使用keyGenerator生成的，默认使用SimpleKeyGenerator
+</code></pre><h2 id="Cacheable其他属性"><a href="#Cacheable其他属性" class="headerlink" title="@Cacheable其他属性"></a>@Cacheable其他属性</h2><p>SPEL表达式可以应用于@Cacheable的属性中</p>
+<table>
+<thead>
+<tr>
+<th>名字</th>
+<th>位置</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>methodName</td>
+<td>root object</td>
+<td>当前被调用的方法名</td>
+<td>#root.methodName</td>
+</tr>
+<tr>
+<td>method</td>
+<td>root object</td>
+<td>当前被调用的方法</td>
+<td>#root.method.name</td>
+</tr>
+<tr>
+<td>target</td>
+<td>root object</td>
+<td>当前被调用的目标对象</td>
+<td>#root.target</td>
+</tr>
+<tr>
+<td>targetClass</td>
+<td>root object</td>
+<td>当前被调用的目标对象类</td>
+<td>#root.targetClass</td>
+</tr>
+<tr>
+<td>args</td>
+<td>root object</td>
+<td>当前被调用的方法的参数列表</td>
+<td>#root.args[0]</td>
+</tr>
+<tr>
+<td>caches</td>
+<td>root object</td>
+<td>当前方法调用使用的缓存列表(如@Cacheable(value={“cache1”, “cache2”})),则有两个cache</td>
+<td>#root.caches[0].name</td>
+</tr>
+<tr>
+<td>argumentname</td>
+<td>evaluation context</td>
+<td>方法参数的名字，可以直接 #参数名， 也可以使用 #p0或#a0的#iban、#a0的形式，0代表参数的索引</td>
+<td>#iban、#a0、#p0</td>
+</tr>
+<tr>
+<td>result</td>
+<td>evaluation context</td>
+<td>方法执行后的返回值(仅当方法执行后的判断有效，如’unless’,’cache put’的表达式’cache evice’的表达式beforeInvocation=false)</td>
+<td>#result</td>
+</tr>
+</tbody>
+</table>
+<p>具体示例看如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">        import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">        import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">        import org.springframework.cache.annotation.Cacheable;</span><br><span class="line">        import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将方法的运行结果进行缓存，以后如果再有相同的数据，直接从缓存获取，不用调用方法</span><br><span class="line">     *</span><br><span class="line">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span><br><span class="line">     * 每一个缓存有自己唯一一个名字</span><br><span class="line">     *</span><br><span class="line">     * 几个属性：</span><br><span class="line">     *  cacheNames/value:指定缓存的名字，将方法的返回结果放在哪个缓存中，是数组的方式，可以指定多个缓存；</span><br><span class="line">     *  key：缓存数据使用的key，可以用它来指定。默认是使用方法参数的值，1-方法的返回值</span><br><span class="line">     *      编写SpEL: #i d；参数id的值   #a0  #p0   #root.args[0]</span><br><span class="line">     *      getEmp[2]</span><br><span class="line">     *  keyGenerator: key的生成器；也可以自己指定key的生成器的组件id</span><br><span class="line">     *      key/keyGenerator: 二选一使用</span><br><span class="line">     *  cacheManager：指定缓存管理器，或者cacheResolver指定获取解析器</span><br><span class="line">     *  condition: 指定符合条件的情况下才缓存</span><br><span class="line">     *      , condition = &quot;#id&gt;0&quot;</span><br><span class="line">     *      condition = &quot;#a0&gt;1&quot;：当第一个参数的值&gt;1的时候才进行缓存(1号员工不满足condition条件，无法缓存)</span><br><span class="line">     *</span><br><span class="line">     *  unless: 否定缓存，当unless指定的条件为true，方法的返回值就不会被缓存；可以获取到结果进行判定</span><br><span class="line">     *      unless = &quot;#result == null &quot;</span><br><span class="line">     *      unless = &quot;#a0 == 2&quot;;如果第一个参数的值是2，结果不缓存（2号员工满足unless条件，无法缓存）</span><br><span class="line">     *  sync: 是否使用异步模式,默认是异步</span><br><span class="line">     *      </span><br><span class="line">     *</span><br><span class="line">     *  原理：</span><br><span class="line">     *      1、自动配置类：CacheAutoConfiguration</span><br><span class="line">     *      2、缓存的配置类：org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration</span><br><span class="line">     *      3、哪个配置类生效？ SimpleCacheConfiguration</span><br><span class="line">     *</span><br><span class="line">     *      4、给容器注册了一个CacheManager：ConcurrentMapCacheManager</span><br><span class="line">     *      5、可以获取和创建ConcurrentMapCache类型的缓存组件：其作用是将数据保存在ConcurrentMap中；</span><br><span class="line">     *</span><br><span class="line">     *      运行过程：</span><br><span class="line">     *      、@Cahceable</span><br><span class="line">     *      1、方法运行之前，先去查询Cache（缓存组件），按照cacheNames指定的名字获取；</span><br><span class="line">     *          （CacheManager先获取相应的缓存），如果没有，第一次获取缓存会自动创建出来；</span><br><span class="line">     *      2、去Cache中查找缓存的内容，使用一个key，默认是方法的参数；</span><br><span class="line">     *          key是按照某种策略生成的，默认是使用keyGenerator生成的，默认使用SimpleKeyGenerator生成key</span><br><span class="line">     *          SimpleKeyGenerator生成key的默认策略；</span><br><span class="line">     *              如果没有参数：key = new SimpleKey();</span><br><span class="line">     *              如果有一个参数：key = 参数值</span><br><span class="line">     *              如果有多个参数：key = new SimpleKey(params);</span><br><span class="line">     *      3、没有查到缓存就调用目标方法；</span><br><span class="line">     *      4、将目标方法返回的结果，放进缓存中</span><br><span class="line">     *</span><br><span class="line">     *      @Cacheable标注的方法：方法执行之前先检查缓存中有没有这个数据，</span><br><span class="line">     *      默认按照参数的值作为key去查询缓存，如果没有，就将运行方法并将结果放入缓存;</span><br><span class="line">     *      以后再来调用就可以直接使用缓存中的数据；</span><br><span class="line">     *</span><br><span class="line">     *      核心：</span><br><span class="line">     *          （1）使用CacheManager[ConcurrentMapCacheManager]按照名字得到Cache[ConcurrentMapCache]组件</span><br><span class="line">     *          （2）key使用keyGenerator生成的，默认使用SimpleKeyGenerator</span><br><span class="line">     *</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, key = &quot;#root.methodName+&apos;[&apos;+#id+&apos;]&apos;&quot;)</span><br><span class="line">    @Cacheable(value = &quot;emp&quot;, keyGenerator = &quot;myKeyGenerator&quot;, condition = &quot;#a0&gt;1&quot;, unless = &quot;#a0 == 2&quot;)</span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="CachePut"><a href="#CachePut" class="headerlink" title="@CachePut"></a>@CachePut</h2><p>示例：验证数据更新之后缓存是否能同步更新</p>
+<p>编写Controller：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.controller;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">import com.usst.springboot01cache.service.EmployeeService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class EmployeeController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeService employeeService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp/&#123;id&#125;&quot;)</span><br><span class="line">    public Employee getEmp(@PathVariable(&quot;id&quot;) Integer id)&#123;</span><br><span class="line">        Employee emp = employeeService.getEmp(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp&quot;)</span><br><span class="line">    public Employee update(Employee employee)&#123;</span><br><span class="line">        Employee emp = employeeService.update(employee);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重点是update方法，在Service层新增加一个注解@CachePut</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">        import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">        import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">        import org.springframework.cache.annotation.CachePut;</span><br><span class="line">        import org.springframework.cache.annotation.Cacheable;</span><br><span class="line">        import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将方法的运行结果进行缓存，以后如果再有相同的数据，直接从缓存获取，不用调用方法</span><br><span class="line">     *</span><br><span class="line">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span><br><span class="line">     * 每一个缓存有自己唯一一个名字</span><br><span class="line">     *</span><br><span class="line">     * 几个属性：</span><br><span class="line">     *  cacheNames/value:指定缓存的名字，将方法的返回结果放在哪个缓存中，是数组的方式，可以指定多个缓存；</span><br><span class="line">     *  key：缓存数据使用的key，可以用它来指定。默认是使用方法参数的值，1-方法的返回值</span><br><span class="line">     *      编写SpEL: #i d；参数id的值   #a0  #p0   #root.args[0]</span><br><span class="line">     *      getEmp[2]</span><br><span class="line">     *  keyGenerator: key的生成器；也可以自己指定key的生成器的组件id</span><br><span class="line">     *      key/keyGenerator: 二选一使用</span><br><span class="line">     *  cacheManager：指定缓存管理器，或者cacheResolver指定获取解析器</span><br><span class="line">     *  condition: 指定符合条件的情况下才缓存</span><br><span class="line">     *      , condition = &quot;#id&gt;0&quot;</span><br><span class="line">     *      condition = &quot;#a0&gt;1&quot;：当第一个参数的值&gt;1的时候才进行缓存(1号员工不满足condition条件，无法缓存)</span><br><span class="line">     *</span><br><span class="line">     *  unless: 否定缓存，当unless指定的条件为true，方法的返回值就不会被缓存；可以获取到结果进行判定</span><br><span class="line">     *      unless = &quot;#result == null &quot;</span><br><span class="line">     *      unless = &quot;#a0 == 2&quot;;如果第一个参数的值是2，结果不缓存（2号员工满足unless条件，无法缓存）</span><br><span class="line">     *  sync: 是否使用异步模式,默认是异步</span><br><span class="line">     *</span><br><span class="line">     *</span><br><span class="line">     *  原理：</span><br><span class="line">     *      1、自动配置类：CacheAutoConfiguration</span><br><span class="line">     *      2、缓存的配置类：org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration</span><br><span class="line">     *      3、哪个配置类生效？ SimpleCacheConfiguration</span><br><span class="line">     *</span><br><span class="line">     *      4、给容器注册了一个CacheManager：ConcurrentMapCacheManager</span><br><span class="line">     *      5、可以获取和创建ConcurrentMapCache类型的缓存组件：其作用是将数据保存在ConcurrentMap中；</span><br><span class="line">     *</span><br><span class="line">     *      运行过程：</span><br><span class="line">     *      、@Cahceable</span><br><span class="line">     *      1、方法运行之前，先去查询Cache（缓存组件），按照cacheNames指定的名字获取；</span><br><span class="line">     *          （CacheManager先获取相应的缓存），如果没有，第一次获取缓存会自动创建出来；</span><br><span class="line">     *      2、去Cache中查找缓存的内容，使用一个key，默认是方法的参数；</span><br><span class="line">     *          key是按照某种策略生成的，默认是使用keyGenerator生成的，默认使用SimpleKeyGenerator生成key</span><br><span class="line">     *          SimpleKeyGenerator生成key的默认策略；</span><br><span class="line">     *              如果没有参数：key = new SimpleKey();</span><br><span class="line">     *              如果有一个参数：key = 参数值</span><br><span class="line">     *              如果有多个参数：key = new SimpleKey(params);</span><br><span class="line">     *      3、没有查到缓存就调用目标方法；</span><br><span class="line">     *      4、将目标方法返回的结果，放进缓存中</span><br><span class="line">     *</span><br><span class="line">     *      @Cacheable标注的方法：方法执行之前先检查缓存中有没有这个数据，</span><br><span class="line">     *      默认按照参数的值作为key去查询缓存，如果没有，就将运行方法并将结果放入缓存;</span><br><span class="line">     *      以后再来调用就可以直接使用缓存中的数据；</span><br><span class="line">     *</span><br><span class="line">     *      核心：</span><br><span class="line">     *          （1）使用CacheManager[ConcurrentMapCacheManager]按照名字得到Cache[ConcurrentMapCache]组件</span><br><span class="line">     *          （2）key使用keyGenerator生成的，默认使用SimpleKeyGenerator</span><br><span class="line">     *</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, key = &quot;#root.methodName+&apos;[&apos;+#id+&apos;]&apos;&quot;)</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, keyGenerator = &quot;myKeyGenerator&quot;, condition = &quot;#a0&gt;1&quot;, unless = &quot;#a0 == 2&quot;)</span><br><span class="line">    @Cacheable(value = &quot;emp&quot;)</span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @CachePut，既调用方法，又更新缓存数据；同步更新缓存</span><br><span class="line">     * 修改了数据库的某个数据，同时更新缓存</span><br><span class="line">     *</span><br><span class="line">     * 运行时机</span><br><span class="line">     *  1、先调用目标方法</span><br><span class="line">     *  2、将目标结果的方法缓存起来</span><br><span class="line">     *</span><br><span class="line">     * 测试步骤：</span><br><span class="line">     * @Cacheable</span><br><span class="line">     *  1、查询1号员工，查询的结果会放在缓存中</span><br><span class="line">     *      key: 1      value  lastName: 张三</span><br><span class="line">     *  2、以后查询还是之前的结果</span><br><span class="line">     *  3、更新1号员工，更新后信息改变</span><br><span class="line">     *      将方法的返回值也放入了缓存</span><br><span class="line">     *      key：传入的Employee对象，值是返回的Employee对象</span><br><span class="line">     *  4、查询更新后的员工</span><br><span class="line">     *      应该是更新后的员工</span><br><span class="line">     *          key = &quot;#employee.id&quot;,使用传入的参数的员工id;</span><br><span class="line">     *          key = &quot;#result.id&quot;,使用返回后的id</span><br><span class="line">     *          、@Cacheable的key是不能用#result.id获取返回结果的</span><br><span class="line">     *      为什么还是未更新之前的缓存？</span><br><span class="line">     *          【1号员工没有在缓存中更新】</span><br><span class="line">     */</span><br><span class="line">    @CachePut(value = &quot;emp&quot;, key = &quot;#employee.id&quot;)</span><br><span class="line">    public Employee update(Employee employee)&#123;</span><br><span class="line">        System.out.println(&quot;updateEmp:&quot; + employee);</span><br><span class="line">        employeeMapper.updateEmp(employee);</span><br><span class="line">        return employee;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：@CachePut(value = “emp”, key = “#employee.id”)和    @Cacheable的key是同一个key，即取和放的key都相同即可完成同步更新缓存操作。</p>
+<h2 id="Caching"><a href="#Caching" class="headerlink" title="@Caching"></a>@Caching</h2><p>@Caching是Cacheable、Evict和Put的集合。用于较为复杂的缓存规则。</p>
+<p>老三样：</p>
+<p>修改Controller,增加方法getEmpByLastName</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.controller;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">import com.usst.springboot01cache.service.EmployeeService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class EmployeeController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeService employeeService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp/&#123;id&#125;&quot;)</span><br><span class="line">    public Employee getEmp(@PathVariable(&quot;id&quot;) Integer id)&#123;</span><br><span class="line">        Employee emp = employeeService.getEmp(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp&quot;)</span><br><span class="line">    public Employee update(Employee employee)&#123;</span><br><span class="line">        Employee emp = employeeService.update(employee);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;delemp&quot;)</span><br><span class="line">    public String deleteEmp(Integer id)&#123;</span><br><span class="line">        employeeService.deleteEmp(id);</span><br><span class="line">        return &quot;success&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;emp/lastName/&#123;lastName&#125;&quot;)</span><br><span class="line">    public Employee getEmpByLastName(@PathVariable(&quot;lastName&quot;) String lastName)&#123;</span><br><span class="line">        return employeeService.getEmpByLastName(lastName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改Mapper，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.mapper;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">import org.apache.ibatis.annotations.*;</span><br><span class="line"></span><br><span class="line">@Mapper</span><br><span class="line">public interface EmployeeMapper &#123;</span><br><span class="line"></span><br><span class="line">    @Select(&quot;select * from employee where id=#&#123;id&#125;&quot;)</span><br><span class="line">    Employee getEmpById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Update(&quot;update employee set lastName=#&#123;lastName&#125;, email=#&#123;email&#125;,&quot; +</span><br><span class="line">            &quot;gender=#&#123;gender&#125;,d_id=#&#123;dId&#125; where id=#&#123;id&#125;&quot;)</span><br><span class="line">    void updateEmp(Employee employee);</span><br><span class="line"></span><br><span class="line">    @Delete(&quot;delete from employee where id=#&#123;id&#125;&quot;)</span><br><span class="line">    void deleteEmpById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Insert(&quot;insert into employee(lastName,email,gender,d_id) values(#&#123;lastName&#125;,&quot; +</span><br><span class="line">            &quot;#&#123;email&#125;,#&#123;gender&#125;,#&#123;dId&#125;)&quot;)</span><br><span class="line">    void insertEmployee(Employee employee);</span><br><span class="line"></span><br><span class="line">    @Select(&quot;select * from employee where lastName=#&#123;lastName&#125;&quot;)</span><br><span class="line">    Employee getEmpByLastName(String lastName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改Service</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">        import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">        import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">        import org.springframework.cache.annotation.CacheEvict;</span><br><span class="line">        import org.springframework.cache.annotation.CachePut;</span><br><span class="line">        import org.springframework.cache.annotation.Cacheable;</span><br><span class="line">        import org.springframework.cache.annotation.Caching;</span><br><span class="line">        import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将方法的运行结果进行缓存，以后如果再有相同的数据，直接从缓存获取，不用调用方法</span><br><span class="line">     *</span><br><span class="line">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span><br><span class="line">     * 每一个缓存有自己唯一一个名字</span><br><span class="line">     *</span><br><span class="line">     * 几个属性：</span><br><span class="line">     *  cacheNames/value:指定缓存的名字，将方法的返回结果放在哪个缓存中，是数组的方式，可以指定多个缓存；</span><br><span class="line">     *  key：缓存数据使用的key，可以用它来指定。默认是使用方法参数的值，1-方法的返回值</span><br><span class="line">     *      编写SpEL: #i d；参数id的值   #a0  #p0   #root.args[0]</span><br><span class="line">     *      getEmp[2]</span><br><span class="line">     *  keyGenerator: key的生成器；也可以自己指定key的生成器的组件id</span><br><span class="line">     *      key/keyGenerator: 二选一使用</span><br><span class="line">     *  cacheManager：指定缓存管理器，或者cacheResolver指定获取解析器</span><br><span class="line">     *  condition: 指定符合条件的情况下才缓存</span><br><span class="line">     *      , condition = &quot;#id&gt;0&quot;</span><br><span class="line">     *      condition = &quot;#a0&gt;1&quot;：当第一个参数的值&gt;1的时候才进行缓存(1号员工不满足condition条件，无法缓存)</span><br><span class="line">     *</span><br><span class="line">     *  unless: 否定缓存，当unless指定的条件为true，方法的返回值就不会被缓存；可以获取到结果进行判定</span><br><span class="line">     *      unless = &quot;#result == null &quot;</span><br><span class="line">     *      unless = &quot;#a0 == 2&quot;;如果第一个参数的值是2，结果不缓存（2号员工满足unless条件，无法缓存）</span><br><span class="line">     *  sync: 是否使用异步模式,默认是异步</span><br><span class="line">     *</span><br><span class="line">     *</span><br><span class="line">     *  原理：</span><br><span class="line">     *      1、自动配置类：CacheAutoConfiguration</span><br><span class="line">     *      2、缓存的配置类：org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration</span><br><span class="line">     *      3、哪个配置类生效？ SimpleCacheConfiguration</span><br><span class="line">     *</span><br><span class="line">     *      4、给容器注册了一个CacheManager：ConcurrentMapCacheManager</span><br><span class="line">     *      5、可以获取和创建ConcurrentMapCache类型的缓存组件：其作用是将数据保存在ConcurrentMap中；</span><br><span class="line">     *</span><br><span class="line">     *      运行过程：</span><br><span class="line">     *      、@Cahceable</span><br><span class="line">     *      1、方法运行之前，先去查询Cache（缓存组件），按照cacheNames指定的名字获取；</span><br><span class="line">     *          （CacheManager先获取相应的缓存），如果没有，第一次获取缓存会自动创建出来；</span><br><span class="line">     *      2、去Cache中查找缓存的内容，使用一个key，默认是方法的参数；</span><br><span class="line">     *          key是按照某种策略生成的，默认是使用keyGenerator生成的，默认使用SimpleKeyGenerator生成key</span><br><span class="line">     *          SimpleKeyGenerator生成key的默认策略；</span><br><span class="line">     *              如果没有参数：key = new SimpleKey();</span><br><span class="line">     *              如果有一个参数：key = 参数值</span><br><span class="line">     *              如果有多个参数：key = new SimpleKey(params);</span><br><span class="line">     *      3、没有查到缓存就调用目标方法；</span><br><span class="line">     *      4、将目标方法返回的结果，放进缓存中</span><br><span class="line">     *</span><br><span class="line">     *      @Cacheable标注的方法：方法执行之前先检查缓存中有没有这个数据，</span><br><span class="line">     *      默认按照参数的值作为key去查询缓存，如果没有，就将运行方法并将结果放入缓存;</span><br><span class="line">     *      以后再来调用就可以直接使用缓存中的数据；</span><br><span class="line">     *</span><br><span class="line">     *      核心：</span><br><span class="line">     *          （1）使用CacheManager[ConcurrentMapCacheManager]按照名字得到Cache[ConcurrentMapCache]组件</span><br><span class="line">     *          （2）key使用keyGenerator生成的，默认使用SimpleKeyGenerator</span><br><span class="line">     *</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, key = &quot;#root.methodName+&apos;[&apos;+#id+&apos;]&apos;&quot;)</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, keyGenerator = &quot;myKeyGenerator&quot;, condition = &quot;#a0&gt;1&quot;, unless = &quot;#a0 == 2&quot;)</span><br><span class="line">    @Cacheable(value = &quot;emp&quot;)</span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @CachePut，既调用方法，又更新缓存数据；同步更新缓存</span><br><span class="line">     * 修改了数据库的某个数据，同时更新缓存</span><br><span class="line">     *</span><br><span class="line">     * 运行时机</span><br><span class="line">     *  1、先调用目标方法</span><br><span class="line">     *  2、将目标结果的方法缓存起来</span><br><span class="line">     *</span><br><span class="line">     * 测试步骤：</span><br><span class="line">     * @Cacheable</span><br><span class="line">     *  1、查询1号员工，查询的结果会放在缓存中</span><br><span class="line">     *      key: 1      value  lastName: 张三</span><br><span class="line">     *  2、以后查询还是之前的结果</span><br><span class="line">     *  3、更新1号员工，更新后信息改变</span><br><span class="line">     *      将方法的返回值也放入了缓存</span><br><span class="line">     *      key：传入的Employee对象，值是返回的Employee对象</span><br><span class="line">     *  4、查询更新后的员工</span><br><span class="line">     *      应该是更新后的员工</span><br><span class="line">     *          key = &quot;#employee.id&quot;,使用传入的参数的员工id;</span><br><span class="line">     *          key = &quot;#result.id&quot;,使用返回后的id</span><br><span class="line">     *          、@Cacheable的key是不能用#result.id获取返回结果的</span><br><span class="line">     *      为什么还是未更新之前的缓存？</span><br><span class="line">     *          【1号员工没有在缓存中更新】</span><br><span class="line">     */</span><br><span class="line">    @CachePut(value = &quot;emp&quot;, key = &quot;#employee.id&quot;)</span><br><span class="line">    public Employee update(Employee employee)&#123;</span><br><span class="line">        System.out.println(&quot;updateEmp:&quot; + employee);</span><br><span class="line">        employeeMapper.updateEmp(employee);</span><br><span class="line">        return employee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 缓存清除</span><br><span class="line">     *  key：指定要清除的数据</span><br><span class="line">     *  allEntries = true：指定清除这个缓存中所有的数据</span><br><span class="line">     *  beforeInvocation = false,缓存的清除是否在方法之前执行</span><br><span class="line">     *      默认代表缓存清除操作是在方法之后执行，如果出现异常，缓存就不会清除</span><br><span class="line">     *  beforeInvocation = true,</span><br><span class="line">     *      代表缓存清除操作是在方法之前执行，无论是否出现异常，缓存都会清除</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">//    @CacheEvict(value = &quot;emp&quot;, key = &quot;#id&quot;) // 按照指定的key删除缓存</span><br><span class="line">//    @CacheEvict(value = &quot;emp&quot;, allEntries = true) // 删除所有的缓存</span><br><span class="line">    @CacheEvict(value = &quot;emp&quot;, beforeInvocation = true)</span><br><span class="line">    public void deleteEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;deleteEmp&quot; + id);</span><br><span class="line">        int i = 10 / 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // @Caching：定义复杂的缓存规则</span><br><span class="line">    @Caching(</span><br><span class="line">            cacheable = &#123;</span><br><span class="line">                    @Cacheable(value = &quot;emp&quot;, key = &quot;#lastName&quot;)</span><br><span class="line">            &#125;,</span><br><span class="line">            put = &#123;</span><br><span class="line">                    @CachePut(value = &quot;emp&quot;, key = &quot;#result.id&quot;), // 可以按照id查询缓存</span><br><span class="line">                    @CachePut(value = &quot;emp&quot;, key = &quot;#result.email&quot;) // 可以按照email查询缓存</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">    )</span><br><span class="line">    public Employee getEmpByLastName(String lastName) &#123;</span><br><span class="line"></span><br><span class="line">        return employeeMapper.getEmpByLastName(lastName);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Service层中，除了利用@Caching注解定义复杂的缓存规则之外，还可以在类上添加注解@CacheConfig，以下是Service示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache.service;</span><br><span class="line"></span><br><span class="line">        import com.usst.springboot01cache.bean.Employee;</span><br><span class="line">        import com.usst.springboot01cache.mapper.EmployeeMapper;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">        import org.springframework.beans.factory.annotation.Value;</span><br><span class="line">        import org.springframework.cache.annotation.*;</span><br><span class="line">        import org.springframework.stereotype.Service;</span><br><span class="line">@CacheConfig(cacheNames = &quot;emp&quot;) // 抽取缓存的公共配置</span><br><span class="line">@Service</span><br><span class="line">public class EmployeeService &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    EmployeeMapper employeeMapper;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 将方法的运行结果进行缓存，以后如果再有相同的数据，直接从缓存获取，不用调用方法</span><br><span class="line">     *</span><br><span class="line">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span><br><span class="line">     * 每一个缓存有自己唯一一个名字</span><br><span class="line">     *</span><br><span class="line">     * 几个属性：</span><br><span class="line">     *  cacheNames/value:指定缓存的名字，将方法的返回结果放在哪个缓存中，是数组的方式，可以指定多个缓存；</span><br><span class="line">     *  key：缓存数据使用的key，可以用它来指定。默认是使用方法参数的值，1-方法的返回值</span><br><span class="line">     *      编写SpEL: #i d；参数id的值   #a0  #p0   #root.args[0]</span><br><span class="line">     *      getEmp[2]</span><br><span class="line">     *  keyGenerator: key的生成器；也可以自己指定key的生成器的组件id</span><br><span class="line">     *      key/keyGenerator: 二选一使用</span><br><span class="line">     *  cacheManager：指定缓存管理器，或者cacheResolver指定获取解析器</span><br><span class="line">     *  condition: 指定符合条件的情况下才缓存</span><br><span class="line">     *      , condition = &quot;#id&gt;0&quot;</span><br><span class="line">     *      condition = &quot;#a0&gt;1&quot;：当第一个参数的值&gt;1的时候才进行缓存(1号员工不满足condition条件，无法缓存)</span><br><span class="line">     *</span><br><span class="line">     *  unless: 否定缓存，当unless指定的条件为true，方法的返回值就不会被缓存；可以获取到结果进行判定</span><br><span class="line">     *      unless = &quot;#result == null &quot;</span><br><span class="line">     *      unless = &quot;#a0 == 2&quot;;如果第一个参数的值是2，结果不缓存（2号员工满足unless条件，无法缓存）</span><br><span class="line">     *  sync: 是否使用异步模式,默认是异步</span><br><span class="line">     *</span><br><span class="line">     *</span><br><span class="line">     *  原理：</span><br><span class="line">     *      1、自动配置类：CacheAutoConfiguration</span><br><span class="line">     *      2、缓存的配置类：org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration</span><br><span class="line">     *      3、哪个配置类生效？ SimpleCacheConfiguration</span><br><span class="line">     *</span><br><span class="line">     *      4、给容器注册了一个CacheManager：ConcurrentMapCacheManager</span><br><span class="line">     *      5、可以获取和创建ConcurrentMapCache类型的缓存组件：其作用是将数据保存在ConcurrentMap中；</span><br><span class="line">     *</span><br><span class="line">     *      运行过程：</span><br><span class="line">     *      、@Cahceable</span><br><span class="line">     *      1、方法运行之前，先去查询Cache（缓存组件），按照cacheNames指定的名字获取；</span><br><span class="line">     *          （CacheManager先获取相应的缓存），如果没有，第一次获取缓存会自动创建出来；</span><br><span class="line">     *      2、去Cache中查找缓存的内容，使用一个key，默认是方法的参数；</span><br><span class="line">     *          key是按照某种策略生成的，默认是使用keyGenerator生成的，默认使用SimpleKeyGenerator生成key</span><br><span class="line">     *          SimpleKeyGenerator生成key的默认策略；</span><br><span class="line">     *              如果没有参数：key = new SimpleKey();</span><br><span class="line">     *              如果有一个参数：key = 参数值</span><br><span class="line">     *              如果有多个参数：key = new SimpleKey(params);</span><br><span class="line">     *      3、没有查到缓存就调用目标方法；</span><br><span class="line">     *      4、将目标方法返回的结果，放进缓存中</span><br><span class="line">     *</span><br><span class="line">     *      @Cacheable标注的方法：方法执行之前先检查缓存中有没有这个数据，</span><br><span class="line">     *      默认按照参数的值作为key去查询缓存，如果没有，就将运行方法并将结果放入缓存;</span><br><span class="line">     *      以后再来调用就可以直接使用缓存中的数据；</span><br><span class="line">     *</span><br><span class="line">     *      核心：</span><br><span class="line">     *          （1）使用CacheManager[ConcurrentMapCacheManager]按照名字得到Cache[ConcurrentMapCache]组件</span><br><span class="line">     *          （2）key使用keyGenerator生成的，默认使用SimpleKeyGenerator</span><br><span class="line">     *</span><br><span class="line">     * @param id</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, key = &quot;#root.methodName+&apos;[&apos;+#id+&apos;]&apos;&quot;)</span><br><span class="line">//    @Cacheable(value = &quot;emp&quot;, keyGenerator = &quot;myKeyGenerator&quot;, condition = &quot;#a0&gt;1&quot;, unless = &quot;#a0 == 2&quot;)</span><br><span class="line">    @Cacheable(value = &quot;emp&quot;)</span><br><span class="line">    public Employee getEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;查询&quot; + id + &quot;号员工&quot;);</span><br><span class="line">        Employee emp = employeeMapper.getEmpById(id);</span><br><span class="line">        return emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @CachePut，既调用方法，又更新缓存数据；同步更新缓存</span><br><span class="line">     * 修改了数据库的某个数据，同时更新缓存</span><br><span class="line">     *</span><br><span class="line">     * 运行时机</span><br><span class="line">     *  1、先调用目标方法</span><br><span class="line">     *  2、将目标结果的方法缓存起来</span><br><span class="line">     *</span><br><span class="line">     * 测试步骤：</span><br><span class="line">     * @Cacheable</span><br><span class="line">     *  1、查询1号员工，查询的结果会放在缓存中</span><br><span class="line">     *      key: 1      value  lastName: 张三</span><br><span class="line">     *  2、以后查询还是之前的结果</span><br><span class="line">     *  3、更新1号员工，更新后信息改变</span><br><span class="line">     *      将方法的返回值也放入了缓存</span><br><span class="line">     *      key：传入的Employee对象，值是返回的Employee对象</span><br><span class="line">     *  4、查询更新后的员工</span><br><span class="line">     *      应该是更新后的员工</span><br><span class="line">     *          key = &quot;#employee.id&quot;,使用传入的参数的员工id;</span><br><span class="line">     *          key = &quot;#result.id&quot;,使用返回后的id</span><br><span class="line">     *          、@Cacheable的key是不能用#result.id获取返回结果的</span><br><span class="line">     *      为什么还是未更新之前的缓存？</span><br><span class="line">     *          【1号员工没有在缓存中更新】</span><br><span class="line">     */</span><br><span class="line">    @CachePut(key = &quot;#employee.id&quot;)</span><br><span class="line">    public Employee update(Employee employee)&#123;</span><br><span class="line">        System.out.println(&quot;updateEmp:&quot; + employee);</span><br><span class="line">        employeeMapper.updateEmp(employee);</span><br><span class="line">        return employee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 缓存清除</span><br><span class="line">     *  key：指定要清除的数据</span><br><span class="line">     *  allEntries = true：指定清除这个缓存中所有的数据</span><br><span class="line">     *  beforeInvocation = false,缓存的清除是否在方法之前执行</span><br><span class="line">     *      默认代表缓存清除操作是在方法之后执行，如果出现异常，缓存就不会清除</span><br><span class="line">     *  beforeInvocation = true,</span><br><span class="line">     *      代表缓存清除操作是在方法之前执行，无论是否出现异常，缓存都会清除</span><br><span class="line">     *</span><br><span class="line">     */</span><br><span class="line">//    @CacheEvict(value = &quot;emp&quot;, key = &quot;#id&quot;) // 按照指定的key删除缓存</span><br><span class="line">//    @CacheEvict(value = &quot;emp&quot;, allEntries = true) // 删除所有的缓存</span><br><span class="line">    @CacheEvict(value = &quot;emp&quot;, beforeInvocation = true)</span><br><span class="line">    public void deleteEmp(Integer id)&#123;</span><br><span class="line">        System.out.println(&quot;deleteEmp&quot; + id);</span><br><span class="line">        int i = 10 / 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // @Caching：定义复杂的缓存规则</span><br><span class="line">    @Caching(</span><br><span class="line">            cacheable = &#123;</span><br><span class="line">                    @Cacheable(key = &quot;#lastName&quot;)</span><br><span class="line">            &#125;,</span><br><span class="line">            put = &#123;</span><br><span class="line">                    @CachePut(key = &quot;#result.id&quot;), // 可以按照id查询缓存</span><br><span class="line">                    @CachePut(key = &quot;#result.email&quot;) // 可以按照email查询缓存</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">    )</span><br><span class="line">    public Employee getEmpByLastName(String lastName) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(lastName);</span><br><span class="line">        return employeeMapper.getEmpByLastName(lastName);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个有些问题，效果没出来。。先大体知道这个流程吧</p>
+<p>总结</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot01cache;</span><br><span class="line"></span><br><span class="line">import org.mybatis.spring.annotation.MapperScan;</span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.cache.annotation.EnableCaching;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 一、搭建基本环境</span><br><span class="line"> * 1、导入数据库文件,创建出两张表，department和employee</span><br><span class="line"> * 2、创建JavaBean封装数据</span><br><span class="line"> * 3、整合MyBatis数据库</span><br><span class="line"> *  （1）配置数据库信息</span><br><span class="line"> *   (2)使用注解版的MyBatis：</span><br><span class="line"> *     （a）@MapperScan指定需要扫描的mapper接口所在的包</span><br><span class="line"> *</span><br><span class="line"> * 二、快速体验缓存</span><br><span class="line"> *  步骤：</span><br><span class="line"> *      1、开启基于注解的缓存</span><br><span class="line"> *      2、标注缓存注解即可</span><br><span class="line"> *          /@Cacheable</span><br><span class="line"> *          /@CacheEvict</span><br><span class="line"> *          /@CachePut</span><br><span class="line"> *</span><br><span class="line"> *  默认使用的是ConcurrentMapCacheManager=ConcurrentMapCache:将数据保存在ConcurrentMap&lt;Object, Object&gt;</span><br><span class="line"> *      开发中经常使用缓存中间件，比如：redis、Memcached、ehcache</span><br><span class="line"> *</span><br><span class="line"> * 三、整合Redis</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">@MapperScan(&quot;com.usst.springboot01cache.mapper&quot;)</span><br><span class="line">@SpringBootApplication</span><br><span class="line">@EnableCaching</span><br><span class="line">public class Springboot01cacheApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Springboot01cacheApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改到Redis了，先停一停，把Redis看一看</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cache/" rel="tag"># cache</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/09/SpringBoot启动原理/" rel="next" title="SpringBoot启动原理">
+                <i class="fa fa-chevron-left"></i> SpringBoot启动原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/29/mysql安装启动和配置/" rel="prev" title="mysql安装启动和配置">
+                mysql安装启动和配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot与缓存"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot与缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JSR107简介"><span class="nav-number">1.1.</span> <span class="nav-text">JSR107简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Spring抽象缓存简介"><span class="nav-number">1.2.</span> <span class="nav-text">基于Spring抽象缓存简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本环境搭建"><span class="nav-number">1.3.</span> <span class="nav-text">基本环境搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable初体验"><span class="nav-number">1.4.</span> <span class="nav-text">@Cacheable初体验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存工作原理-amp-Cacheable"><span class="nav-number">1.5.</span> <span class="nav-text">缓存工作原理&amp;@Cacheable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable其他属性"><span class="nav-number">1.6.</span> <span class="nav-text">@Cacheable其他属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachePut"><span class="nav-number">1.7.</span> <span class="nav-text">@CachePut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Caching"><span class="nav-number">1.8.</span> <span class="nav-text">@Caching</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

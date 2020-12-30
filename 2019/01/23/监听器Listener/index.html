@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="监听器Listener&amp;emsp;&amp;emsp;监听器是一个实现特定接口的普通Java程序，该程序专门用于监听另一个java对象的方法调用或属性改变，当被监听对象发生上述事件后，监听器某个方法将立即被执行。&amp;emsp;&amp;emsp;Listener用于监听Java Web程序中的事件，例如：创建、修改、删除Session、request、context等，并触发相应的事件。利用Listener可以用很">
+<meta name="keywords" content="Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监听器Listener">
+<meta property="og:url" content="http://blog.letmefly.cc/2019/01/23/监听器Listener/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="监听器Listener&amp;emsp;&amp;emsp;监听器是一个实现特定接口的普通Java程序，该程序专门用于监听另一个java对象的方法调用或属性改变，当被监听对象发生上述事件后，监听器某个方法将立即被执行。&amp;emsp;&amp;emsp;Listener用于监听Java Web程序中的事件，例如：创建、修改、删除Session、request、context等，并触发相应的事件。利用Listener可以用很">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2019/01/23/监听器Listener/发送邮件的流程.jpg">
+<meta property="og:updated_time" content="2019-06-22T02:39:05.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="监听器Listener">
+<meta name="twitter:description" content="监听器Listener&amp;emsp;&amp;emsp;监听器是一个实现特定接口的普通Java程序，该程序专门用于监听另一个java对象的方法调用或属性改变，当被监听对象发生上述事件后，监听器某个方法将立即被执行。&amp;emsp;&amp;emsp;Listener用于监听Java Web程序中的事件，例如：创建、修改、删除Session、request、context等，并触发相应的事件。利用Listener可以用很">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2019/01/23/监听器Listener/发送邮件的流程.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2019/01/23/监听器Listener/"/>
+
+
+
+
+
+  <title>监听器Listener | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2019/01/23/监听器Listener/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">监听器Listener</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-23T14:46:35+08:00">
+                2019-01-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="监听器Listener"><a href="#监听器Listener" class="headerlink" title="监听器Listener"></a>监听器Listener</h1><p>&emsp;&emsp;监听器是一个实现特定接口的普通Java程序，该程序专门用于监听另一个java对象的方法调用或属性改变，当被监听对象发生上述事件后，监听器某个方法将立即被执行。<br>&emsp;&emsp;Listener用于监听Java Web程序中的事件，例如：创建、修改、删除Session、request、context等，并触发相应的事件。利用Listener可以用很少的代码实现很酷炫的效果。</p>
+<h2 id="Listener概述"><a href="#Listener概述" class="headerlink" title="Listener概述"></a>Listener概述</h2><p>&emsp;&emsp;Listener也是Servlet规范2.3中加入的，对应设计模式中的Listener模式，事件发生的时候会自动触发该事件对应的Listener。Listener主要用于对Session、request、context等进行监控。目前Servlet2.5规范中共有8种Listener，分别完成对不同事件的监听。</p>
+<h3 id="Listener概述-1"><a href="#Listener概述-1" class="headerlink" title="Listener概述"></a>Listener概述</h3><p>&emsp;&emsp;JavaWeb中使用Listener与Event完成相应事件的处理。使用Listener不需要关注该类事件是怎样触发的或者怎么相应的Listener，只要记住该类事件触发时一定会调用相应的Listener。遵循Servlet规范的服务器完成了相应的工作。</p>
+<h3 id="Listener的使用"><a href="#Listener的使用" class="headerlink" title="Listener的使用"></a>Listener的使用</h3><p>&emsp;&emsp;使用Listener需要实现相应的Listener接口。应该触发Listener事件的时候，Tomcat会自动调用Listener的方法。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pulic class SessionListenerTest implements HttpSessionListener&#123;</span><br><span class="line">	public void sessionCreated(HttpSessionEvent se)&#123;</span><br><span class="line">		//创建Session时会被调用</span><br><span class="line">		HttpSession session = se.getSession();</span><br><span class="line">		//输出到控制台</span><br><span class="line">		System.out.println(&quot;新创建了一个session：&quot; + session);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void sessionDestroyed(HttpSessionEvent se)&#123;</span><br><span class="line">		//销毁Session前被调用</span><br><span class="line">		HttpSession session = se.getSession();</span><br><span class="line">		//输出到控制台</span><br><span class="line">		System.out.println(&quot;销毁了一个session：&quot; + session);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这段代码实现了HttpSessionListener接口。创建Session会使用服务器调用SessionCreated()方法，销毁Session(包括session超时自动销毁)时服务器会调用sessionDestroyed()方法，都以HttpSessionEvent对象为参数。HttpSessionEvent代表了当前的事件，能从中获取到Session。Listener需要在web.xml文件中配置才生效。配置代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;listener&gt;</span><br><span class="line">//类的全限定名</span><br><span class="line">  &lt;listener-class&gt;</span><br><span class="line">  com.usst.listener.SessionListenerTest </span><br><span class="line">  &lt;/listener-class&gt;</span><br><span class="line">&lt;/listener&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;\<listener>标签一般配置在\<servlet>标签的前面。启动Web服务后，每当创建一个Session或者销毁一个Session，控制台都会打印出相应的日志。<br>&emsp;&emsp;注意：一个完整的Listener包括Listener类、\<listener>配置。一个web.xml文件中可以配置多个Listener。同一种类型的Listener也可以配置多个，触发的时候服务器会顺次执行各个Listener的相应方法。</listener></servlet></listener></p>
+<h3 id="监听器术语"><a href="#监听器术语" class="headerlink" title="监听器术语"></a>监听器术语</h3><ul>
+<li>事件源：被监听的对象（目标对象）</li>
+<li>监听器对象：用于监听“事件源”的对象</li>
+<li>注册（绑定）：将“监听器对象”注册给“事件源”。当“事件源”发生某些行为时，监听对象将被执行</li>
+<li>事件：事件源行为的称呼</li>
+<li><p>事件对象：在“监听器对象”中获得“事件源”</p>
+<h2 id="Listener的分类"><a href="#Listener的分类" class="headerlink" title="Listener的分类"></a>Listener的分类</h2><p>&emsp;&emsp;Servlet2.5规范中共有8种Listener，分别用于监听Session、context、request等的创建与销毁、属性变化等。另有一个Listener能够监听存放在Session中的对象。共有6种Event。</p>
+<h3 id="监听对象的创建与销毁"><a href="#监听对象的创建与销毁" class="headerlink" title="监听对象的创建与销毁"></a>监听对象的创建与销毁</h3><p>&emsp;&emsp;HttpSessionListener、ServletContextListener、ServletRequestListener分别用于监控Session、context、request的创建与销毁。触发时机分别为：</p>
+</li>
+<li><p>HttpSessionListener：监听（Http）Session的创建与销毁。创建Session时执行sessionCreated（HttpSessionEvent se）方法。超时或者执行session.invalidate()时执行sessionDestroyed(HttpSessionEvent se)方法。该Listener可用于收集在线者信息。</p>
+<ul>
+<li>Session域对象创建和销毁的时机创建：用户第一次访问时，服务器创建session</li>
+<li>销毁：如果用户的session30分钟没有使用，服务器会销毁session，我们在web.xml文件中也可以配置session的失效时间。</li>
+</ul>
+</li>
+<li>ServletContextListener：监听context的创建与销毁。context代表当前的Web应用程序。服务器启动或者热部署war包时执行contextInitialized(ServletContextEvent event)方法。服务器关闭时或者只关闭该Web时会执行contextDestroyed(ServletContextEvent event)方法。该Listener可用于启动时获取web.xml里配置的初始化参数。<ul>
+<li>提问：servletContext域对象何时创建和销毁？<ul>
+<li>创建：服务器启动<font color="red">针对每一个web应用创建servletcontext</font></li>
+<li>销毁：服务器关闭前关闭代表每一个web应用的</li>
+</ul>
+</li>
+<li>servletContext主流应用<ul>
+<li>保存全局应用数据对象<ul>
+<li>例如：创建数据库连接池</li>
+</ul>
+</li>
+<li>加载框架配置文件<ul>
+<li>Spring框架(配置文件随服务器启动加载)</li>
+<li>org.springframework.web.context.ContextLoaderListener</li>
+</ul>
+</li>
+<li>实现任务调度（定时器）<ul>
+<li>Timer</li>
+<li>TimerTask</li>
+</ul>
+</li>
+<li>主要作用<ul>
+<li>a.初始化的工作：初始化对象、初始化数据 —-加载数据库驱动、连接池的初始化</li>
+<li>b.加载—初始化的配置文件 —-spring的配置文件</li>
+<li>c.任务调度—定时器—-Timer/Timer Task</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ServletRequestListener：监听request的创建与销毁。用户每次请求request都会执行requestInitialized(ServletRequestEvent event)方法。Request对象被销毁时，监听器的requestDestroyed方法会被调用。注意如果一个HTML页面内含有多个图片，则请求一次HTML页面可能会触发多次request事件。<ul>
+<li>servletRequest域对象创建和销毁的时机：<ul>
+<li>创建：用户每一次访问，都会创建一个request</li>
+<li>销毁：当前访问结束，request对象就会销毁</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="监听Session、Request、ServletContext"><a href="#监听Session、Request、ServletContext" class="headerlink" title="监听Session、Request、ServletContext"></a>监听Session、Request、ServletContext</h3><p>&emsp;&emsp;Java中的类可以实现多个接口，因此实现Listener时可以使用一个类实现多个Listener接口。这样的好处是多种Listener一块儿工作，使用同一个类的资源。<br><code>public class ListenerTest implements HttpSessionListener,ServletContextListener,ServletRequestListener</code></p>
+<h3 id="监听对象的属性变化"><a href="#监听对象的属性变化" class="headerlink" title="监听对象的属性变化"></a>监听对象的属性变化</h3><p>&emsp;&emsp;另一类Listener用于监听Session、context、request的属性变化，接口名称格式为XXXAttributeListener，包括HttpSessionAttributeListener、ServletContextAttributeListener、ServletRequestAttributeListener。当向被监听对象中添加、更新、移除属性时，会分别执行xxxAdded()、xxxReplaced()、XXXRemoved()方法，xxx分别代表Session、context、request。</p>
+<ul>
+<li>attributeAdded方法<ul>
+<li>当向被监听器对象中增加一个属性时，web容器就调用事件监听器的attributeAdded方法进行相应，这个方法接受一个事件类型的参数，监听器可以通过这个参数来获得正在增加的域对象和被保存到域中的属性对象。</li>
+<li>各个域属性监听器中的完整语法定义为：<ul>
+<li>public void attributeAdded(ServletContextAttributeEvent scae)</li>
+<li>public void attributeAdder(HttpSessionBindingEvent hsbe)</li>
+<li>public void attributeAdder(ServletRequestAttributeEvent srae)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>attributeRemoved方法<ul>
+<li>当删除被监听对象中的一个属性时，web容器调用事件监听器的这个方法进行相应操作</li>
+<li>各个域属性监听器中的完整语法定义为：<ul>
+<li>public void attributeRemoved(ServletContextAttributeEvent scae)</li>
+<li>public void attributeRemoved(HttpSessionBindingEvent hsbe)</li>
+<li>public void attributeRemoved(ServletRequestAttributeEvent srae)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>attributeReplaced方法<ul>
+<li>当监听器的域对象中的某个属性被替换时，web容器调用事件监听器的这个方法进行相应操作</li>
+<li>各个域属性监听器中的完整语法定义为：<ul>
+<li>public void attributeReplaced(ServletContextAttributeEvent scae)</li>
+<li>public void attributeReplaced(HttpSessionBindingEvent hsbe)</li>
+<li>public void attributeReplaced(ServletRequestAttributeEvent srae)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="监听Session内的内容"><a href="#监听Session内的内容" class="headerlink" title="监听Session内的内容"></a>监听Session内的内容</h3><p>&emsp;&emsp;除了上面的6种Listener，还有两种Listener用于监控Session内的对象，分别是HttpSessionBindingListener和HttpSessionActivationListener。它们的触发时机分别为：</p>
+<ul>
+<li>HttpSessionBindingListener：JavaBean对象可以感知自己被绑定到Session中以及从Session中删除的事件。当对象被放到Session里是执行valueBound(HttpSessionBindingEvent event)方法。当对象被从Session里移除时执行valueUnbound(HttpSessionBindingEvent event)方法。对象必须实现该Listener接口。</li>
+<li>HttpSessionActivationListener：JavaBean对象可以感知自己被活化和钝化的事件。服务器关闭时，会将Session中的内容保存到硬盘上，这个过程叫钝化。服务器重新启动时，会将Session里的内容从硬盘上重新加载。当Session里的对象被钝化时执行sessionWillPassivate(HttpSessionEvent se)方法，当该对象被重新加载时执行sessionDidActivate(HttpSessionEvent se)。对象必须实现Listener接口。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Context&gt;</span><br><span class="line">	&lt;Manager className=&quot;org.apache.catalina.session.PersistentManager&quot; maxIdleSwap=&quot;1&quot;&gt;</span><br><span class="line">		&lt;Store className=&quot;org.apache.catalina.session.FileStore&quot; directory=&quot;it315&quot;/&gt;</span><br><span class="line">	&lt;/Manager&gt;	</span><br><span class="line">&lt;/Context&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;与上面的6种Listener不同，这两个Listener监听的是Session中的对象而非Session等，因此不需要在web.xml文件中声明。</p>
+<h2 id="Listener的使用案例"><a href="#Listener的使用案例" class="headerlink" title="Listener的使用案例"></a>Listener的使用案例</h2><p>&emsp;&emsp;Listener的特性使得它可以做许多事情，而且不会和Servlet等有任何的耦合。</p>
+<ul>
+<li>单态登录</li>
+<li>统计在线用户<ul>
+<li>记录服务器信息，包括：</li>
+<li>活动时间</li>
+<li>累计访问人数</li>
+<li>最大同时在线数</li>
+<li>发生的时间</li>
+<li>当前用户数</li>
+<li>最后一次访问时间</li>
+<li>访问次数</li>
+<li>IP地址</li>
+</ul>
+</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>&emsp;&emsp;Listener和Filter一样是Servlet的高级特性，提供辅助性功能，与Servlet没有任何耦合。Filter用于过滤request与response，而Listener用于监控context、Session、request相关的事情。</p>
+<h1 id="附：电子邮件"><a href="#附：电子邮件" class="headerlink" title="附：电子邮件"></a>附：电子邮件</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>邮件服务器：<ul>
+<li>要在Internet上提供电子邮件功能，必须有专门的电子邮件服务器。例如现在Internet很多提供邮件服务的厂商：sina、sohu、163等等他们都有自己的邮件服务器。</li>
+<li>邮件服务器类似于邮局，主要负责接收用户投递过来的邮件，并把邮件投递到邮件接收者的电子邮箱中。</li>
+<li>邮件服务器，按照提供的服务类型，可以分为发送邮件的服务器和接收邮件的服务器</li>
+</ul>
+</li>
+<li>电子邮箱：<ul>
+<li>电子邮箱（E-mail地址）的获得需要在邮件服务器上进行申请，电子邮箱即用户在邮件服务器上申请的一个账户。用户在邮件服务器上申请了一个账号后，邮件服务器会为这个账户分配一定的空间，用户可以使用这个账户以及空间，发送电子邮件和保存别人发送过来的电子邮件。</li>
+</ul>
+</li>
+</ul>
+<h2 id="邮件协议"><a href="#邮件协议" class="headerlink" title="邮件协议"></a>邮件协议</h2><ul>
+<li>SMTP协议—发邮件协议<ul>
+<li>全称为Simple Mail Transfer Protocol(简单邮件传输协议)，它定义了邮件客户端软件与SMTP服务器之间、以及两台SMTP服务器之间的通讯规则。</li>
+<li>端口号：25</li>
+</ul>
+</li>
+<li>POP3协议—收邮件协议<ul>
+<li>全称为Post Office Protocol(邮局协议)，他定义了邮件客户端软件与POP3服务器的通讯规则。</li>
+<li>端口号：110<br><img src="/2019/01/23/监听器Listener/发送邮件的流程.jpg" alt="发送邮件的流程"></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/09/JSP和JSTL以及EL/" rel="next" title="JSP和JSTL以及EL">
+                <i class="fa fa-chevron-left"></i> JSP和JSTL以及EL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/22/centos搭建docker/" rel="prev" title="centos搭建docker">
+                centos搭建docker <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#监听器Listener"><span class="nav-number">1.</span> <span class="nav-text">监听器Listener</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener概述"><span class="nav-number">1.1.</span> <span class="nav-text">Listener概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Listener概述-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">Listener概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Listener的使用"><span class="nav-number">1.1.2.</span> <span class="nav-text">Listener的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听器术语"><span class="nav-number">1.1.3.</span> <span class="nav-text">监听器术语</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener的分类"><span class="nav-number">1.2.</span> <span class="nav-text">Listener的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#监听对象的创建与销毁"><span class="nav-number">1.2.1.</span> <span class="nav-text">监听对象的创建与销毁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听Session、Request、ServletContext"><span class="nav-number">1.2.2.</span> <span class="nav-text">监听Session、Request、ServletContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听对象的属性变化"><span class="nav-number">1.2.3.</span> <span class="nav-text">监听对象的属性变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听Session内的内容"><span class="nav-number">1.2.4.</span> <span class="nav-text">监听Session内的内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Listener的使用案例"><span class="nav-number">1.3.</span> <span class="nav-text">Listener的使用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附：电子邮件"><span class="nav-number">2.</span> <span class="nav-text">附：电子邮件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#邮件协议"><span class="nav-number">2.2.</span> <span class="nav-text">邮件协议</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

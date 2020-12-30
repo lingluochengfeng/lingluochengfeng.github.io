@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JSP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="JSP技术JSP简介&amp;emsp;&amp;emsp;JSP是一种基于本文的程序，其特点是HTML代码与Java程序共同存在。执行JSP会被Tomcat自动编译，这个过程对开发者是透明的、不需要关注的。编译后的JSP跟HttpServlet一样，都是javax.servlet.Servlet接口的子类，因此JSP是另外一种形式的Servlet。JSP与Servlet一样，在服务器端执行的。不同的是先由服务器">
+<meta name="keywords" content="JSP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSP技术">
+<meta property="og:url" content="http://blog.letmefly.cc/2018/12/17/JSP技术/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="JSP技术JSP简介&amp;emsp;&amp;emsp;JSP是一种基于本文的程序，其特点是HTML代码与Java程序共同存在。执行JSP会被Tomcat自动编译，这个过程对开发者是透明的、不需要关注的。编译后的JSP跟HttpServlet一样，都是javax.servlet.Servlet接口的子类，因此JSP是另外一种形式的Servlet。JSP与Servlet一样，在服务器端执行的。不同的是先由服务器">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/JSP运行原理.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/request的运行流程.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/request中文乱码.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/request的乱码.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/forward方法工作原理.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/转发和重定向.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/response运行过程.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/response运行过程1.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/HTTP响应.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/编码错误分析.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/编码错误分析2.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/记录上次访问时间.bmp">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/记录商品浏览记录.bmp">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/cookie和session的原理.bmp">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/购物车的分析.bmp">
+<meta property="og:updated_time" content="2018-12-28T05:19:32.136Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JSP技术">
+<meta name="twitter:description" content="JSP技术JSP简介&amp;emsp;&amp;emsp;JSP是一种基于本文的程序，其特点是HTML代码与Java程序共同存在。执行JSP会被Tomcat自动编译，这个过程对开发者是透明的、不需要关注的。编译后的JSP跟HttpServlet一样，都是javax.servlet.Servlet接口的子类，因此JSP是另外一种形式的Servlet。JSP与Servlet一样，在服务器端执行的。不同的是先由服务器">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2018/12/17/JSP技术/JSP运行原理.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2018/12/17/JSP技术/"/>
+
+
+
+
+
+  <title>JSP技术 | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2018/12/17/JSP技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JSP技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T10:41:04+08:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JSP技术"><a href="#JSP技术" class="headerlink" title="JSP技术"></a>JSP技术</h1><h2 id="JSP简介"><a href="#JSP简介" class="headerlink" title="JSP简介"></a>JSP简介</h2><p>&emsp;&emsp;JSP是一种基于本文的程序，其特点是HTML代码与Java程序共同存在。执行JSP会被Tomcat自动编译，这个过程对开发者是透明的、不需要关注的。编译后的JSP跟HttpServlet一样，都是javax.servlet.Servlet接口的子类，因此JSP是另外一种形式的Servlet。JSP与Servlet一样，在服务器端执行的。不同的是先由服务器编译部署成Servlet执行。<br>&emsp;&emsp;一般而言，提到JSP和Servlet时，Servlet一般指的是HttpServlet。如果不特别指明，这里的Servlet一般指HttpServlet而不是Servlet接口。  </p>
+<h3 id="JSP概述"><a href="#JSP概述" class="headerlink" title="JSP概述"></a>JSP概述</h3><p>&emsp;&emsp;JSP全名为Java Server Page，是为了简化Servlet的工作而出现的替代品。Sun公司1997年推出了Servlet API以及第一款Java Web服务器。早期的Java Web层体系结构中只有Servlet。接受用户请求，处理业务逻辑，生成HTML显示结果都是在Servlet中完成的。虽然Servlet可以胜任所有的工作，但是Servlet中不能像PHP、ASP等镶嵌HTML代码，输出HTML比较困难，而且部署过程也比较复杂。<br>&emsp;&emsp;为了克服Servlet的这些弱点，Sun公司在1999年初推出了JSP 1.0.作为对Servlet的一个补充，JSP在生成HMLT代码上比Servlet方便许多，而且不需要特殊部署，只需要复制到服务器下即可运行。JSP程序不需要再web.xml中部署，直接使用地址访问即可。<br>&emsp;&emsp;JSP包括很多技术，包括Java Bean，自定义标签(Custom Tags),EL表达式(Expression Language),JSTL标准标签类库(Java Standard Tag Library)等。</p>
+<h3 id="JSP工作原理"><a href="#JSP工作原理" class="headerlink" title="JSP工作原理"></a>JSP工作原理</h3><p>&emsp;&emsp;JSP是一种Servlet，但是与HttpServlet的工作方式不太一样。HttpServlet是先由源代码编译为class文件后部署到服务器下的，先编译后部署。而JSP则是先部署源代码后编译为class文件的，先部署后编译。JSP会在客户端第一次请求JSP文件时被编译为HttpJspPage类(接口Servlet的一个子类)。该类会被服务器临时存放在服务器工作目录里面。<br>&emsp;&emsp;客户端第一次访问jsp页面时，Tomcat先将jsp文件转化为标准的java文件，存放在Tomcat路径下的work\Catalina\localhost\jsp\org\apache\jsp目录下，并将java文件编译为class文件。该class文件便是JSP对应的Servlet。编译完毕后再运行class文件来响应客户端请求。以后客户端访问该jsp时，服务器将不再重新编译JSP文件，而是直接调用其class文件来响应客户端请求。<br>&emsp;&emsp;由于JSP只会在客户端第一次请求的时候被编译，因此第一次请求JSP时会感觉比较慢。而之后的请求因为不会编译JSP，所以速度快很多。如果将Tomcat保存的JSP编译后的class文件删除，Tomcat也会重新编译JSP。<br>&emsp;&emsp;开发Web的时候需要经常修改JSP。Tomcat可以自动检测到JSP程序的改动。如果检测到JSP源代码发生了改动，Tomcat会在下次客户端请求JSP时重新编译JSP，而不需要重启Tomcat。这种自动检测功能默认是开启的，检测改动会消耗少量的时间。在部署Web应用程序的时候可以在web.xml中将其关闭。<br><img src="/2018/12/17/JSP技术/JSP运行原理.png" alt="JSP运行原理"><br>&emsp;&emsp;JSP的执行过程<br>（1）客户端发出Request请求<br>（2）JSP Container将JSP翻译成Servlet的源代码<br>（3）将产生的Servlet的源代码经编译后，加载到内存中运行<br>（4）把结果Response(响应)发送至客户端<br>&emsp;&emsp;JSP和Servlet的执行效率相差不大，只是第一次执行JSP页面时需要进行编译。<br>&emsp;&emsp;JSP在执行第一次后，会被编译成Servlet的类文件。当再重复调用执行时，就直接执行第一次所产生的Servlet，而不用再重新把JSP编译成Servlet。因此，除了第一次编译会花费比较久的时间之外，JSP和Servlet的执行速度几乎相同了。<br>&emsp;&emsp;执行JSP网页时，通常可以分为两个时期：转译时期(Translation Time)和请求时期(Request Time)<br>(1)JSP文件先要被服务器翻译成Java文件(Servlet),在Tomcat中翻译后的Java文件在tomcat下的work/Catalina/localhost中相应名字的应用目录中。<br>(2)编译成Java文件<br>(3)运行.class文件</p>
+<h3 id="JSP生命周期"><a href="#JSP生命周期" class="headerlink" title="JSP生命周期"></a>JSP生命周期</h3><p>&emsp;&emsp;JSP也是Servlet，运行时只会有一个实例。跟Servlet一样，JSP实例初始化、销毁也会调用Servlet的init()与destroy()方法。另外，JSP还有自己的初始化方法与销毁方法_jspInit()和_jspDestroy()。</p>
+<h2 id="JSP语法"><a href="#JSP语法" class="headerlink" title="JSP语法"></a>JSP语法</h2><p>&emsp;&emsp;JSP是HTML代码与Java代码的混合体，其中HTML部分遵循HTML语法，Java部分遵循Java语法。</p>
+<h3 id="JSP元素与模板数据"><a href="#JSP元素与模板数据" class="headerlink" title="JSP元素与模板数据"></a>JSP元素与模板数据</h3><p>JSP源代码可以分成两部分：模板数据与元素。</p>
+<ul>
+<li>模板数据：JSP中的HTML代码，它的内容是固定的。无论程序怎样运行，模板数据输出到客户端浏览器时都不会发生变化。模板数据不会控制程序的流程，也不会影响程序的运行结果。模板数据写的是什么输出来的就是什么。</li>
+<li>元素：JSP中的Java部分，包括脚本(Script, 也就是JSP中的Java代码)，以及JSP指令(Directive)与JSP标签(Tag)等。元素决定着程序的流程。</li>
+</ul>
+<h3 id="JSP脚本"><a href="#JSP脚本" class="headerlink" title="JSP脚本"></a>JSP脚本</h3><p>&emsp;&emsp;JSP脚本必须用“&lt;%”与“%&gt;“括起来，否则被视为模板数据。“&lt;%”与“%&gt;“中间的部分必须遵循Java语法，否则会发生编译错误。JSP脚本可以出现在JSP文件的任何地方。</p>
+<h3 id="JSP输出"><a href="#JSP输出" class="headerlink" title="JSP输出"></a>JSP输出</h3><p>&emsp;&emsp;在源程序中使用out.println()方法输出，类似于Servlet中的输出。JSP中还可以使用“&lt;%=”与“%&gt;“输出各种类型数据，包括int、double、boolean、String、Object等。使用“&lt;%=”与“%&gt;“输出变量的时候，后面不能有“;”号。输出某个类对象的时候调用该对象的toString()方法（表达式）。</p>
+<h3 id="JSP注释"><a href="#JSP注释" class="headerlink" title="JSP注释"></a>JSP注释</h3><p>&emsp;&emsp;注释是编程中常用的程序元素。JSP中除了可以使用Java注释之外，还可以使用”&lt;%–”与”–%&gt;”引起的JSP注释。JSP注释既可以单行，也可以多行。</p>
+<h3 id="JSP方法"><a href="#JSP方法" class="headerlink" title="JSP方法"></a>JSP方法</h3><p>&emsp;&emsp;JSP中可以声明方法和属性(全局变量)，但是不能直接在“&lt;%”与”%&gt;”以及“&lt;%=”与”%&gt;”之间声明。JSP声明方法或者全局变量时使用另一组符合“&lt;%!”与“%&gt;”(声明标签)。声明的作用范围是整个JSP页面，同时，只在一个JSp页面有效。声明的类型包括：变量，方法，类。</p>
+<h3 id="JSP的if语句"><a href="#JSP的if语句" class="headerlink" title="JSP的if语句"></a>JSP的if语句</h3><p>&emsp;&emsp;JSP中可以使用if语句。if语句块中可以包含大段的HTML代码。如果if语句块包含有HTML代码，if语句块前后必须使用”{“与”}”。</p>
+<h3 id="JSP的for循环"><a href="#JSP的for循环" class="headerlink" title="JSP的for循环"></a>JSP的for循环</h3><p>&emsp;&emsp;JSP中可以使用for语句来循环输出内容。可以使程序流程更加灵活。</p>
+<h3 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h3><p>&emsp;&emsp;while循环和for循环实质上是一样的。while循环可以改写成for循环，for循环也可以改写成while循环。在一个代码块中声明的变量是JSP页面的局部变量，只在当前页面有效。</p>
+<h3 id="JSP的return语句"><a href="#JSP的return语句" class="headerlink" title="JSP的return语句"></a>JSP的return语句</h3><p>&emsp;&emsp;当JSP代码执行过程中需要中途停止而不再继续往下运行时，使用return语句可以终止程序继续运行。return语句会忽略后面的所有语句（包括Java代码和HTML代码），直接结束运行。return之后，后面的代码不再执行，因此注意保持输出的HTML代码完整。</p>
+<h3 id="JSP的break语句"><a href="#JSP的break语句" class="headerlink" title="JSP的break语句"></a>JSP的break语句</h3><p>&emsp;&emsp;break跟return差不多，都能改变程序的运行流程。但return是直接返回，后面的代码不再继续运行，而break是跳出一个程序代码块，如for循环、while循环、switch子句等，程序代码块外层的代码仍会继续执行。另外break只能出现在for、while、switch等代码块的内部，而return不仅可以出现在其内部，也可以出现在其外部。</p>
+<h2 id="JSP指令"><a href="#JSP指令" class="headerlink" title="JSP指令"></a>JSP指令</h2><p>&emsp;&emsp;JSP指令是用来声明JSP页面的一些属性等，如编码方式、文档类型。JSp指令以符号“&lt;%@”开始，以符号”%&gt;”结束。JSP指令格式为&lt;%@ directive {attribute=value}<em>%&gt;。星号(</em>)表示可以有0个或者多个属性。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=utf-8&quot;%&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;该指令中directive位置为page，因此该指令是一个page指令。该指令包含language与contentType两个属性。常见的指令有page、taglib、include等。</p>
+<h3 id="page指令"><a href="#page指令" class="headerlink" title="page指令"></a>page指令</h3><p>&emsp;&emsp;page指令是最常用的指令，用来声明JSP页面的属性等。JSP指令的多个属性可以写在一个page指令中，也可以写在多个指令中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//一个指令写多个属性</span><br><span class="line">&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=utf-8&quot;%&gt;</span><br><span class="line">//一个指令写一个属性</span><br><span class="line">&lt;%@ page pageEncoding=&quot;UTF-8&quot;%&gt;</span><br><span class="line">&lt;%@ page import=&quot;java.util.*&quot;%&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;但是，无论在哪个page指令里的属性，任何page允许的属性都只能出现一次，否则会出现编译错误。import属性除外，可以出现多次。属性名区分大小写。  </p>
+<table>
+<thead>
+<tr>
+<th>属性名称</th>
+<th>取值范围</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>language</td>
+<td>java</td>
+<td>指明解释该JSP文件时采用的语言，默认为java</td>
+</tr>
+<tr>
+<td>extends</td>
+<td>任何类的全名</td>
+<td>指明编译该JSP文件时继承哪个类。JSP为Servlet，因此当指明继承普通类时需要实现Servlet的init、destroy等方法</td>
+</tr>
+<tr>
+<td>session</td>
+<td>true,false</td>
+<td>指明该JSP文件内是否内置Session对象。如果为true，则内置Session对象，可直接使用。否则不内置Session对象。默认为true</td>
+</tr>
+<tr>
+<td>import</td>
+<td>任何包名，类名</td>
+<td>引入该JSP中用到的类、包等。import是唯一可以声明多次的page指令属性。一个import属性可以引用多个类，中间用”,”分开。如:&lt;@page import=”java.util.List,java.tuil.ArrayList”&gt;。JSP中下面四个包里的类可以直接使用:java.lang.*, javax.servlet.*, javax.servlet.jsp.*, javax.servlet.http.*</td>
+</tr>
+<tr>
+<td>autoFlush</td>
+<td>true,false</td>
+<td>是否运行缓存。如果为true，则使用out.println()等方法输出的字符串并不是立刻到达客户端服务器的，而是暂时缓存在缓存中，缓存满或者能程序执行完毕执行out.flush()操作时才到客户端。默认为true</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>none或者数字+kb</td>
+<td>指定缓存大小。当autoFlush设为true时有效，例如:&lt;@page buffer=”10kb”&gt;</td>
+</tr>
+<tr>
+<td>isThreadSafe</td>
+<td>true,false</td>
+<td>指定线程是否安全。如果为true，则运行多个线程同时运行该JSP程序，否则只运行一个线程，其余线程等待。默认为false</td>
+</tr>
+<tr>
+<td>isErrorPage</td>
+<td>true,false</td>
+<td>指定该页面是否为错误处理页面。如果为true，则该JSP内置一个Exception对象exception，可直接使用，否则没有。默认为false</td>
+</tr>
+<tr>
+<td>errorPage</td>
+<td>某个JSP页面的相对路径</td>
+<td>指明一个错误显示页面，如果该JSP程序抛出了一个未捕捉的异常，则跳转到errorPage指定的页面。errorPage指定的页面通常是isErrorPage属性为true，且内置的exception对象为未捕捉的异常</td>
+</tr>
+<tr>
+<td>contentType</td>
+<td>有效的文档类型</td>
+<td>客户端浏览器根据该属性判断文档类型，例如：HTML格式为text/html, 纯文本格式为text/plain, JPG图像为image/jpeg, GIF图像为image/gif, WORD文档为application/msword</td>
+</tr>
+<tr>
+<td>info</td>
+<td>任意字符串</td>
+<td>指明JSP的信息。该信息可以通过Servlet.getServletInfo()方法得到</td>
+</tr>
+<tr>
+<td>trimDirectiveWhitespaces</td>
+<td>true,false</td>
+<td>是否去掉指令前后的空白字符串。默认为false</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;在HTML文件中，空行不影响显示效果。</p>
+<h3 id="include指令"><a href="#include指令" class="headerlink" title="include指令"></a>include指令</h3><p>&emsp;&emsp;include指令只有一种形式:\&lt;%@ include file=”relativeURL” %&gt;。relativeURL为本应用程序内另一个JSP文件或者HTML文件的路径。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//静态包含</span><br><span class="line">&lt;@ include file=&quot;head.jsp&quot;&gt;</span><br><span class="line">&lt;@ include file=&quot;foot.jsp&quot;&gt;</span><br><span class="line"></span><br><span class="line">//如果导航的头有多个还可以使用if语句来动态include某个文件</span><br><span class="line">&lt;%</span><br><span class="line">if(&quot;style&quot;.equals(request.getParameter(&quot;style&quot;)))&#123;</span><br><span class="line">%&gt;</span><br><span class="line">	&lt;@ include file=&quot;head.jsp&quot;&gt;</span><br><span class="line">&lt;%</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	&lt;@ include file=&quot;foot.jsp&quot;&gt;</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%</span><br><span class="line">&#125;</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="taglib指令"><a href="#taglib指令" class="headerlink" title="taglib指令"></a>taglib指令</h3><p>&emsp;&emsp;JSP支持标签技术，使用标签功能可以实现视图代码重用，很少量的代码就可以实现很复杂的显示效果。要使用标签功能必须先声明标签库以及标签前缀。taglib指令用来指明JSP页面内使用的JSP标签库。taglib指令有两个属性，uri为类库的地址，prefix为标签的前缀，如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot;%&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="JSP行为"><a href="#JSP行为" class="headerlink" title="JSP行为"></a>JSP行为</h2><p>&emsp;&emsp;JSP行为(JSP Actions)是一组JSP内置的标签。JSP行为是对常用的JSP功能的抽象与封装，包括两种，自定义JSP行为与标准JSP行为。自定义行为也就是JSP自定义标签。<br>&emsp;&emsp;标准的JSP行为格式为\&lt;jsp:elements {attribute=”value”}* /&gt;</p>
+<h3 id="jsp-include-行为"><a href="#jsp-include-行为" class="headerlink" title="jsp:include\行为"></a><a href="jsp:include\" target="_blank" rel="noopener">jsp:include\</a>行为</h3><p>&emsp;&emsp;include行为用于运行时包含某个文件。如果被包含的文件为JSP程序，则先执行JSP程序，然后把执行的结果包含进来。<br>&emsp;&emsp;include行为的语法为\&lt;jsp:include page=”relativeURI” flush=”true” /&gt;。属性page是必需的，为被包含文件的相对路径，必须为本Web应用程序内的文件。属性flush取值为true或者flase，默认为false，设置读入被保存文件内容前是否清空缓存，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;jsp:include flush=&quot;true&quot; page=&quot;/head.jsp&quot;&gt;&lt;/jsp:include&gt;</span><br><span class="line">这里是正文</span><br><span class="line">&lt;jsp:include flush=&quot;true&quot; page=&quot;/foot.jsp&quot;&gt;&lt;/jsp:include&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;虽然include指令(&lt;% page include=”relativeURL”%&gt;)与include行为都包含一个文件，但两者的原理与include发生的时刻不同。前者是在编译时包含，包含的是源代码，而后者是在运行时才包含的，而且只包含运行结果。include行为使用request.getRequestDispatcher(“relativeURI”).forward(request, response)。include指令是“先包含，后编译”，在被编译的jsp中已经包含被include时文件内容了。而include行为是“先运行后包含”，在被编译的jsp中没有被include的文件内容。</p>
+<h3 id="使用Java-Bean-POJO"><a href="#使用Java-Bean-POJO" class="headerlink" title="使用Java Bean(POJO)"></a>使用Java Bean(POJO)</h3><p>&emsp;&emsp;Java Bean行为是一组与Java Bean相关的行为，包括useBean行为、setProperty行为、getProperty等。<br>&emsp;&emsp;Java Bean是普通的Java类，也被成为POJO(普通Java对象，Plain Ordinary Java Object)，是Java程序中广泛应用的一种设计模式。Java Bean类只有私有属性与对应的getter与setter方法。<br>&emsp;&emsp;getter方法用于获取该属性，因此getter方法有返回类型。stter方法用于设置该属性，因此是void的，没有返回类型。<br>&emsp;&emsp;useBean行为用于在JSP中定义一个Java Bean对象。useBean行为的格式为\&lt;jsp:useBean id=”beanId” class=”className” scope=”Value” /&gt;。其中的属性如下表：</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>取值范围</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>合法的java变量名称</td>
+<td>指明Java Bean对象的名称。JSP中可以使用该名称引用该Java Bean对象</td>
+</tr>
+<tr>
+<td>class</td>
+<td>Java Bean类的全名</td>
+<td>Java Bean类的全名</td>
+</tr>
+<tr>
+<td>scope</td>
+<td>page,request,session,application</td>
+<td>该Java Bean对象的范围。当为page时，只在该JSP内有效。当为request时，只有当前的request中有效。当为session时，对当前用户有效。当为application时，当前Web应用程序内有效。默认为page</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;useBean行为定义了Java Bean对象后，就可以通过getPropert行为来获取Java Bean属性，或者通过setProperty行为来设置Java Bean属性。getProperty行为格式为\&lt;jsp:getProperty name=”beanName” property=”propertyName” /&gt;。setProperty行为格式为\&lt;jsp:setProperty name=”beanName” preperty=”propertyName” value=”” /&gt;。其中name为Java Bean的名称，也就是useBean行为里的id属性，property为Java Bean属性，value为属性值。</p>
+<h3 id="lt-jsp-forward-gt-行为"><a href="#lt-jsp-forward-gt-行为" class="headerlink" title="\&lt;jsp:forward /&gt;行为"></a>\&lt;jsp:forward /&gt;行为</h3><p>&emsp;&emsp;Servlet中能够通过request.getRequestDispatcher(“someServlet”).forward(request, response)跳转到另一个Servlet或者另一个文件，jsp也可以。\&lt;jsp:forward /&gt;实际上是对forward方法的一个封装，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;jsp:forward page=&quot;/somepage.jsp&quot;&gt;</span><br><span class="line">	&lt;jsp:param name=&quot;param1&quot; value=&quot;value1&quot;&gt;</span><br><span class="line">	&lt;jsp:param name=&quot;param2&quot; value=&quot;value2&quot;&gt;</span><br><span class="line">&lt;/jsp:forward&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;当使用param参数为1时，该JSP页面将跳转到指定的页面，并且跳转的时候地址栏参数为\&lt;jsp:param /&gt;指定的值。同Servlet一样，跳转动作发生之前不能用任何输出到达客户端浏览器，否则会抛出IllegalStateException。</p>
+<h3 id="lt-jsp-directive-gt-行为"><a href="#lt-jsp-directive-gt-行为" class="headerlink" title="\&lt;jsp:directive /&gt;行为"></a>\&lt;jsp:directive /&gt;行为</h3><p>&emsp;&emsp;\&lt;jsp:directive /&gt;行为相当于JSP指令。\&lt;jsp:directive.page /&gt;行为相当于\&lt;%@ page%&gt;指令，\&lt;jsp:derective.include /&gt;行为相当于\&lt;%@ include%&gt;指令，\&lt;jsp:derective.taglib /&gt;行为相当于\&lt;%@ taglib%&gt;指令，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;jsp:directive.page language=&quot;java&quot; contentType=&quot;text/html; charset=utf-8&quot;&gt;</span><br><span class="line">&lt;jsp:directive.page trimDirectiveWhitespaces=&quot;false&quot; /&gt;</span><br><span class="line">&lt;jsp:directive.page import=&quot;java.util.Date&quot; /&gt;</span><br><span class="line">&lt;jsp:directive.page import=&quot;java.util.List&quot; /&gt;</span><br><span class="line">&lt;jsp:directive.include file=&quot;head.jsp&quot; /&gt;</span><br><span class="line">&lt;jsp:directive.taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;\&lt;jsp:directive /&gt;行为与JSP指令可以相互改写。</p>
+<h2 id="JSP隐藏对象"><a href="#JSP隐藏对象" class="headerlink" title="JSP隐藏对象"></a>JSP隐藏对象</h2><p>&emsp;&emsp;JSP中内置了9个隐藏对象，使得JSP比Servlet使用起来更简单，更方便。<br>&emsp;&emsp;JSP内置的隐藏对象有out、request、response、config、session、application、page、pageContext、exception。  </p>
+<h4 id="out输出流对象"><a href="#out输出流对象" class="headerlink" title="out输出流对象"></a>out输出流对象</h4><p>&emsp;&emsp;隐藏对象out是javax.servlet.jsp.JspWriter类的实例。服务器向客户端输出的字符类内容可以通过out对象输出。Out对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void append(CharSequence cs)</td>
+<td>向out缓存中扩展字符类输出。当缓存满或者执行out.flush()操作时这些内容会输出到客户端浏览器</td>
+</tr>
+<tr>
+<td>void clear()</td>
+<td>清空要输出的内容</td>
+</tr>
+<tr>
+<td>void flush()</td>
+<td>将缓存内容flush到客户端浏览器</td>
+</tr>
+<tr>
+<td>void println(String str)</td>
+<td>向客户端输出内容</td>
+</tr>
+<tr>
+<td>boolean isAutoFlush()</td>
+<td>返回缓存满时是否自动flush。如果为false，缓存满时会抛出异常</td>
+</tr>
+<tr>
+<td>int getBufferSize()</td>
+<td>返回缓存大小。单位KB</td>
+</tr>
+<tr>
+<td>int getRemaining()</td>
+<td>返回缓存剩余大小。单位KB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="request请求对象"><a href="#request请求对象" class="headerlink" title="request请求对象"></a>request请求对象</h3><p>&emsp;&emsp;在Servlet API中，定义了一个HttpServletRequest接口，它继承自ServletRequest接口，专门用来封装HTTP请求消息。由于HTTP请求消息分为请求行、请求消息头和请求消息体三部分，因此在HttpServletRequest接口中定义了获取请求行、请求头和请求消息体的相关方法。在创建Servlet时会覆盖service()方法，或doGet()/doPost()，这些方法都有两个参数，一个为代表请求的request和代表响应的response。service方法中的request类型是ServletRequest，而doGet/doPost方法的request类型是HttpServletRequest，HttpServletRequest是ServletRequest的子接口，功能更加强大。</p>
+<p><img src="/2018/12/17/JSP技术/request的运行流程.jpg" alt="request的运行流程">  </p>
+<p>&emsp;&emsp;隐藏对象request是javax.servlet.ServletRequest类的实例，代表着客户端的请求。request包含客户端的信息以及请求的信息，如请求哪个文件，附带的地址栏参数等。每次客户端请求都会产生一个request实例。当访问Servlet时，会在请求消息的请求行中，包含请求方法、请求资源名、请求路径等信息，为了获取这些信息，在HttpServletRequest接口中，定义了一系列用于获取请求行、请求头、请求参数的方法，Request对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void attribute(String name, Object value)</td>
+<td>在request中保存一个对象。本页面内或者forward之后的页面中可以通过getAttribute(String name)方法获取该对象</td>
+</tr>
+<tr>
+<td>Object getAttribute(String name)</td>
+<td>从request中获取name对应的对象</td>
+</tr>
+<tr>
+<td>String getMethod()</td>
+<td>该方法用于获取HTTP请求消息中的请求消息，返回提交方式，一般是post或get</td>
+</tr>
+<tr>
+<td>String getParameter(String key)</td>
+<td>返回提交的参数，如果请求消息中没有包含指定名称的参数，getParameter()方法返回null；如果指定名称的参数存在但没有设置值，则返回一个空串；如果请求消息中包含多个该指定名称的参数，getParameter()方法返回第一个出现的参数值。</td>
+</tr>
+<tr>
+<td>String[] getParameterValues(String key)</td>
+<td>返回提交的多个同名参数值。以数组形式返回</td>
+</tr>
+<tr>
+<td>Enumeration getParameterNames()</td>
+<td>返回所有提交的参数名称</td>
+</tr>
+<tr>
+<td>String getParameterMap()</td>
+<td>用于将请求消息中的所有参数名和值装入一个Map对象中返回</td>
+</tr>
+<tr>
+<td>Cookie[] getCookies()</td>
+<td>返回所有的Cookie</td>
+</tr>
+<tr>
+<td>String getContextPath()</td>
+<td>返回应用程序路径（根路径），web应用的名称</td>
+</tr>
+<tr>
+<td>String getRequestURI()</td>
+<td>该方法用于获取请求行中资源名称部分，即位于URL的主机和端口之后、参数部分之前的部分（返回请求的URI路径）,如:/jsp/a.jsp</td>
+</tr>
+<tr>
+<td>void setCharacterEncoding(String encoding)</td>
+<td>设置request的编码方式</td>
+</tr>
+<tr>
+<td>String getHeader(String name)</td>
+<td>获取request头信息</td>
+</tr>
+<tr>
+<td>String getDateHeader(String name)</td>
+<td>该方法用于获取指定头字段的值，并将其按GMT时间格式转换成一个代表日期/时间的长整数，这个长整数是自1970年1月1日0点0分0秒算起的以毫秒为单位的时间值</td>
+</tr>
+<tr>
+<td>Enumeration getHeaders(String name)</td>
+<td>返回一个Enumeration集合对象，该集合对象由请求消息中出现的某个指定名称的所有头字段值组成。多数情况下，一个头字段名在请求消息中只出现一次，但有时候可能出现多次。</td>
+</tr>
+<tr>
+<td>Enumeration getHeaderNames()</td>
+<td>返回所有的request头信息</td>
+</tr>
+<tr>
+<td>int getIntHeader(String name)</td>
+<td>获取指定名称的头字段，并且将其值转为int类型。需要注意的是，如果指定名称的头字段不存在，返回值为-1；如果获取到的头字段的值不能转为int类型，将发生NumberFormatException异常。</td>
+</tr>
+<tr>
+<td>String getContentType()</td>
+<td>获取Content-Type头字段的值，结果为String类型</td>
+</tr>
+<tr>
+<td>String getContentLength()</td>
+<td>获取Content-Type头字段的值，结果为int类型</td>
+</tr>
+<tr>
+<td>String getCharacterEncoding()</td>
+<td>用于返回请求消息的实体部分的字符集编码，通常是从Content-Type头字段中进行提取，结果为String类型</td>
+</tr>
+<tr>
+<td>Dispatcher getRequestDispatcher()</td>
+<td>返回Dispatcher对象。Dispatcher对象可以执行forward操作</td>
+</tr>
+<tr>
+<td>HttpSession getSession()</td>
+<td>返回HttpSession对象</td>
+</tr>
+<tr>
+<td>String getQueryString()</td>
+<td>该方法用于获取请求行中的参数部分，即资源路径后面问好(?)以后的所有内容</td>
+</tr>
+<tr>
+<td>String getProtocol()</td>
+<td>该方法用于获取请求行中的协议名和版本，例如HTTP/1.0或HTTP/1.1</td>
+</tr>
+<tr>
+<td>String getServletPath()</td>
+<td>该方法用于获取Servlet的名称或Servlet所映射的路径</td>
+</tr>
+<tr>
+<td>String getRemoteAddr()</td>
+<td>该方法用于获取请求客户端的IP地址，其格式类似于”192.168.0.3”</td>
+</tr>
+<tr>
+<td>String getRemoteHost()</td>
+<td>该方法用于获取请求客户端的完整主机名，其格式类似于”pcl.itcast.cn”.需要注意的是，如果无法解析出客户机的完整主机名，该方法将会返回客户端的IP地址</td>
+</tr>
+<tr>
+<td>int getRemotePort()</td>
+<td>该方法用于获取请求客户端网络连接的端口号</td>
+</tr>
+<tr>
+<td>String getLocalAddr()</td>
+<td>该方法用于获取Web服务器上接收当前请求网络连接的IP地址</td>
+</tr>
+<tr>
+<td>String getLocalName()</td>
+<td>获取Web服务器上接收当前网络连接IP所对应的主机名</td>
+</tr>
+<tr>
+<td>int getLocalPort()</td>
+<td>获取Web服务器上接收当前网络连接的端口号</td>
+</tr>
+<tr>
+<td>String getServerName()</td>
+<td>用于获取当前请求所指向的主机名，即HTTP请求消息</td>
+</tr>
+<tr>
+<td>int getServerPort()</td>
+<td>用于获取当前请求所连接的服务器端口号，即如果HTTP请求消息中Host头字段所对应的端口号部分</td>
+</tr>
+<tr>
+<td>String getScheme()</td>
+<td>用于获取请求的协议名，例如http、https或ftp</td>
+</tr>
+<tr>
+<td>StringBuffer getRequestURL()</td>
+<td>该方法用于获取客户端发出请求时的完整URL，包括协议、服务器名、端口号、资源路径等信息，但不包括后面的查询参数部分。注意，getRequestURL()方法返回的结果是StringBuffer类型，而不是String类型，这样更便于对结果进行修改</td>
+</tr>
+</tbody>
+</table>
+<h5 id="解决请求参数的中文乱码问题"><a href="#解决请求参数的中文乱码问题" class="headerlink" title="解决请求参数的中文乱码问题"></a>解决请求参数的中文乱码问题</h5><p>&emsp;&emsp;由于HTML设置了浏览器在传递请求参数时，采用的编码方式是UTF-8，但在解码时采用的是默认的ISO8859-1，因此会导致乱码的出现。<br>&emsp;&emsp;解决方法：<br>&emsp;&emsp;在HttpServletRequest接口中，提供了一个setCharacterEncoding()方法，该方法用于设置request对象的解码方式。但该方法只对POST方式有效，对GET方式则无效。<br>&emsp;&emsp;对GET方式的处理需要增加另一语句，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">request.setCharacterEncoding(&quot;utf-8&quot;);</span><br><span class="line">String name = request.getParameter(&quot;username&quot;);</span><br><span class="line">//需要加入这句话，处理GET方式中文乱码</span><br><span class="line">name = new String(name.getBytes(&quot;iso8859-1&quot;),&quot;utf-8&quot;);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;request的中文乱码处理流程<br><img src="/2018/12/17/JSP技术/request中文乱码.jpg" alt="request的乱码"><br><img src="/2018/12/17/JSP技术/request的乱码.png" alt="request的乱码"></p>
+<h5 id="通过Request对象传递数据"><a href="#通过Request对象传递数据" class="headerlink" title="通过Request对象传递数据"></a>通过Request对象传递数据</h5><p>&emsp;&emsp;Request对象不仅可以获取一系列数据，还可以通过属性传递数据。在ServletRequest接口中，定义了一系列操作属性的方法，具体如下：</p>
+<ul>
+<li>setAttribute()方法<br>&emsp;&emsp;该方法用于将一个对象与一个名称关联后存储进ServletRequest对象中，其完整语法定义为：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void setAttribute(String name, Object o)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;需要注意的是，如果ServletRequest对象中已经存在指定名称的属性，setAttribute()方法将会先删除原来的属性，然后再添加新的属性。如果传递给setAttribute()方法的属性对象为null，则删除指定名称的属性，此时的效果等同于removeAttribute()。</p>
+<ul>
+<li>getAttribute()方法<br>&emsp;&emsp;该方法用于从ServletRequest对象中返回指定名称的属性对象，其完整语法定义为：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public String getAttribute(String name)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>removeAttribute()方法<br>&emsp;&emsp;该方法用于从ServletRequest对象中删除指定名称的属性，其完整语法定义为：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void removeAttribute(String name)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>getAttributeNames()方法<br>&emsp;&emsp;该方法用于返回一个包含ServletRequest对象中的所有属性名Enumeration对象，可以对ServletRequest对象中的所有属性进行遍历处理。getAttributeNames()方法的完整语法定义如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public Enumeration getAttributeNames()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;需要注意的是，只有属于同一个请求中的数据才可以通过ServletRequest对象传递数据。</p>
+<h5 id="RequestDispatcher接口"><a href="#RequestDispatcher接口" class="headerlink" title="RequestDispatcher接口"></a>RequestDispatcher接口</h5><p>&emsp;&emsp;当一个Web资源受到客户端的请求后，如果希望服务器通知另外一个资源去处理请求，这时，除了使用sendRedirect()方法实现请求重定向外，还可以通过RequestDispatcher接口的实例对象来实现。在ServletRequest接口中定义了一个获取RequestDispatcher对象的方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法声明</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getRequestDispatcher(String path)</td>
+<td>返回封装了某个路径所指定资源的RequestDispatcher对象。其中参数path必须以”/“开头，用于表示当前Web应用的根目录。需要注意的是，WEB-INF目录中的内容对RequestDispatcher对象也是可见的，因此传递给getRequestDispatcher(String path)方法的资源可以是WEB-INF目录中的文件</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;获取RequestDispatcher对象后，最重要的是通知其他Web资源处理当前的Servlet请求，在RequestDispatcher接口中，定义了两个相关方法</p>
+<table>
+<thead>
+<tr>
+<th>方法声明</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>forward(ServletRequest request, ServletResponse response)</td>
+<td>该方法用于将请求从一个Servlet传递给另外一个Web资源。在Servlet中，可以对请求做一个初步处理，然后通过调用这个方法，将请求给其他资源进行相应。需要注意的是，该方法必须在响应提交给客户端之前被调用，否则将抛出IllegalStateException异常</td>
+</tr>
+<tr>
+<td>include(ServletRequest request, ServletResponse response)</td>
+<td>用于将其他的资源作为当前相应内容包含进来</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;forward()方法可以实现请求转发，include()方法可以实现请求包含。</p>
+<h4 id="请求转发"><a href="#请求转发" class="headerlink" title="请求转发"></a>请求转发</h4><p>&emsp;&emsp;在Servlet中，如果当前Web资源不想处理请求时，可以通过forward()方法将当前请求传递给其他Web资源进行处理，这种方式称为请求转发。<br><img src="/2018/12/17/JSP技术/forward方法工作原理.jpg" alt="forward方法工作原理"><br>&emsp;&emsp;从图中可以看出，当客户端访问Servlet1时，可以通过forward()方法将请求转发给其他Web资源，其他Web资源处理完请求后，直接将响应结果返回到客户端。</p>
+<h4 id="重定向和请求转发的区别"><a href="#重定向和请求转发的区别" class="headerlink" title="重定向和请求转发的区别"></a>重定向和请求转发的区别</h4><p><img src="/2018/12/17/JSP技术/转发和重定向.png" alt="重定向和请求转发的区别"></p>
+<ul>
+<li>1.重定向的地址栏会发生变化，转发的地址栏不变。</li>
+<li>2.重定向两次请求两次响应，转发一次请求一次响应。</li>
+<li>3.重定向路径需要加工程名，转发的路径不需要加工程名。</li>
+<li>4.重定向可以跳转到任意网站，转发只能在服务器内部进行转发。</li>
+<li>5.重定向不使用request域来传递对象，转发可以传递对象。</li>
+</ul>
+<h4 id="ServletContext域和Request域的生命周期比较"><a href="#ServletContext域和Request域的生命周期比较" class="headerlink" title="ServletContext域和Request域的生命周期比较"></a>ServletContext域和Request域的生命周期比较</h4><p>ServletContext：<br>&emsp;&emsp;创建：服务器启动<br>&emsp;&emsp;销毁：服务器关闭<br>&emsp;&emsp;域的作用范围：整个web应用</p>
+<p>request：<br>&emsp;&emsp;创建：访问时创建request<br>&emsp;&emsp;销毁：响应结束request销毁<br>&emsp;&emsp;域的作用范围：一次请求中</p>
+<h4 id="客户端地址与服务器端地址的写法"><a href="#客户端地址与服务器端地址的写法" class="headerlink" title="客户端地址与服务器端地址的写法"></a>客户端地址与服务器端地址的写法</h4><p>客户端地址：<br>&emsp;&emsp;客户端去访问服务器的地址，服务器外部的地址，特点：写上web应用名称<br>直接输入地址：<br>&emsp;&emsp;重定向</p>
+<p>服务器端地址：<br>&emsp;&emsp;服务器内部资源的跳转的地址，特点，不需要写web应用的名称<br>&emsp;&emsp;转发</p>
+<h3 id="response对象"><a href="#response对象" class="headerlink" title="response对象"></a>response对象</h3><p>&emsp;&emsp;我们在创建Servlet时会覆盖service()方法，或doGet()/doPost(),这些方法都有两个参数，一个为代表请求的request和代表响应response。<br>&emsp;&emsp;在Servlet API中，定义了一个HttpServletResponse接口，它继承自ServletResponse接口，专门用来封装HTTP响应消息。由于HTTP响应消息分为状态行、响应消息头、消息体三部分，因此在HttpServletResponse接口中定义了向客户端发送响应状态码、响应消息头、响应消息体的方法。<br>&emsp;&emsp;隐藏对象response是javax.servlet.ServletResponse类的实例，代表客户端的响应。服务器端的任何输出通过response对象发送到客户端浏览器。每次服务器端都会响应一个response实例。service方法中的response的类型是ServletResponse，而doGet/doPost方法的response的类型是HttpServletResponse，HttpServletResponse是ServletResponse的子接口，功能和方法更加强大。<br>response运行流程<br><img src="/2018/12/17/JSP技术/response运行过程.png" alt="response运行过程"><br><img src="/2018/12/17/JSP技术/response运行过程1.jpg" alt="response运行过程"><br>response的响应如下图所示：<br><img src="/2018/12/17/JSP技术/HTTP响应.jpg" alt="response运行过程"><br>&emsp;&emsp;我们可以设置response的响应行和响应头。</p>
+<h4 id="设置响应行"><a href="#设置响应行" class="headerlink" title="设置响应行"></a>设置响应行</h4><p>&emsp;&emsp;1. 设置响应行状态码：setStatus(int sta)<br>&emsp;&emsp;该方法用于设置HTTP响应消息的状态码，并生成响应状态行。由于响应状态行中的状态描述信息直接与状态码相关，而HTTP版本由服务器确定，因此只要通过setStatus(int status)方法设置了状态码，即可实现状态行的发送。注意，正常情况下，Web服务器会默认产生一个状态码为200的状态行。<br>&emsp;&emsp;2. sendError(int sc)方法<br>&emsp;&emsp;该方法用于发送表示错误信息的状态码，如，404状态码表示找不到客户端请求的资源。在response对象中，提供了两个重载的sendError(int sc)方法，具体如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public void sendError(int code) throws java.io.IOException</span><br><span class="line">public void sendError(int code, String message)throws java.io.IOException</span><br></pre></td></tr></table></figure>
+<p>上述重载的两个方法中，第一个方法只发送错误信息的状态码，而第二个方法除了发送状态码外，还增加了一条用于提示说明的文本信息，该文本信息将出现在发送给客户端的正文内容中。</p>
+<h4 id="设置响应头"><a href="#设置响应头" class="headerlink" title="设置响应头"></a>设置响应头</h4><ul>
+<li>addHeader（String name，String value）</li>
+<li>setHeader（String name，String value）</li>
+<li>addIntHeader（String name，int value）</li>
+<li>setIntHeader（String name，int value）</li>
+<li>addDateHeader（String name，long date）</li>
+<li>setDateHeader（String name，long date）</li>
+<li>void setContentLength(int len)</li>
+<li>void setContentType(String type)</li>
+<li>void setLocale(Locale loc)</li>
+<li>void setCharacterEncoding(String charset)  setCharacterEncoding()方法比setContentType()和setLocale()方法的优先权高，它的设置将覆盖setContentType()和setLocale()方法所设置的字符码表。<font color="red">setContentType、setLocale和setCharacterEncoding方法都用于设置字符编码，可以解决乱码问题</font></li>
+</ul>
+<p>&emsp;&emsp;其中add表示添加，set表示设置。</p>
+<h4 id="通过response设置响应体"><a href="#通过response设置响应体" class="headerlink" title="通过response设置响应体"></a>通过response设置响应体</h4><p>(1). 响应体设置文本<br>&emsp;&emsp;PrintWriter getWriter()<br>&emsp;&emsp;获得字符流，通过字符流的write(Stirng s)方法可以将字符串设置到response缓冲区中，随后Tomcat将response缓冲区中的内容组装成Http响应返回给浏览器端。该方法获取的字节输出流对象为PrintWriter类型。由于PrintWriter类型的对象可以直接输出字符文本内容，因此要想输出内容全为字符文本的网页文档，需要使用getWriter()方法。</p>
+<h5 id="关于设置中文乱码的问题"><a href="#关于设置中文乱码的问题" class="headerlink" title="关于设置中文乱码的问题"></a>关于设置中文乱码的问题</h5><p><img src="/2018/12/17/JSP技术/编码错误分析.jpg" alt="编码错误分析"><br>&emsp;&emsp;原因：response缓冲区的默认编码是ISO8859-1，此码表中没有中文，可以通过response的setCharacterEncoding(String charset)设置response编码。</p>
+<p>&emsp;&emsp;如果客户端还是不能正常显示文字：<br>原因：虽然将response缓冲区的编码设置为UTF-8，但浏览器的默认编码是本地系统的编码，由于中文系统客户端浏览器的默认编码是GBK，我们需要手动改成UTF-8<br><img src="/2018/12/17/JSP技术/编码错误分析2.jpg" alt="编码错误分析"><br>&emsp;&emsp;还可以在代码中指定浏览器解析页面的编码方式，通过response的setContentType(String type)方法指定页面解析时的编码是UTF-8，response.setContentType(“text/html;charset=UTF-8”);</p>
+<p>&emsp;&emsp;上面的代码不仅可以指定浏览器解析页面时的编码，同时也内含setCharacterEncoding的功能，所以在实际开发中只要编写response.setContentType(“text/html;charset=UTF-8”);即可解决页面输出中午乱码问题。</p>
+<p>(2). 响应头设置字节<br>&emsp;&emsp;ServletOutputStream getOutputStream()<br>获取字节流，通过该字节流的write(byte[] bytes)可以向response缓冲区中写入字节，然后由Tomcat服务器将字节内容组成Http响应返回给浏览器。该方法所获取的字节输出流对象为ServletOutputStream类型。由于ServletOutputStream是OutputStream的子类，它可以直接输出字节数组中的二进制数据。因此要想输出二进制格式的响应正文，就要使用getOutputStream()方法。</p>
+<font color="red">注意：虽然response对象的getOutputStream()和getWriter()方法都可以发送响应消息体，但他们之间相互排斥，不可以同时使用，否则会发生IllegalStateException异常。</font>
+
+
+<p>Response对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void clean()</td>
+<td>清空暂存在缓存中的输出</td>
+</tr>
+<tr>
+<td>void addCookie(Cookie cookie)</td>
+<td>设置Cookie</td>
+</tr>
+<tr>
+<td>OutputStream getOutputStream()</td>
+<td>返回服务器输出流。可以通过输出流输出二进制信息</td>
+</tr>
+<tr>
+<td>void sendRedirect(String url)</td>
+<td>使本页面redirect到另一个页面</td>
+</tr>
+<tr>
+<td>void setContentType(String contentType)</td>
+<td>设置文档类型。HTML文档类型为text/html</td>
+</tr>
+<tr>
+<td>PrintWriter getOut()</td>
+<td>返回out对象</td>
+</tr>
+<tr>
+<td>void setHeader(String name, String value)</td>
+<td>设置response头信息</td>
+</tr>
+<tr>
+<td>void setStatus(int status)</td>
+<td>设置response状态码</td>
+</tr>
+</tbody>
+</table>
+<h3 id="config配置对象"><a href="#config配置对象" class="headerlink" title="config配置对象"></a>config配置对象</h3><p>&emsp;&emsp;隐藏对象config是javax.servlet.ServletConfig类的实例。ServletConfig对象封装了配置在web.xml中初始化JSP的参数。JSP中通过config获取这些参数。每个JSP文件共有一个config对象。Config对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String getInitParameter(String name)</td>
+<td>返回配置在web.xml中的初始化参数</td>
+</tr>
+<tr>
+<td>Enumeration getInitParameterNames()</td>
+<td>返回所有初始化参数名称</td>
+</tr>
+<tr>
+<td>ServletContext getServletContext()</td>
+<td>返回ServletContext对象</td>
+</tr>
+<tr>
+<td>String getServletName()</td>
+<td>返回Servlet名称</td>
+</tr>
+</tbody>
+</table>
+<h3 id="session会话对象"><a href="#session会话对象" class="headerlink" title="session会话对象"></a>session会话对象</h3><h4 id="什么是会话？"><a href="#什么是会话？" class="headerlink" title="什么是会话？"></a>什么是会话？</h4><p>&emsp;&emsp;会话可以简单理解为：用户打开一个浏览器，点击多个超链接，访问服务器多个web资源，然后关闭浏览器，整个过程称为一个会话。</p>
+<h4 id="会话过程中要解决的一些问题？"><a href="#会话过程中要解决的一些问题？" class="headerlink" title="会话过程中要解决的一些问题？"></a>会话过程中要解决的一些问题？</h4><ul>
+<li>每个用户与服务器进行交互的过程中，各自会有一些数据，程序要想办法保存每个用户数据。</li>
+</ul>
+<p>&emsp;&emsp;隐藏对象session是javax.servlet.http.HttpSession类的实例。session与cookie是记录客户访问信息的两种机制，session用于在服务器端保存用户信息，cookie用于在客户端保存用户信息。Servlet中需要通过request.getSession()获取session对象，而JSP中可以直接使用。如果JSP中配置了\&lt;%@ page seesion=”false”%&gt;,则隐藏对象session不可用。</p>
+<h5 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h5><p>Cookie是客户端技术，程序把每个用户的数据以cookie的形式写给用户各自的浏览器。当用户使用浏览器再去访问服务中的web资源时，就会带着各自的数据。这样，web资源处理就是用户各自的数据了。<br>&emsp;&emsp;cookie的作用：</p>
+<ul>
+<li>判断用户上次访问时间：如果是第一次访问，需要输出欢迎，并且记录当前的时间，保存到cookie中，再回写到浏览器端。如果不是第一次访问，获取cookie中的时间，输出时间，并且记录当前的时间，保存到cookie中，再回写到浏览器端。</li>
+</ul>
+<p>&emsp;&emsp;java.servlet.http.Cookie类用于创建一个Cookie，response接口中也定义了一个addCookie方法，它用于在其响应头中增加一个相应的Set-Cookie头字段。同样，request接口中也定义了一个getCookies方法，用于获取客户端提交的Cookie。Cookie类的方法：</p>
+<ul>
+<li>public Cookie(String name, String value)</li>
+<li>setValue与getValue方法</li>
+<li>setMaxAge与getMaxAge方法</li>
+<li>setPath与getPath方法</li>
+<li>setDomain与getDomain方法</li>
+<li>getName方法</li>
+</ul>
+<h5 id="Cookie的细节"><a href="#Cookie的细节" class="headerlink" title="Cookie的细节"></a>Cookie的细节</h5><ul>
+<li>一个Cookie只能只能标识一种信息，它至少含有一个标识该信息的名称(NAME)和设置值(VALUE)</li>
+<li>一个WEB站点可以给一个WEB浏览器发送多个Cookie，一个WEB浏览器也可以存储多个WEB站点提供的Cookie。</li>
+<li>浏览器一般只允许存放300个Cookie，每个站点最多存放20个Cookie，每个Cookie的大小限制为4KB。</li>
+<li>如果创建了一个cookie，并将他发送到浏览器，默认情况下它是一个会话级别的cookie(即存储在浏览器的内存中)，用户退出浏览器之后即被删除。若希望浏览器将该cookie存储在磁盘上，则需要使用maxAge，并给出一个以秒为单位的时间。</li>
+<li>删除持久cookie，可以将cookie最大实效设为0，注意，删除cookie时，path必须一致，否则不会删除。</li>
+</ul>
+<p>cookie的应用<br><img src="/2018/12/17/JSP技术/记录上次访问时间.bmp" alt="cookie的应用"><br><img src="/2018/12/17/JSP技术/记录商品浏览记录.bmp" alt="cookie的应用"></p>
+<h5 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h5><p>&emsp;&emsp;WEB开发中，服务器可以为每个用户浏览器创建一个会话对象(session对象)，注意：一个浏览器独占一个session对象(默认情况下)。因此，在需要保存用户数据时，服务器程序可以把用户数据写到用户浏览器独占的session中，当用户使用浏览器访问其他程序时，其他程序可以从用户的session中取出该用户的数据，为用户服务。<br>&emsp;&emsp;Session和Cookie的主要区别在于：</p>
+<ul>
+<li>Cookie是把用户的数据写给用户的浏览器；</li>
+<li>Session技术把用户的数据写到用户独占的Session中（服务器端）</li>
+<li>Session对象由服务器创建，开发人员可以调用request对象的getSession方法得到session对象。</li>
+</ul>
+<p>cookie和session的实现原理：<br><img src="/2018/12/17/JSP技术/cookie和session的原理.bmp" alt="cookie和session的实现原理"><br>购物车的分析<br><img src="/2018/12/17/JSP技术/购物车的分析.bmp" alt="cookie和session的实现原理"><br>&emsp;&emsp;Session是服务器端技术，利用该技术，服务器在运行时可以为每一个用户的浏览器创建一个其独享的session对象，由于session为用户浏览器独享，所以用户在访问服务器的web资源时，可以把各自的数据放在各自的session中，当用户去访问服务器中的其他web资源时，其他web资源再从用户各自的session中取出数据为用户的服务。<br>每个用户对应一个session对象。Session对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String getId()</td>
+<td>返回session的id</td>
+</tr>
+<tr>
+<td>Object getAttribute(String name)</td>
+<td>返回session中属性名为name的对象</td>
+</tr>
+<tr>
+<td>Enumeration getAttributeNames()</td>
+<td>返回session的所有属性名</td>
+</tr>
+<tr>
+<td>long getCreationTime()</td>
+<td>返回session创建的时间</td>
+</tr>
+<tr>
+<td>long getLastAccessedTime()</td>
+<td>返回该session最后一次访问的时间</td>
+</tr>
+<tr>
+<td>int getMaxInactiveInterval()</td>
+<td>返回session的最大允许的间隔时间。单位为秒</td>
+</tr>
+<tr>
+<td>void setAttribute(String name, Object value)</td>
+<td>设置session</td>
+</tr>
+<tr>
+<td>void setMaxInactiveInterval(long second)</td>
+<td>设置最大允许的时间间隔</td>
+</tr>
+</tbody>
+</table>
+<h3 id="application应用程序对象"><a href="#application应用程序对象" class="headerlink" title="application应用程序对象"></a>application应用程序对象</h3><p>&emsp;&emsp;隐藏对象application是javax.servlet.ServletContext类的对象。application封装了JSP所在的Web应用程序的信息，如web.xml中配置的全局的初始化信息。Servlet中application对象需要通过ServletConfig.getServletContext()来获取。整个Web应用程序对应一个application对象。Application对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object getAttribute(String name)</td>
+<td>返回application中属性名为name的对象</td>
+</tr>
+<tr>
+<td>Enumeration getAttributeNames()</td>
+<td>返回application的所有属性名</td>
+</tr>
+<tr>
+<td>void setAttribute(String name, Object value)</td>
+<td>设置application属性</td>
+</tr>
+<tr>
+<td>void removeAttribute(String name)</td>
+<td>移除application属性</td>
+</tr>
+<tr>
+<td>String getInitParameter(String name)</td>
+<td>返回全局初始化参数</td>
+</tr>
+<tr>
+<td>Enumeration getInitParameterNames()</td>
+<td>返回所有的全局初始化参数</td>
+</tr>
+<tr>
+<td>String getMimeType(String filename)</td>
+<td>返回文件的文档类型。例如:getMimeType(“abc.html”)将返回”text/html”</td>
+</tr>
+<tr>
+<td>String getRealPath(String relativePath)</td>
+<td>返回web应用程序内相对网址对应的绝对路径</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Servlet的数据访问范围"><a href="#Servlet的数据访问范围" class="headerlink" title="Servlet的数据访问范围"></a>Servlet的数据访问范围</h4><ul>
+<li>applicationScope servletContext（数据库连接池，配置，线程池，站点访问次数）：每一个Web应用对应一个ServletContext，存放所有用户都可以访问的数据</li>
+<li>session Scope HttpSession（存放与用户相关数据）：存放每个用户自己会话过程中的数据</li>
+<li>request Scope HttpServletRequest</li>
+<li>Servlet处理结果，JSP显示：数据存放在request中，生成新的请求时，原request存放数据丢失<h3 id="page页面对象"><a href="#page页面对象" class="headerlink" title="page页面对象"></a>page页面对象</h3>&emsp;&emsp;隐藏对象page是javax.servlet.jsp.HttpJspPage类的实例。page对象代表当前JSP页面，是当前JSP编译后的Servlet类的对象。page相当于普通Java类中的关键字this。</li>
+</ul>
+<h3 id="pageContext页面上下文对象"><a href="#pageContext页面上下文对象" class="headerlink" title="pageContext页面上下文对象"></a>pageContext页面上下文对象</h3><p>&emsp;&emsp;隐藏对象pageContext是javax.servlet.pageContext类的实例。pageContext对象代表当前JSP页面编译后的内容。通过pageContext能够获取JSP中的资源。pageContext对象的常用方法如下表：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object findAttribute(String name)</td>
+<td>在JSP页面中查找变量</td>
+</tr>
+<tr>
+<td>void forward(String url)</td>
+<td>forward到另一个页面</td>
+</tr>
+<tr>
+<td>void setAttribute(String name, Object value)</td>
+<td>设置application属性</td>
+</tr>
+<tr>
+<td>void removeAttribute(String name)</td>
+<td>移除application属性</td>
+</tr>
+<tr>
+<td>Object getAttribute(String name)</td>
+<td>返回属性</td>
+</tr>
+<tr>
+<td>Object getAttribute(String name，int scope)</td>
+<td>返回指定范围内的属性。范围包括PAGE、REQUEST_SCOPE、SESSION_REQUEST、APPLICATION_SCOPE</td>
+</tr>
+<tr>
+<td>JspWriter getOut()</td>
+<td>返回out对象</td>
+</tr>
+<tr>
+<td>Object getPage()</td>
+<td>返回Page对象</td>
+</tr>
+<tr>
+<td>ServletRequest getRequest()</td>
+<td>返回request对象</td>
+</tr>
+<tr>
+<td>ServletResponse getResponse()</td>
+<td>返回response对象</td>
+</tr>
+<tr>
+<td>HttpSession getSession()</td>
+<td>返回session对象</td>
+</tr>
+</tbody>
+</table>
+<h3 id="exception异常对象"><a href="#exception异常对象" class="headerlink" title="exception异常对象"></a>exception异常对象</h3><p>&emsp;&emsp;隐藏对象exception是java.lang.Exception类的对象。exception封装了JSP中抛出的异常信息。要使用exception隐藏对象，需要设置\&lt;%@ page isErrorPage=”true” %&gt;。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html;charset=UTF-8&quot; errorPage=&quot;error.jsp&quot;%&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;error.jsp就是捕获异常要跳转的地址。error.jsp需要设置isErrorPage为true，否则exception隐藏对象将不可用。</p>
+<h2 id="JSP配置"><a href="#JSP配置" class="headerlink" title="JSP配置"></a>JSP配置</h2><p>&emsp;&emsp;JSP文件部署到服务器后可以直接访问，而不必像Servlet必须在web.xml中配置。如果Web应用程序中只包含JSP程序与HTML、图片等静态文件，可以省略web.xml配置文件。当然，JSP也可以在web.xml中配置，个人觉得用的不多，这里不做展示。</p>
+<h2 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h2><p>&emsp;&emsp;JSP中可以使用EL(Expression Language)表达式。EL表达式是用”\${标识符}”括起来的脚本，用来方便地读取对象。EL表达式写在JSP的HTML代码中，而不能写在”&lt;%”与”%&gt;”引起的JSP脚本中。</p>
+<h3 id="EL表达式-1"><a href="#EL表达式-1" class="headerlink" title="EL表达式"></a>EL表达式</h3><p>&emsp;&emsp;EL表达式提供了获取对象以及属性的简单方式，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;jsp:useBean id=&quot;person&quot; class=&quot;Person&quot;&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	欢迎您,$&#123;person&#125;</span><br><span class="line">	您的年龄是:$&#123;person.age&#125;</span><br><span class="line">	您的性别是:$&#123;person.sex&#125;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;%=request.getAttribute(&quot;name&quot;);%&gt; 等价于</span><br><span class="line">$&#123;requestScope.name&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;代码中先使用useBean行为将Person对象放置到request中，再使用EL表达式读取该对象。El表达式也可以读取session中的对象。如果request中不存在名为person的对象，则会去session中查找。常用的方法是setAttribute(String name, Object value)将对象放置到request或者session中。</p>
+<h3 id="隐藏对象"><a href="#隐藏对象" class="headerlink" title="隐藏对象"></a>隐藏对象</h3><p>&emsp;&emsp;EL表达式不仅可以读取request、session中的属性，还可以读取其他JSP隐藏对象的属性，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;param.foo &#125; //读取地址栏参数，相当于request.getParameter(&quot;foo&quot;)</span><br><span class="line">$&#123;initParam.foo &#125; //读取初始化参数，相当于request.getInitParameter(&quot;foo&quot;)</span><br><span class="line">$&#123;header.host &#125; //读取head参数</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;param、initParam、header均返回Map类型对象。对于放置在Map里的对象，还可以使用数组的形式获取到。</p>
+<h3 id="EL表达式运算"><a href="#EL表达式运算" class="headerlink" title="EL表达式运算"></a>EL表达式运算</h3><p>&emsp;&emsp;EL表达式支持简单的运算，包括加(+)、减(-)、乘(*)、除(/或者div)、取余(%或者mod)、三目运算符(exp?var1:var2)<br>&emsp;&emsp;EL表达式也可以支持简单的比较运算，包括大于(&gt;或者gt)，小于(&lt;或者lt)，等于(==或者eq)，不等于(!=或者ne)，大于等于(&gt;=或者ge)，小于等于(&lt;=或者le)等。<br>&emsp;&emsp;多个比较运算可以用且(&amp;&amp;或者and)、或(||或者or)、否(!或者not)以及括号等连接起来。某些比较运算符也适用于字符比较，&lt;、&gt;、==。<br>&emsp;&emsp;字符比较时，如果为大于小于操作EL表达式会调用int compare(char ss)方法完成比较，等于操作时会调用equals()方法来完成比较。<br>&emsp;&emsp;对于Map或者数组类，还可以使用[]取值，或者使用empty判断是否为空，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;param.paramA[0] &#125; //输出提交的paramA参数的第一个值</span><br><span class="line">$&#123;empty param.paramA &#125; //提交的paramA参数是否为空或者个数为0</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;EL表达式不能直接访问普通的方法以及静态属性。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>&emsp;&emsp;JSP是一种简化了的Servlet，最终也会被编译为Servlet类。JSP中Java代码与HTML代码交互在一起，比Servlet更方便地输出HTML代码。JSP中也可以声明方法与变量，初始化时调用_jspInit()，销毁时调用_jspDestroy()。JSP中内置的对象为out、request、response、config、session、page、pageContext、application、exception。<br>&emsp;&emsp;与Servlet相比，JSP更适合与HTML打交道，而Servlet更适合与Java打交道。现在的Java EE（J2EE）系统中，Servlet只用于处理业务逻辑，JSP只用于显示结果。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JSP/" rel="tag"># JSP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/07/深入Servlet技术/" rel="next" title="深入Servlet技术">
+                <i class="fa fa-chevron-left"></i> 深入Servlet技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/28/Cookie和Session/" rel="prev" title="Cookie和Session">
+                Cookie和Session <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JSP技术"><span class="nav-number">1.</span> <span class="nav-text">JSP技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP简介"><span class="nav-number">1.1.</span> <span class="nav-text">JSP简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP概述"><span class="nav-number">1.1.1.</span> <span class="nav-text">JSP概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP工作原理"><span class="nav-number">1.1.2.</span> <span class="nav-text">JSP工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP生命周期"><span class="nav-number">1.1.3.</span> <span class="nav-text">JSP生命周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP语法"><span class="nav-number">1.2.</span> <span class="nav-text">JSP语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP元素与模板数据"><span class="nav-number">1.2.1.</span> <span class="nav-text">JSP元素与模板数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP脚本"><span class="nav-number">1.2.2.</span> <span class="nav-text">JSP脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP输出"><span class="nav-number">1.2.3.</span> <span class="nav-text">JSP输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP注释"><span class="nav-number">1.2.4.</span> <span class="nav-text">JSP注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP方法"><span class="nav-number">1.2.5.</span> <span class="nav-text">JSP方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP的if语句"><span class="nav-number">1.2.6.</span> <span class="nav-text">JSP的if语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP的for循环"><span class="nav-number">1.2.7.</span> <span class="nav-text">JSP的for循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while循环"><span class="nav-number">1.2.8.</span> <span class="nav-text">while循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP的return语句"><span class="nav-number">1.2.9.</span> <span class="nav-text">JSP的return语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP的break语句"><span class="nav-number">1.2.10.</span> <span class="nav-text">JSP的break语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP指令"><span class="nav-number">1.3.</span> <span class="nav-text">JSP指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#page指令"><span class="nav-number">1.3.1.</span> <span class="nav-text">page指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#include指令"><span class="nav-number">1.3.2.</span> <span class="nav-text">include指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#taglib指令"><span class="nav-number">1.3.3.</span> <span class="nav-text">taglib指令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP行为"><span class="nav-number">1.4.</span> <span class="nav-text">JSP行为</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jsp-include-行为"><span class="nav-number">1.4.1.</span> <span class="nav-text">jsp:include\行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Java-Bean-POJO"><span class="nav-number">1.4.2.</span> <span class="nav-text">使用Java Bean(POJO)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-jsp-forward-gt-行为"><span class="nav-number">1.4.3.</span> <span class="nav-text">\&lt;jsp:forward /&gt;行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-jsp-directive-gt-行为"><span class="nav-number">1.4.4.</span> <span class="nav-text">\&lt;jsp:directive /&gt;行为</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP隐藏对象"><span class="nav-number">1.5.</span> <span class="nav-text">JSP隐藏对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#out输出流对象"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">out输出流对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#request请求对象"><span class="nav-number">1.5.1.</span> <span class="nav-text">request请求对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决请求参数的中文乱码问题"><span class="nav-number">1.5.1.0.1.</span> <span class="nav-text">解决请求参数的中文乱码问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通过Request对象传递数据"><span class="nav-number">1.5.1.0.2.</span> <span class="nav-text">通过Request对象传递数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RequestDispatcher接口"><span class="nav-number">1.5.1.0.3.</span> <span class="nav-text">RequestDispatcher接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求转发"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">请求转发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重定向和请求转发的区别"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">重定向和请求转发的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletContext域和Request域的生命周期比较"><span class="nav-number">1.5.1.3.</span> <span class="nav-text">ServletContext域和Request域的生命周期比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端地址与服务器端地址的写法"><span class="nav-number">1.5.1.4.</span> <span class="nav-text">客户端地址与服务器端地址的写法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#response对象"><span class="nav-number">1.5.2.</span> <span class="nav-text">response对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置响应行"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">设置响应行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置响应头"><span class="nav-number">1.5.2.2.</span> <span class="nav-text">设置响应头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过response设置响应体"><span class="nav-number">1.5.2.3.</span> <span class="nav-text">通过response设置响应体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于设置中文乱码的问题"><span class="nav-number">1.5.2.3.1.</span> <span class="nav-text">关于设置中文乱码的问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config配置对象"><span class="nav-number">1.5.3.</span> <span class="nav-text">config配置对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session会话对象"><span class="nav-number">1.5.4.</span> <span class="nav-text">session会话对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是会话？"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">什么是会话？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#会话过程中要解决的一些问题？"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">会话过程中要解决的一些问题？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Cookie"><span class="nav-number">1.5.4.2.1.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Cookie的细节"><span class="nav-number">1.5.4.2.2.</span> <span class="nav-text">Cookie的细节</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Session"><span class="nav-number">1.5.4.2.3.</span> <span class="nav-text">Session</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#application应用程序对象"><span class="nav-number">1.5.5.</span> <span class="nav-text">application应用程序对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Servlet的数据访问范围"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">Servlet的数据访问范围</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#page页面对象"><span class="nav-number">1.5.6.</span> <span class="nav-text">page页面对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pageContext页面上下文对象"><span class="nav-number">1.5.7.</span> <span class="nav-text">pageContext页面上下文对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exception异常对象"><span class="nav-number">1.5.8.</span> <span class="nav-text">exception异常对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP配置"><span class="nav-number">1.6.</span> <span class="nav-text">JSP配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EL表达式"><span class="nav-number">1.7.</span> <span class="nav-text">EL表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EL表达式-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">EL表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隐藏对象"><span class="nav-number">1.7.2.</span> <span class="nav-text">隐藏对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EL表达式运算"><span class="nav-number">1.7.3.</span> <span class="nav-text">EL表达式运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.8.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

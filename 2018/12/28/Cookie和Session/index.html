@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="会话跟踪引言&amp;emsp;&amp;emsp;前面两个章节讲解的对象中，HttpServletRequest对象和ServletContext对象都可以对数据进行保存，但这个对象都不能满足会话的要求，具体原因如下：&amp;emsp;&amp;emsp;(1)客户端请求Web服务器时，针对每次HTTP请求，Web服务器都会创建一个HttpServletRequest对象，该对象只能保存本次请求所传递的数据。由于购买和结账时">
+<meta name="keywords" content="Web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie和Session">
+<meta property="og:url" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="会话跟踪引言&amp;emsp;&amp;emsp;前面两个章节讲解的对象中，HttpServletRequest对象和ServletContext对象都可以对数据进行保存，但这个对象都不能满足会话的要求，具体原因如下：&amp;emsp;&amp;emsp;(1)客户端请求Web服务器时，针对每次HTTP请求，Web服务器都会创建一个HttpServletRequest对象，该对象只能保存本次请求所传递的数据。由于购买和结账时">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/request保存数据.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/ServletContext保存数据.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/Cookie和Session.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/Cookie在浏览器和服务器之间传输的过程.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/Cookie在浏览器和服务器过程.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/总结.jpg">
+<meta property="og:updated_time" content="2019-01-08T15:48:00.433Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cookie和Session">
+<meta name="twitter:description" content="会话跟踪引言&amp;emsp;&amp;emsp;前面两个章节讲解的对象中，HttpServletRequest对象和ServletContext对象都可以对数据进行保存，但这个对象都不能满足会话的要求，具体原因如下：&amp;emsp;&amp;emsp;(1)客户端请求Web服务器时，针对每次HTTP请求，Web服务器都会创建一个HttpServletRequest对象，该对象只能保存本次请求所传递的数据。由于购买和结账时">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2018/12/28/Cookie和Session/request保存数据.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2018/12/28/Cookie和Session/"/>
+
+
+
+
+
+  <title>Cookie和Session | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2018/12/28/Cookie和Session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Cookie和Session</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-28T13:20:35+08:00">
+                2018-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="会话跟踪"><a href="#会话跟踪" class="headerlink" title="会话跟踪"></a>会话跟踪</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>&emsp;&emsp;前面两个章节讲解的对象中，HttpServletRequest对象和ServletContext对象都可以对数据进行保存，但这个对象都不能满足会话的要求，具体原因如下：<br>&emsp;&emsp;(1)客户端请求Web服务器时，针对每次HTTP请求，Web服务器都会创建一个HttpServletRequest对象，该对象只能保存本次请求所传递的数据。由于购买和结账时两个不同的请求，因此，在发送结账请求时，之前购买请求中的数据将会丢失。<br><img src="/2018/12/28/Cookie和Session/request保存数据.jpg" alt="request保存数据"><br>&emsp;&emsp;(2)使用ServletContext对象保存数据时，由于同一个Web应用共享的是同一个ServletContext对象，因此，当用户发送结账请求时，由于无法区分哪些商品是那个用户所购买的，而会将该购物网站中所有用户购买的商品进行结算，这显然不可取。<br><img src="/2018/12/28/Cookie和Session/ServletContext保存数据.jpg" alt="ServletContext保存数据"><br>&emsp;&emsp;(3)为了保存会话过程中产生的数据，在Servlet技术中，体用了两个用于保存会话数据的对象，分别是Cookie和Session。<br><img src="/2018/12/28/Cookie和Session/Cookie和Session.jpg" alt="Cookie和Session"></p>
+<ul>
+<li>Cookie和浏览器缓存有什么区别？<br>&emsp;&emsp;共同点:浏览器缓存可以缓存任意内容(上网浏览的所有内容),cookie只是服务器需要浏览器缓存数据(浏览器缓存中一部分)。</li>
+</ul>
+<p>&emsp;&emsp;会话(Session)跟踪是Web程序中常用的技术，用来跟踪用户的整个会话。因为HTTP协议是无状态的，也就是说每个客户访问服务器端资源时，服务器并不知道该客户是谁，所以需要绘画识别识别客户端状态。会话技术是帮助服务器记住客户端状态(区分客户端)。</p>
+<h2 id="会话技术"><a href="#会话技术" class="headerlink" title="会话技术"></a>会话技术</h2><p>&emsp;&emsp;从打开一个浏览器访问某个站点，到关闭这个浏览器的整个过程，称为一次会话。会话技术是记录这次会话中客户端的状态和数据的。常用的会话跟踪技术是Cookie和Session。<br>Cookie通过在客户端记录信息确定用户身份，数据存储在客户端本地，减少服务器端的存储压力，安全性不好，客户端可以清除cookie。<br>Session通过在服务器端记录信息确定用户身份，将数据存储到服务器端，安全性相对好，增加服务器的压力。</p>
+<h2 id="Cookie机制"><a href="#Cookie机制" class="headerlink" title="Cookie机制"></a>Cookie机制</h2><p>&emsp;&emsp;理论上，一个用户的所有请求操作都应该属于同一个会话，而另一个用户的所有请求操作则属于另一个会话，二者不能混淆。而Web应用程序使用HTTP协议传输数据的。HTTP协议是无状态的协议。一旦数据交换完毕，客户端与服务端的连接就会关闭，再次交换数据需要建立新的连接。这就意味着服务器无法从连接上跟踪会话。</p>
+<h3 id="什么是Cookie"><a href="#什么是Cookie" class="headerlink" title="什么是Cookie"></a>什么是Cookie</h3><p>&emsp;&emsp;Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie。<br>&emsp;&emsp;注意：Cookie功能需要浏览器的支持。如果浏览器不支持Cookie或者把Cookie禁用了，Cookie功能就会失效。不同的浏览器采用不同的方式保存Cookie。<br>&emsp;&emsp;Java中把Cookie封装成了javax.servlet.http.Cookie类。每个Cookie都是该Cookie类的对象。服务器通过操作Cookie类对象对客户端Cookie进行操作。通过request.getCookie()获取客户端提交的所有Cookie（以Cookie[]数组形式返回）,通过response.addCookie(Cookie cookie)向客户端设置Cookie。<br>&emsp;&emsp;Cookie对象使用key-value属性对的形式保存用户状态，一个Cookie对象保存一个属性对，一个request或者response同时使用多个Cookie。  </p>
+<h2 id="Cookie技术"><a href="#Cookie技术" class="headerlink" title="Cookie技术"></a>Cookie技术</h2><p>&emsp;&emsp;Cookie技术是将用户的数据存储到客户端的技术,当用户通过浏览器访问Web服务器时，服务器会给客户端发送一些信息，这些信息会保存在Cookie中。这里进行两方面的展示：第一个是服务器端怎样将一个Cookie发送到客户端；另一个是服务器端怎样接受客户端携带的Cookie。</p>
+<h3 id="Cookie在浏览器和服务器之间传输的过程"><a href="#Cookie在浏览器和服务器之间传输的过程" class="headerlink" title="Cookie在浏览器和服务器之间传输的过程"></a>Cookie在浏览器和服务器之间传输的过程</h3><p><img src="/2018/12/28/Cookie和Session/Cookie在浏览器和服务器之间传输的过程.jpg" alt="Cookie在浏览器和服务器之间传输的过程"><br>&emsp;&emsp;该图描述了Cookie在浏览器和服务器之间的传输过程。当用户第一次访问服务器时，服务器会在响应消息中增加Set-Cookie头字段，将用户信息以Cookie的形式发送给浏览器。一旦用户接受了服务器发送的Cookie信息，就会将它保存在浏览器的缓存区中，以后浏览器访问该服务器时，都会在请求消息中将用户信息以Cookie的形式发送给Web服务器，从而使服务器端分辨出当前请求是由哪个用户发出的。<br><img src="/2018/12/28/Cookie和Session/Cookie在浏览器和服务器过程.jpg" alt="Cookie在浏览器和服务器之间传输的过程"></p>
+<h3 id="服务器端向客户端端发送一个Cookie"><a href="#服务器端向客户端端发送一个Cookie" class="headerlink" title="服务器端向客户端端发送一个Cookie"></a>服务器端向客户端端发送一个Cookie</h3><p>1).创建Cookie<br>Cookie cookie = new Cookie(String cookieName, String cookieValue)<br>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(name, value);</span><br><span class="line">Cookie cookie = new Cookie(&quot;username&quot;,&quot;zhangsan&quot;);</span><br><span class="line">```  </span><br><span class="line">那么该cookie会以响应头的形式发送给客户端：</span><br><span class="line">```  </span><br><span class="line">Set-Cookie: user=&quot;&quot;;path=/;</span><br><span class="line">Set-Cookie:&quot;name=zhangsan&quot;</span><br></pre></td></tr></table></figure></p>
+<p>注意：Cookie中不能存储中文<br>2)设置Cookie在客户端的持久化时间：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cookie.setMaxAge(int seconds);--时间秒</span><br><span class="line"></span><br><span class="line">注意：如果不设置持久化时间，</span><br><span class="line">cookie会存储在浏览器的内存中，</span><br><span class="line">浏览器关闭cookie信息会销毁（会话级别的cookie），</span><br><span class="line">如果设置持久化时间，cookie信息会被持久化到浏览器的磁盘文件里。  </span><br><span class="line">示例：  </span><br><span class="line">cookie.setMaxAge(10 * 60);</span><br></pre></td></tr></table></figure>
+<p>设置cookie信息在浏览器的磁盘存储的时间是10分钟，过期浏览器自动删除该cookie信息。（详细的内容可以参考下面的Cookie有效期）  </p>
+<p>3)设置cookie的携带路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cookie.setPath(String path); </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">注意：如果不设置携带路径，那么该cookie信息会在访问产生该cookie的web资源所在的路径携带cookie信息：  </span><br><span class="line">示例：</span><br></pre></td></tr></table></figure></p>
+<p>cookie.setPath(“/web16”); //代表访问web16应用中的任何资源都携带cookie<br>cookie.setPath(“/web16/cookieServlet”); //代表访问web16中的cookieServlet时才携带cookie信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4)向客户端发送cookie:</span><br></pre></td></tr></table></figure></p>
+<p>response.addCookie(Cookie cookie)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">5)删除客户端的cookie:</span><br><span class="line">&amp;emsp;&amp;emsp;如果想删除客户端的已经存储的cookie信息，就使用同名同路径的持久化时间为0的cookie进行覆盖即可。</span><br><span class="line">### 服务器端如何接收客户端携带的Cookie</span><br><span class="line">cookie信息是以请求头的方式发送到服务器端的：  </span><br><span class="line">Cookie : &quot;name=zhang&quot;</span><br><span class="line">1)通过request获得所有的Cookie：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie[] cookies = request.getCookies();<br>Cookie[] cookies = HttpServletRequest.getCookies()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2)遍历Cookie数组，通过Cookie的名称获得我们想到的Cookie：</span><br><span class="line">getName():获得cookie名称；  </span><br><span class="line">getValue():获得cookie的值；</span><br></pre></td></tr></table></figure></p>
+<p>for(Cookie cookie : cookies){<br>    if(cookie.getName().equal(cookieName)){<br>        String cookieValue = cookie.getValue();<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### Cookie的不可跨域名性</span><br><span class="line">&amp;emsp;&amp;emsp;Cookie具有不可跨域名性。根据Cookie规范，浏览器访问Google只会携带Google的Cookie，而不会携带Baidu的Cookie。Google也只能操作Google的Cookie，而不能操作Baidu的Cookie。  </span><br><span class="line">&amp;emsp;&amp;emsp;Cookie在客户端是由浏览器来管理的。浏览器可以保证Google只会操作Google的Cookie而不会操作Baidu的Cookie，从而保证用户的隐私安全。浏览器判断一个网站是否能操作另一个网站的Cookie是根据。Google和Baidu的域名不同，所以Google不能操作Baidu的Cookie。  </span><br><span class="line">&amp;emsp;&amp;emsp;注意：对普通的Cookie而言，虽然网站images.google.com与网站www.google.com同属于Google，但域名不同，二者同样不能相互操作彼此的Cookie。有时候用户登录www.google.com后发现访问images.google.com时登录信息仍然有效，是因为做了特殊的处理。</span><br><span class="line">### Unicode编码：保存中文</span><br><span class="line">&amp;emsp;&amp;emsp;中文与英文字符不同，中文属于Unicode字符，而英文属于ASCII字符。Cookie中使用Unicode字符时需要对Unicode字符进行编码，否则会乱码。编码可以使用java.net.URLEncoder类的encode(String str, String encoding)方法，解码使用java.net.URLDecoder类的decode(String str, String encoding)方法。例如：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(URLEncoder.encode(“姓名”,”UTF-8”),URLEncoder.encode(“刘静华”,”UTF-8”));<br>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">注意：Cookie中保存中文只能编码，一般使用UTF-8编码即可。由于浏览器每次请求服务器都会携带Cookie，因此Cookie内容不宜过多，否则影响速度。Cookie的内容应该少而精。</span><br><span class="line">### 设置Cookie的所有属性</span><br><span class="line">&amp;emsp;&amp;emsp;除了name与value之外，Cookie还具有其他几个常用的属性。每个睡醒对应一个getter和setter方法。Cookie类的所有属性如下表所示：</span><br><span class="line"></span><br><span class="line">| 属性名称 | 描述 |</span><br><span class="line">| ------ | ------ |</span><br><span class="line">| String name | 该Cookie的名称。Cookie一旦创建，名称不可更改。 | </span><br><span class="line">| Object value | 该Cookie的值。如果值为Unicode字符，需要为字符编码。如果值为二进制数据，则需要使用BASE64编码。 | </span><br><span class="line">| int maxAge | 该Cookie失效的时间，单位秒。如果为正数，则该Cookie在maxAge秒之后失效。如果为负数，该Cookie为临时Cookie，关闭浏览器即失效，浏览器也不会以任何形式保存该Cookie。如果为0，表示删除该Cookie。默认为-1. | </span><br><span class="line">| boolean secure | 该Cookie是否仅被使用安全协议传输。安全协议有：HTTPS、SSL等，在网络上传输数据之前先加密。默认为false |</span><br><span class="line">| String path | 该Cookie的使用路径。如果设置为&quot;/sessionWeb/&quot;,则只有contextPath为&quot;/sessionWeb&quot;的程序可以访问该Cookie。如果设置为&quot;/&quot;,则本域名下contextPath都可以访问该Cookie。注意最后一个字符必须为&quot;/&quot; | </span><br><span class="line">| String domain | 可以访问该Cookie的域名。如果设置为&quot;.google.com&quot;，则所有以&quot;google.com&quot;结尾的域名都可以访问该Cookie。注意第一个字符必须为&quot;.&quot; | </span><br><span class="line">| String comment | 该Cookie的用处说明。浏览器显示Cookie信息的时候显示该说明 | </span><br><span class="line">| int version | 该Cookie使用的版本号。0表示遵循Netscape的Cookie规范，1表示遵循W3C的RFC2109规范 |</span><br><span class="line">### Cookie的分类</span><br><span class="line"></span><br><span class="line">- 会话级别的Cookie：默认的。关闭了浏览器Cookie就销毁了。</span><br><span class="line">- 持久级别的Cookie：需要设置有效时长的。关闭浏览器也不会销毁的Cookie。</span><br><span class="line">	- setMaxAge(int expiry):以秒为单位的时间，超过该时间之后Cookie会自动销毁。setMaxAge(0),手动删除持久性的Cookie。（前提：path和name必须一致）</span><br><span class="line">	- setPath(String uri);设置Cookie的有效路径</span><br><span class="line">		- (1)cookie.setPath(&quot;/day16/demo&quot;):表示day16项目下,【demo目录】下所有的servlet，都可以访问当前cookie。但”/day16“或&quot;/day16/aaa&quot;将不能访问；</span><br><span class="line">		- (2)cookie.setPath(&quot;/day16&quot;);表示【day16项目】下的所有servlet都可以访问当前cookie；</span><br><span class="line">		- (3)cookie.setPath(&quot;/&quot;);表示【tomcat下】的所有的web项目，都可以访问当前cookie。</span><br><span class="line"></span><br><span class="line">- cookie唯一表示：</span><br><span class="line">	- 唯一标示：domain + path + name（类似Java中包+类名）</span><br><span class="line">		- domain域名，不同的网站使用的是不同的域名，cookie就不同</span><br><span class="line">		- path路径，通过cookie.setPath(...)设置的内容</span><br><span class="line">		- name cookie名称，通过new Cookie(name, ...)确定的内容</span><br><span class="line">	- 例如：以下表示的是两个cookie，可以同时存在。</span><br><span class="line">		- /web/a/b/cookieName</span><br><span class="line">		- /web/a/cookieName</span><br><span class="line">	- 如果路径和名称一样，两次addCookie(),后者将覆盖前者</span><br><span class="line">### Cookie的有效期</span><br><span class="line">&amp;emsp;&amp;emsp;Cookie的maxAge决定着Cookie的有效期，单位为秒。Cookie中通过getMaxAge()与setMaxAge(int maxAge)方法来读写maxAge属性。  </span><br><span class="line">&amp;emsp;&amp;emsp;如果maxAge属性为正数，则表示该Cookie会在maxAge秒之后自动失效。浏览器会将maxAge为正数的Cookie持久化即写到对应的Cookie文件中。无论客户关闭了浏览器还是电脑，只要还在maxAge秒之前，登录网站时，该Cookie仍然有效。下面代码中的Cookie信息将永远有效：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(“username”,”helloweenvsfei”);<br>cookie.setMaxAge(Integer.MAX_VALUE);<br>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;&amp;emsp;如果maxAge是负数，则表示该Cookie仅在本浏览器窗口及本窗口打开的子窗口内有效，关闭窗口后该Cookie即失效。maxAge为负数的Cookie，为临时性Cookie，不会被持久化，不会被写到Cookie文件中.Cookie信息保存在浏览器内存中，因此关闭浏览器该Cookie就消失了。Cookie默认的maxAge值为-1.  </span><br><span class="line">&amp;emsp;&amp;emsp;如果maxAge为0则表示删除该Cookie。Cookie机制没有提供删除Cookie的方法，因此通过设置Cookie即时失效实现删除Cookie的效果。失效的Cookie会被浏览器从Cookie文件或者内存中删除。例如：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(“username”,”helloweenvsfei”);<br>cookie.setMaxAge(0);<br>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;&amp;emsp;response对象提供的Cookie操作方法只有一个添加操作add(Cookie cookie)。要想修改Cookie只能使用一个同名的Cookie来覆盖原来的Cookie，达到修改的目的。删除时只需把setMaxAge修改为0即可。</span><br><span class="line">### Cookie的修改、删除</span><br><span class="line">&amp;emsp;&amp;emsp;Cookie并不提供修改、删除操作。如果要修改某个Cookie，只需要新建一个同名的Cookie，并添加到response中覆盖原来的Cookie。  </span><br><span class="line">&amp;emsp;&amp;emsp;如果要删除某个Cookie，需要新建一个同名的Cookie，并将maxAge设置为0，并添加到response中覆盖原来的Cookie。注意是0而不是负数。  </span><br><span class="line">&amp;emsp;&amp;emsp;修改、删除Cookie时，新建的Cookie除value、maxAge之外的所有属性，例如：name、path、domain等，都要与原Cookie完全一样。否则，浏览器将视为两个不同的Cookie不予覆盖，导致修改、删除失败。</span><br><span class="line">### Cookie的域名</span><br><span class="line">&amp;emsp;&amp;emsp;Cookie是不可跨域名的，这是由Cookie的隐私安全机制决定的。隐私安全机制能够禁止网站非法获取其他网站的Cookie。</span><br><span class="line">&amp;emsp;&amp;emsp;正常情况下，同一个一级域名下的两个二级域名如www.helloweenvsfei.com和images.helloweenvsfei.com也不能交互使用Cookie,因为二者的域名并不严格相同。如果想所有helloweenvsfei.com名下的二级域名都可以使用该Cookie，需要设置Cookie的domain参数，例如：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(“time”,”20080808”);<br>cookie.setDomain(“.helloweenvsfei.com”);<br>cookie.setPath(“/“);<br>cookie.setMaxAge(Integer.MAX_VALUE);</p>
+<p>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">注意：domain参数必须以点(&quot;.&quot;)开始。另外，name相同但domain不同的两个Cookie是两个不同的Cookie。如果想要两个域名完全不同的网站共有Cookie，可以生成两个Cookie，domain属性分别为两个域名，输出到客户端。</span><br><span class="line">### Cookie的路径</span><br><span class="line">&amp;emsp;&amp;emsp;domain属性决定运行访问Cookie的域名，而path属性决定允许访问Cookie的路径(ContextPath)。例如，如果只允许/sessionWeb/下的程序使用Cookie:</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(“time”,”20080808”);<br>cookie.setPath(“/session/“);</p>
+<p>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">设置为&quot;/&quot;时允许所有路径使用Cookie。path属性需要使用符号&quot;/&quot;结尾。name相同但domain不相同的两个Cookie也是两个不同的Cookie。</span><br><span class="line">### Cookie的安全属性</span><br><span class="line">&amp;emsp;&amp;emsp;HTTP协议不仅是无状态的，而且是不安全的。使用HTTP协议的数据不经过任何加密就直接在网络上传播，有被劫的可能。使用HTTP协议传输很机密的内容是一种隐患。如果不希望Cookie在HTTP等非安全协议中传输，可以设置Cookie的secure属性为true。浏览器只会在HTTPS和SSL等安全协议中传输此类Cookie。如下所示：</span><br></pre></td></tr></table></figure></p>
+<p>Cookie cookie = new Cookie(“time”,”20080808”);<br>cookie.setSecure(true);</p>
+<p>response.addCookie(cookie);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">secure属性并不能对Cookie内容进行加密，因而不能保证绝对的安全性。如果需要高安全性，需要在程序中对Cookie内容加密、解密，以防泄密。</span><br><span class="line">### JavaScript操作Cookie</span><br><span class="line">&amp;emsp;&amp;emsp;Cookie是保存在浏览器端的，因此浏览器具有操作Cookie的先决条件。浏览器可以使用脚本程序如JavaScript等操作Cookie。例如：</span><br></pre></td></tr></table></figure></p>
+<p><script>document.write(document.cookie);</script><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#### 使用Cookie可以进行永久登录，只要把maxAge的属性调长即可。</span><br><span class="line">## 有了Cookie为什么还有Session</span><br><span class="line"></span><br><span class="line">- Cookie有大小和个数的限制。Session存到服务器端的技术，没有大小和个数的限制</span><br><span class="line">- Cookie相对于Session而言不安全</span><br><span class="line">## Session机制</span><br><span class="line">&amp;emsp;&amp;emsp;除了使用Cookie，Web应用程序中还经常使用Session来记录客户端状态。Session是服务器端使用的一种记录客户端状态的机制，使用上比Cookie简单一些，但相应的，也增加了服务器的存储压力。</span><br><span class="line">### 什么是Session</span><br><span class="line">&amp;emsp;&amp;emsp;Session是另一种记录客户状态的机制，Session保存在服务器上。客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上，这就是Session。客户端浏览器再次访问时，只需要从该Session中查找该客户的状态就可以了。  </span><br><span class="line">### Session技术</span><br><span class="line">&amp;emsp;&amp;emsp;Session技术是将数据存储在服务器端的技术，会为每个客户端都创建一块内存空间来存储客户的数据，但客户端需要每次都携带一个标识ID去服务器中寻找属于自己的内存空间（当客户端后续访问服务器时，只要将标识号传给服务器，服务器就能判断出该服务是由哪个客户端发送的，从而选择与之）。所以Session的实现基于Cookie，Session需要借助Cookie存储客户的唯一标识JSESSIONID。</span><br><span class="line">![Cookie在浏览器和服务器之间传输的过程](Cookie和Session/Session保存用户信息的过程.jpg)</span><br><span class="line"></span><br><span class="line">&amp;emsp;&amp;emsp;在Session这里需要了解如下三个问题：  </span><br><span class="line">&amp;emsp;&amp;emsp;1).怎样获得属于本客户端的session对象（内存区域）？  </span><br><span class="line">&amp;emsp;&amp;emsp;2).怎样向session中存取数据(session也是一个域对象)?  </span><br><span class="line">&amp;emsp;&amp;emsp;3).session对象的生命周期？  </span><br><span class="line"></span><br><span class="line">1).获得Session对象</span><br></pre></td></tr></table></figure></p>
+<p>HttpSession session = request.getSession();<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">此方法会获得专属于当前会话的Session对象，如果服务器端没有该会话的Session对象会创建一个新的Session返回，如果已经有了属于该会话的Session直接将已有的Session返回(实质是指JSESSIONID判断该客户是否在服务器上已经存在session了)</span><br><span class="line">2).向session中存取数据  </span><br><span class="line">&amp;emsp;&amp;emsp;Session是存储区域的对象，所以session也有以下三个方法：</span><br><span class="line"></span><br><span class="line">- session.setAttribute(String name, Object obj);</span><br><span class="line">- session.getAttribute(String name);</span><br><span class="line">- session.removeAttribute(String name);</span><br><span class="line"></span><br><span class="line">3).Session对象的生命周期</span><br><span class="line">创建：第一次执行request.getSession()时创建  </span><br><span class="line">销毁：  </span><br><span class="line">(I)服务器(非正常)关闭时;  </span><br><span class="line">(II)session过期/失效(默认30分钟)  </span><br><span class="line">问题：时间的起点算  从何时开始计算30分钟？   </span><br><span class="line">从不操作服务器的资源开始计时</span><br><span class="line"></span><br><span class="line">可以在web.xml中进行配置</span><br></pre></td></tr></table></figure></p>
+<p><session-config><br>    <session-timeout>30</session-timeout><br></session-config><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(III)手动销毁session</span><br></pre></td></tr></table></figure></p>
+<p>session.invalidate();<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">作用范围：默认在一次会话中，一次会话中任何资源公用一个session对象。  </span><br><span class="line">面试题：浏览器关闭，session就销毁了，对不对？不对</span><br><span class="line">### 实现用户登录</span><br><span class="line">&amp;emsp;&amp;emsp;Session对应的类是javax.servlet.http.HttpSession类。每个来访者对应一个Session对象，所有该客户的状态信息都保存在这个Session对象中。Session对象是在客户端第一次请求服务器的时候创建的。Session也是一种key-value的属性对，通过getAttribute(String key)和setAttribute(String key, Object value)方法读写客户状态信息。Servlet中通过request.getSession()或者request.getSession(boolean create)方法获取该客户的Session，这两个方法都用于返回与当前请求相关的HttpSession对象。不同的是，第一个getSession()方法根据传递的参数来创建新的HttpSession对象，如果参数为true，则在相关的HttpSession对象不存在时创建并返回新的HttpSession对象，否则不创建新的HttpSession对象，而是返回null。第二个getSession()方法相当于第一个方法参数为true时的情况，在相关的HttpSession对象不存在时总是创建新的HttpSession对象。这里只是getSession()的一个获取方式，例如：</span><br></pre></td></tr></table></figure></p>
+<p>HttpSession session = request.getSession();<br>session.getAttribute(“loginTime”, new Date());</p>
+<p>out.println(“登录时间为： “ + (Date)session.getAttribute(“loginTime”));<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;&amp;emsp;request还可以使用getSession(boolean create)来获取Session。区别是如果该客户的Session不存在，request.getSession()方法会返回null，而getSession(true)会先创建Session再将Session返回。  </span><br><span class="line">&amp;emsp;&amp;emsp;Servlet中必须使用request来编程式获取HttpSession对象，而JSP中内置了Session隐藏对象，可以直接使用。如果使用声明了&lt;%@ page session=&quot;false&quot; %&gt;,则Session隐藏对象不可用。  </span><br><span class="line">&amp;emsp;&amp;emsp;登录页面验证用户登录信息，如果登录正确，就把用户信息以及登录时间保存进Session，然后跳转到另一页面。另一页面中从Session中获取信息，并将用户资料显示出来。当多个客户端执行程序时，服务器会保存多个客户端的Session。获取Session的时候也不需要声明获取谁的Session。Session机制决定了当前客户只会获取到自己的Session，而不会获取到别人的Session。各客户的Session也彼此独立，互不可见。</span><br><span class="line">### Session的生命周期</span><br><span class="line">&amp;emsp;&amp;emsp;Session保存在服务器端。为了获得更高的存取速度，服务器一般把Session放入内存。每个用户都会有一个独立的Session。如果Session内容过于复杂，当大量客户访问服务器时可能会导致内存溢出。所以，Session中的信息要尽量精简。  </span><br><span class="line">&amp;emsp;&amp;emsp;Session在用户第一次访问服务器的时候自动创建。注意只有访问JSP、Servlet等程序时才会创建Session，只访问HTML、IMAGE等静态资源并不会创建Session。如果尚未生成Session，也可以使用request.getSession(true)强制生成Session。  </span><br><span class="line">&amp;emsp;&amp;emsp;Session生成后，只要用户继续访问，服务器就会更新Session的最后访问时间，并维护该Session。用户每访问服务器一次，无论是否读写Session，服务器都认为该用户的Session&quot;活跃(active)&quot;了一次。</span><br><span class="line"></span><br><span class="line">### Session的有效期</span><br><span class="line">&amp;emsp;&amp;emsp;由于会有越来越多的用户访问服务器，因此Session也会越来越多。为了防止内存溢出，服务器会把长时间没有活跃的Session从内存删除。这个时间就是Session的超时时间。如果超过了超时时间没访问过服务器，Session就会自动失效。  </span><br><span class="line">&amp;emsp;&amp;emsp;Session的超时时间为maxInactiveInterval属性，可以通过对应的getMaxInactiveInterval()获取，通过setMaxInactiveInterval(long interval)修改。  </span><br><span class="line">&amp;emsp;&amp;emsp;Session的超时时间也可以在web.xml中修改。另外，通过调用Session的invalidate()方法也可以使Session失效。</span><br><span class="line"></span><br><span class="line">### Session的常用方法</span><br><span class="line">&amp;emsp;&amp;emsp;Session中包括各种方法，用起来比Cookie方法得多。其常用方法如下表所示：</span><br><span class="line"></span><br><span class="line">| 属性名称 | 描述 |</span><br><span class="line">| ------ | ------ |</span><br><span class="line">| void setAttribute(String attribute, Object value) | 设置Session属性。value参数可以为任何Java Object。通常为Java Bean。value信息不宜过大 | </span><br><span class="line">| String getAttribute(String attribute) | 返回Session属性 | </span><br><span class="line">| Enumeration getAttributeNames() | 返回Session中存在的属性名 | </span><br><span class="line">| void removeAttribute(String attribute) | 移除Session属性 |</span><br><span class="line">| String getId() | 返回Session的ID。该ID由服务器自动创建，不会重复 | </span><br><span class="line">| long getCreationTime() | 返回Session的创建日期，这个时间是创建Session的时间与1970年1月1日00:00:00之间时间差的毫秒表示形式。返回类型为long，常被转换为Date类型。 | </span><br><span class="line">| long getLastAccessedTime() | 返回Session的最后活跃时间。返回类型为long | </span><br><span class="line">| int getMaxInactiveInterval | 返回服务器的超时时间。单位为秒。超时该时间没有访问，服务器认为该Session失效。 |</span><br><span class="line">| int setMaxInactiveInterval(int second) | 设置Session的超时时间。单位为秒。 |</span><br><span class="line">| boolean isNew() | 返回该Session是否是新创建的 | </span><br><span class="line">| void invalidate() | 使该Session失效 | </span><br><span class="line">| ServletContext getServletContext() | 用于返回当前HttpSession对象所属于的WEB应用程序对象，即代表当前WEB应用程序的ServletContext对象 | </span><br><span class="line">&amp;emsp;&amp;emsp;Tomcat中Session的默认超时时间是20分钟。通过setMaxInactiveInterval(int seconds)修改超时时间。可以修改web.xml改变Session的默认超时时间。例如修改为60分钟：</span><br></pre></td></tr></table></figure></p>
+<p><session-config><br>    <!--单位：分钟--><br>    <session-timeout>60</session-timeout></session-config></p>
+<p><session-config><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">### Session对浏览器的要求</span><br><span class="line">&amp;emsp;&amp;emsp;虽然Session保存在服务器，对客户端透明，但其正常运行仍然需要客户端浏览器的支持。因为Session使用Cookie作为识别标志。（服务器想客户端发送一个名为JSESSIONID的cookie来判断是否是同一个用户）</span><br><span class="line">### URL地址重写</span><br><span class="line">&amp;emsp;&amp;emsp;URL地址重写是对客户端不支持Cookie的解决方案。URL地址重写的原理是将该用户Session的id信息重写到URL地址中。服务器能够解析重写后的URL获取Session的id。即使客户端不支持Cookie，也可以使用Session来记录用户状态。HttpServletResponse类提供了encodeURL(String url)实现URL地址重写，例如：</span><br></pre></td></tr></table></figure></session-config></p>
+<p><td><br>    &lt;a href=”&lt;%response.encodeURL(“index.jsp?c=1&amp;wd=Java”)%&gt;”&gt;<br></td><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;&amp;emsp;该方法会自动判断客户端是否支持Cookie。如果客户端支持Cookie，会将URL原封不动地输出来。如果客户端不支持Cookie，则会将用户Session的id重写到URL中。重写后的输出可能如下所示：</span><br></pre></td></tr></table></figure></p>
+<p><td><br>    &lt;a href=index.jsp;jsessionid=0CCD096E7F8D97B0BE608AFDC3E1931E?c=1&amp;wd=Java”&gt;Homepage<br></td><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;emsp;&amp;emsp;即在文件名的后面，在URL参数的前面添加了字符串&quot;;jsessionid=XXX&quot;。其中XXX为Session的id。添加的jessionid字符串既不会影响请求的文件名，也不会影响提交的地址栏参数。用户单机这个链接的时候会把Session的id通过URL提交到服务器上，服务器通过解析URL地址获得Session的id。  </span><br><span class="line">&amp;emsp;&amp;emsp;如果是页面重定向，URL地址重写可以为：</span><br></pre></td></tr></table></figure></p>
+<p>&lt;%<br>    if(“admin”.equals(username)){<br>        response.sendRedirect(response.encodeRedirectURL(“admin.jsp”));<br>        return;<br>    }<br>%&gt;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">效果跟response.encodeURL(String url)是一样的：如果客户端支持Cookie，生成原URL地址，如果不支持Cookie，传回重写后的带有jsessionid字符串的地址。  </span><br><span class="line">&amp;emsp;&amp;emsp;注意：Tomcat判断客户端浏览器是否支持Cookie的依据是请求中是否含有Cookie。尽管客户端可能会支持Cookie，但由于第一次请求时不会携带任何Cookie，URL地址重写后的地址中仍然会带有jsessionid，当第二次访问时服务器就已经在浏览器中写入Cookie了，因此URL地址重写后的地址中就不会带有jsessionid了。</span><br><span class="line">### Session中禁止使用Cookie</span><br><span class="line">&amp;emsp;&amp;emsp;Java Web规范支持通过配置的方式禁用Cookie。可以通过以下方式进行配置，打开项目下的WebRoot下的META-INF文件夹，打开context.xml（如果没有则创建），编辑内容如下：</span><br></pre></td></tr></table></figure></p>
+<p>&lt;?xml version=’1.0’ encoding=’UTF-8’&gt;</p>
+<p><context path="/项目名" cookies="false"><br></context><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">或者修改Tomcat全局的conf/context.xml修改内容如下：</span><br></pre></td></tr></table></figure></p>
+<p><context cookies="false"><br>    <!--中间内容省略--><br>    …….<br></context><br><code>`</code><br>&emsp;&emsp;部署后Tomcat便不会自动生成名JSESSIONID的Cookie，Session也不会以Cookie为识别标志，而仅仅以重写后的URL地址作为识别标志了。<br>&emsp;&emsp;注意：该配置只是禁止Session使用Cookie作为识别标志，并不能阻止其他的Cookie读写。即服务器不会自动维护名为JSESSIONID的Cookie了，但程序中仍然可以读写其他的Cookie。</p>
+<h2 id="Session与Cookie比较"><a href="#Session与Cookie比较" class="headerlink" title="Session与Cookie比较"></a>Session与Cookie比较</h2><ul>
+<li>从存取方式比较：Cookie中只能保存ASCII字符串，如果需要存取Unicode字符或者二进制数据，需要进行UTF-8，GBK或者BASE64等方式的编码。Cookie中也不能直接存取Java对象。若要存储比较复杂的信息，使用Cookie是比较困难的。Session中可以存取任何类型的数据，包括而不限于String、Integer、List、Map等。Session中也可以直接保存Java Bean乃至任何Java类，对象等。使用起来非常方便。可以把Session看作是一个Java容器类。  </li>
+<li>从隐私安全上比较：Cookie存储在客户端浏览器中，而Session存储在服务器上。如果选用Cookie，敏感的信息如账号密码尽量不要写到Cookie中。而Session放在服务器中，任何隐私都可以。</li>
+<li>从有效期上比较：Cookie可以实现永久有效的效果。而Session由于依赖名为JSESSIONID的Cookie，而Cookie的JSESSIONID的maxAge默认为-1，只要关闭浏览器该Session就会失效，因此Session不能实现信息有效的永久存储。使用URL地址重写也不能实现。而且如果设置Session的超时时间过长，服务器累积的Session就会越多，越容易导致内存溢出。</li>
+<li>从对服务器上的负担比较：Session是保存在服务器端的，每个用户都会产生一个Session。如果并发访问的用户非常多，会产生非常多的Session，消耗大量的内存。而Cookie保存在客户端，不占用服务器资源。如果并发浏览的用户非常多，Cookie是一个很好的选择。</li>
+<li>从浏览器支持上比较：Cookie是需要客户端浏览器支持的。如果客户端禁用了Cookie，或者不支持Cookie，则会话跟踪会失效。如果客户端浏览器不支持Cookie，需要使用Session以及URL地址重写。需要注意的是所有用到Session程序的URL都要使用response.encodeURL(String URL)或者response.encodeRedirectURL(String url)进行URL地址重写，否则导致Session会话跟踪失败。如果客户端支持Cookie，则Cookie既可以设为本浏览器窗口以及子窗口内有效（把maxAge设为-1），也可以设为所有浏览器窗口内有效(把maxAge设为某个大于0的整数)。但Session只能在本浏览器窗口以及其子窗口内有效。如果两个浏览器窗口互不相干，它们将使用两个不同的Session。</li>
+<li>从跨域名上比较：Cookie可以通过设置setDomain(String url)实现跨域名的访问。而Session则不会支持跨域名访问。Session仅在他所在的域名内有效。</li>
+</ul>
+<h2 id="作用域总结："><a href="#作用域总结：" class="headerlink" title="作用域总结："></a>作用域总结：</h2><h3 id="Servlet三个作用域"><a href="#Servlet三个作用域" class="headerlink" title="Servlet三个作用域"></a>Servlet三个作用域</h3><ul>
+<li>ServletContext：针对一个WEB应用。一个WEB应用只有一个ServletContext对象，使用该对象保存的数据在整个WEB应用中都有效。<ul>
+<li>创建：服务器启动的时候</li>
+<li>销毁：服务器关闭的时候或者项目移除的时候</li>
+</ul>
+</li>
+<li>HttpSession：针对一次会话。使用该对象保存数据，一次会话(多次请求)内数据有效。<ul>
+<li>创建：服务器第一次调用getSession()的时候，一次会话(多次请求)内数据有效。</li>
+<li>销毁：<br>1：非正常关闭服务器(正常关闭：Session被序列化)；<br>2：Session过期了，默认时间是30分钟；<br>3：手动调用Session的invalidate方法；</li>
+</ul>
+</li>
+<li><p>HttpServletRequest：针对一次请求。使用该对象保存数据，一次请求(一个页面，如果是请求转发多个页面)内数据有效</p>
+<ul>
+<li>创建：客户端向服务器发送一次请求</li>
+<li>销毁：服务器为这次请求做出响应之后，销毁request</li>
+</ul>
+</li>
+<li><p>三个作用域对象操作的API相同</p>
+<ul>
+<li>存放数据：setAttribute(name, value)</li>
+<li>获得数据：getAttribute(name)、getAttributeNames()</li>
+<li>删除数据：removeAttribute(name)</li>
+</ul>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><img src="/2018/12/28/Cookie和Session/总结.jpg" alt="总结"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag"># Web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/17/JSP技术/" rel="next" title="JSP技术">
+                <i class="fa fa-chevron-left"></i> JSP技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/05/mysql连接错误/" rel="prev" title="mysql连接错误">
+                mysql连接错误 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#会话跟踪"><span class="nav-number">1.</span> <span class="nav-text">会话跟踪</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话技术"><span class="nav-number">1.2.</span> <span class="nav-text">会话技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie机制"><span class="nav-number">1.3.</span> <span class="nav-text">Cookie机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Cookie"><span class="nav-number">1.3.1.</span> <span class="nav-text">什么是Cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie技术"><span class="nav-number">1.4.</span> <span class="nav-text">Cookie技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie在浏览器和服务器之间传输的过程"><span class="nav-number">1.4.1.</span> <span class="nav-text">Cookie在浏览器和服务器之间传输的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器端向客户端端发送一个Cookie"><span class="nav-number">1.4.2.</span> <span class="nav-text">服务器端向客户端端发送一个Cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session与Cookie比较"><span class="nav-number">1.5.</span> <span class="nav-text">Session与Cookie比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域总结："><span class="nav-number">1.6.</span> <span class="nav-text">作用域总结：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet三个作用域"><span class="nav-number">1.6.1.</span> <span class="nav-text">Servlet三个作用域</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

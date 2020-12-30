@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="servlet," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="深入Servlet技术&amp;emsp;&amp;emsp;用户在浏览器中输入一个网址并回车，浏览器会向服务器发送一个http请求。服务器接受这个请求，并对请求进行处理，然后发送一个响应。浏览器收到响应，再把响应的内容显示出来。这就是请求-响应模式，是典型的Web应用程序访问过程，Java Web应用程序中，处理请求并发送响应的过程是一种叫做Servlet的程序来处理的。 HTTP协议&amp;emsp;&amp;emsp;在">
+<meta name="keywords" content="servlet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入Servlet技术">
+<meta property="og:url" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="深入Servlet技术&amp;emsp;&amp;emsp;用户在浏览器中输入一个网址并回车，浏览器会向服务器发送一个http请求。服务器接受这个请求，并对请求进行处理，然后发送一个响应。浏览器收到响应，再把响应的内容显示出来。这就是请求-响应模式，是典型的Web应用程序访问过程，Java Web应用程序中，处理请求并发送响应的过程是一种叫做Servlet的程序来处理的。 HTTP协议&amp;emsp;&amp;emsp;在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/servlet访问过程.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/servlet访问过程2.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/servlet访问过程2.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/登录页面的流程.tiff">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/用户登录.png">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/Servlet生命周期.tiff">
+<meta property="og:updated_time" content="2018-12-13T06:32:36.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入Servlet技术">
+<meta name="twitter:description" content="深入Servlet技术&amp;emsp;&amp;emsp;用户在浏览器中输入一个网址并回车，浏览器会向服务器发送一个http请求。服务器接受这个请求，并对请求进行处理，然后发送一个响应。浏览器收到响应，再把响应的内容显示出来。这就是请求-响应模式，是典型的Web应用程序访问过程，Java Web应用程序中，处理请求并发送响应的过程是一种叫做Servlet的程序来处理的。 HTTP协议&amp;emsp;&amp;emsp;在">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/servlet访问过程.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/"/>
+
+
+
+
+
+  <title>深入Servlet技术 | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2018/12/07/深入Servlet技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入Servlet技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-07T08:51:29+08:00">
+                2018-12-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="深入Servlet技术"><a href="#深入Servlet技术" class="headerlink" title="深入Servlet技术"></a>深入Servlet技术</h1><p>&emsp;&emsp;用户在浏览器中输入一个网址并回车，浏览器会向服务器发送一个http请求。服务器接受这个请求，并对请求进行处理，然后发送一个响应。浏览器收到响应，再把响应的内容显示出来。这就是请求-响应模式，是典型的Web应用程序访问过程，Java Web应用程序中，处理请求并发送响应的过程是一种叫做Servlet的程序来处理的。</p>
+<h2 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h2><p>&emsp;&emsp;在浏览器中单机链接的时候，浏览器会向服务器发送一段文本，告诉服务器请求的是哪个网页。这段文本遵循HTTP协议格式，包含访问方式、HTTP版本、使用的浏览器、当前页面地址等信息。服务器知道了网址，便将网页的内容输出给浏览器。输出的内容既可以是HTML文本，也可以是二进制数据如图片、声音、视频等。浏览器将HTTP文本显示为网页，将二进制内容还原为图片、声音、视频，予以显示或者播放。</p>
+<h3 id="GET方式查询"><a href="#GET方式查询" class="headerlink" title="GET方式查询"></a>GET方式查询</h3><p>&emsp;&emsp;GET方式常用来查询信息。并且GET方式提交的网址不能超过256个字符，GET方式提交数据时，数据在浏览器地址栏中显示。</p>
+<h3 id="HTTP头数据"><a href="#HTTP头数据" class="headerlink" title="HTTP头数据"></a>HTTP头数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /books/java.html HTTP/1.1 请求行，请求行用于描述客户端的请求方式、请求的资源名称，以及使用的HTTP协议版本号</span><br><span class="line">/**以下是多个消息头（请求头），消息头用于描述客户端请求哪台主机，以及客户端的一些环境信息等**/</span><br><span class="line">Accept: text/html;*/*</span><br><span class="line">Accept-Language: en-us</span><br><span class="line">Connection: Keep-Alive</span><br><span class="line">Host: localhost</span><br><span class="line">Cookie: account=Helloween</span><br><span class="line">Referer: http://localhost/links.asp</span><br><span class="line">User-Agent: Mozilla/4.0</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;以上是HTTP的请求行以及HTTP头数据（HTTP头信息）。其中Accept是浏览器支持的格式。</p>
+<h3 id="POST方式提交数据"><a href="#POST方式提交数据" class="headerlink" title="POST方式提交数据"></a>POST方式提交数据</h3><p>&emsp;&emsp;GET方式提交的数据不能超过256个字符。如果需要提交大量的文本，需要使用POST方式。POST提交数据时，数据不在浏览器地址栏中显示。例如：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /s HTTP/1.1</span><br><span class="line">Content-Type : application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 7</span><br><span class="line">wd=Java</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;POST常用来提交表单数据。例如提交用户资料、上传文件等。</p>
+<h3 id="其他访问方式"><a href="#其他访问方式" class="headerlink" title="其他访问方式"></a>其他访问方式</h3><p>&emsp;&emsp;POST和GET是最常用的访问方式。除了POST和GET，HTTP协议还规定了HEAD、DELETE、TRACE、PUT、OPTIONS等5访问方式。实际中，这5中访问方式很少用到，服务器、浏览器也大部分不支持，因此可以忽略。<br>&emsp;&emsp;需要了解HTTP协议，Tomcat、浏览器已经实现好了HTTP协议，一般不会用到。</p>
+<h2 id="Servlet概述"><a href="#Servlet概述" class="headerlink" title="Servlet概述"></a>Servlet概述</h2><p>&emsp;&emsp;Servlet运行在服务端的小程序，是sun公司提供一套规范，用来处理客户端请求、响应给浏览器的动态资源。Servlet是JavaWeb三大组件之一(Servlet、Filter过滤器、Listener监听器),且最重要。  </p>
+<h3 id="Servlet的作用"><a href="#Servlet的作用" class="headerlink" title="Servlet的作用"></a>Servlet的作用</h3><p>&emsp;&emsp;用来处理从客户端发送过来的请求，并对请求做出响应。<br>&emsp;&emsp;Servlet的任务有：<br>&emsp;&emsp;1. 获取请求数据<br>&emsp;&emsp;2. 处理请求<br>&emsp;&emsp;3. 完成响应<br>&emsp;&emsp;Java Web应用程序中所有的请求-响应都是由Servlet完成的。Servlet是Java Web的核心程序，所有的网址最终都交给Servlet来处理。Servlet并没有main之类的执行方法。当用户访问服务器的时候，Tomcat通过调用Servlet的某些方法来完成整个处理过程。</p>
+<h3 id="Servlet工作流程"><a href="#Servlet工作流程" class="headerlink" title="Servlet工作流程"></a>Servlet工作流程</h3><p>&emsp;&emsp;浏览器提交的请求是遵循HTTP协议的文本。这段文本由服务器也就是Tomcat接收并解析，封装成HttpServletRequest类型的request对象。所有的HTTP请求数据都可以通过request相应的方法查询到。<br>&emsp;&emsp;Tomcat同时把输出流封装为HttpServletResponse类型的response对象，通过设置response属性就可以控制输出的内容。Tomcat把request、response作为参数，调用Servlet的相应方法，例如doPost（HttpServletRequest request, HttpServletResponse response）、deGet(HttpServletRequest  request, HttpServletResponse response)。<br>&emsp;&emsp;Servlet中主要处理业务逻辑，例如读取数据库、权限检查、业务处理等。Java Web应用程序请求-相应的典型过程如图所示：<br><img src="/2018/12/07/深入Servlet技术/servlet访问过程.png" alt="servlet访问过程"><br><img src="/2018/12/07/深入Servlet技术/servlet访问过程2.png" alt="servlet访问过程"></p>
+<h3 id="Servlet接口"><a href="#Servlet接口" class="headerlink" title="Servlet接口"></a>Servlet接口</h3><p>&emsp;&emsp;Servlet是一种实现了javax.servlet.Servlet接口的类。Servlet接口规定了特定的方法来处理特定的请求。开发者只要实现Servlet的相关方法，用户访问Web程序时，Tomcat会调用这些方法完成业务。创建类继承HttpServlet的步骤是：  </p>
+<ul>
+<li>1）创建类继承HttpServlet类  </li>
+<li>2）覆盖doGet和doPost方法  </li>
+<li><p>3）在web.xml中进行servlet配置<br>&emsp;&emsp;Servlet规范是建立在HTTP规范基础上的。HTTP1.1规范支持OPTIONS、GET、POST、HEAD、PUT、DELETE以及TRACE等7种Web访问方式。各方式的意义为：  </p>
+</li>
+<li><p>GET表示查询信息，URL中可以附带少量的参数信息，但URL总长度不能超过255个字符，并且参数会显示在浏览器地址栏。  </p>
+</li>
+<li>POST表示提交信息，一般用于提交大数据信息或者文件，提交的内容不受长度限制，并且不会显示在浏览器地址栏。  </li>
+<li>HEAD表示查询文档头信息，服务器会返回文件类型、长度、最后修改时间等信息。该方法很少使用。  </li>
+<li>OPTIONS、PUT、DELETE、TRACE属于被声明了，但还没有被使用的Web访问方式。现在的浏览器也很少使用这几种方式。  </li>
+</ul>
+<p>&emsp;&emsp;最常用的是GET和POST，当浏览器以xxx的方式访问网络程序时，Servlet会执行形如void doGet(HttpServletRequest request, HttpServletResponse response)的方法。例如：doGet(HttpServletRequest request, HttpServletResponse response),doPost(HttpServletRequest request, HttpServletResponse response)等。<br>&emsp;&emsp;Servlet还有一个方法long getLastModified(HttpServletRequest request, HttpServletResponse reponse)，返回该文档的最后修改时间，默认为-1，表示该文档永远是最新的。</p>
+<h3 id="Java-Web目录结构"><a href="#Java-Web目录结构" class="headerlink" title="Java Web目录结构"></a>Java Web目录结构</h3><p>&emsp;&emsp;Web程序部署在Tomcat的/webapps下面。一个webapps文件夹可以部署多个不同的web应用，例如：webapps/web1、webapps/web2,访问时地址分别为：<a href="http://localhost:8080/web1、http://localhost:8080/web2。这两个不同的web应用分别称为两个Context，路径为/web1、/web2也称为上下文路径(ContextPath)。" target="_blank" rel="noopener">http://localhost:8080/web1、http://localhost:8080/web2。这两个不同的web应用分别称为两个Context，路径为/web1、/web2也称为上下文路径(ContextPath)。</a><br>&emsp;&emsp;如果不使用上下文路径，Web程序需放到webapps/ROOT下面。ROOT文件夹下的程序使用:<a href="http://localhost:8080/访问。" target="_blank" rel="noopener">http://localhost:8080/访问。</a></p>
+<h2 id="编写Servlet"><a href="#编写Servlet" class="headerlink" title="编写Servlet"></a>编写Servlet</h2><p>&emsp;&emsp;在JDK中javax.servlet.*, javax.servlet.http.*包下提供了对Servlet的支持，如javax.servlet.http.HttpServlet类已经实现了Servlet接口的所有方法。编写Servlet时直接继承HttpServlet，并覆盖需要的方法即可。一般只覆盖doGet()与doPost()方法。</p>
+<h3 id="实现Servlet"><a href="#实现Servlet" class="headerlink" title="实现Servlet"></a>实现Servlet</h3><p>&emsp;&emsp;在Eclipse中新建Web Project，取名WEB13。利用向导新建Servlet，取名为quickStartServlet，并继承HttpServlet。该Servlet实例覆盖了doGet()、doPost()以及getLastModified()3个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">import javax.servlet.ServletException;</span><br><span class="line">import javax.servlet.http.HttpServlet;</span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line">import javax.servlet.http.HttpServletResponse;</span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">public class quickStartServlet extends HttpServlet &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123;</span><br><span class="line">        System.out.println(&quot;quickStarServlet running&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 以POST方式访问页面时执行该函数。执行前不会执行getLastModified</span><br><span class="line">     * @param request</span><br><span class="line">     * @param response</span><br><span class="line">     * @throws javax.servlet.ServletException</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    protected void doPost(HttpServletRequest request, HttpServletResponse response)</span><br><span class="line">            throws ServletException, IOException &#123;</span><br><span class="line">//        doGet(request,response);</span><br><span class="line">        this.log(&quot;执行doPost方法...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 以Get方式访问页面执行的函数</span><br><span class="line">     * 执行doGet前会先执行getLastModified，如果浏览器发现getLastModified返回的数值</span><br><span class="line">     * 与上次访问时返回的数值相同，则认为该文档没有更新，浏览器采用缓存而不执行doGet</span><br><span class="line">     * 如果getLastModified返回-1，则认为是时刻更新的，总是执行该函数</span><br><span class="line">     * @param request</span><br><span class="line">     * @param response</span><br><span class="line">     * @throws javax.servlet.ServletException</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    protected void doGet(HttpServletRequest request, HttpServletResponse response)</span><br><span class="line">            throws ServletException, IOException &#123;</span><br><span class="line">        System.out.println(&quot;first Demo&quot;);</span><br><span class="line"></span><br><span class="line">        ///customer</span><br><span class="line">        System.out.println(&quot;contextPath是：&quot; + request.getContextPath());</span><br><span class="line"></span><br><span class="line">        //realPath的结果是：/Users/gaojie/IdeaProjects/exerciseweb/customermgr/src/main/webapp</span><br><span class="line">        System.out.println(&quot;realPath: &quot; + request.getRealPath(&quot;/&quot;));</span><br><span class="line"></span><br><span class="line">        //0:0:0:0:0:0:0:1</span><br><span class="line">        System.out.println(request.getRemoteAddr());</span><br><span class="line"></span><br><span class="line">        //url:http://localhost:9080/customer/servlet/HelloServlet</span><br><span class="line">        System.out.println(request.getRequestURL());</span><br><span class="line"></span><br><span class="line">        //uri:/customer/servlet/HelloServlet</span><br><span class="line">        System.out.println(request.getRequestURI());</span><br><span class="line"></span><br><span class="line">        //null</span><br><span class="line">        System.out.println(request.getHeader(&quot;referer&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; quickStartServlet的doPost方法使用了HttpServlet自带的日志函数输出信息到控制台，而doGet方法使用了System.out.println(“”)输出信息。不推荐使用这种方式，以后会使用log4j,log4j2,commons-logging等专业日志工具。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置\"></a>配置\<servlet></servlet></h3><p>&emsp;&emsp;只有Servlet类文件还不行，Web容器还必须知道浏览器怎么访问这个Servlet。也就是说需要配置Servlet的类文件与访问方式。这个配置在Web应用程序的描述文件web.xml中进行配置。首先要配置Servlet的名称以及类名。名称与类名使用标签\<servlet>配置。</servlet></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 注册servlet --&gt;</span><br><span class="line">   &lt;servlet&gt;</span><br><span class="line">   	&lt;!-- servlet名称，当前xml中唯一 --&gt;</span><br><span class="line">       &lt;servlet-name&gt;abc&lt;/servlet-name&gt;</span><br><span class="line">      &lt;!-- servlet实现类的全限定名（包名+类名） --&gt;</span><br><span class="line">       &lt;servlet-class&gt;quickStartServlet&lt;/servlet-class&gt;</span><br><span class="line">   &lt;/servlet&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;\<servlet>与\</servlet>分别为Servlet配置的开始标签和结束标签。以上就是一个Servlet的配置信息。其中\<serlvet-name>与\<servlet-class>属性是必须配置的。\<servlet-name>配置Servlet的名称，\<servlet-class>配置Servlet的类名。\<servlet-name>可以任意取字符串值，但必须保证该名称在web.xml中唯一。该名称供其他标签如\<servlet-mapping>,\<filter>等使用。\<servlet-class>是FirstServlet类的路径。<br>&emsp;&emsp;\<servlet>标签还有一些可选的配置，加入可选配置后的FirstServlet配置如下所示：</servlet></servlet-class></filter></servlet-mapping></servlet-name></servlet-class></servlet-name></servlet-class></serlvet-name></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;abc&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-class&gt;quickStartServlet&lt;/servlet-class&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;!--参数名称--&gt;</span><br><span class="line">        &lt;param-name&gt;message&lt;/param-name&gt;</span><br><span class="line">        &lt;!--参数值--&gt;</span><br><span class="line">        &lt;param-value&gt;welcom to quickStartServlet&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;encoding&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;utf-8&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;使用\<init-param>标签可以配置一个初始化参数，包括一个参数名称与一个参数值。一个Servlet可以配置多个初始化参数。如上代码一共配置了两个初始化参数。Servlet中可以使用方法getServletContext().getInitParam(String paramName)来取得配置的初始化参数值。<br>&emsp;&emsp;标签\<load-on-startup>配置Servlet的加载方式。可选值为0和1.如果配置为1，Tomcat在启动时会自动加载该Servlet，否则，Tomcat会在有人第一次请求该Servlet的时候才加载该Servlet。Servlet默认是在第一次访问时被创建。\<load-on-startup>2\</load-on-startup>传入正整数，整数越小，被创建的优先级越高。</load-on-startup></init-param></p>
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置\"></a>配置\<servlet-mapping></servlet-mapping></h3><p>&emsp;&emsp;配置好Servlet名称与类名之后还需要配置Servlet的访问方式。访问方式通过标签/<servlet-mapping>配置。配置后的FirstServlet如下：</servlet-mapping></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 给注册的servlet添加映射路径 --&gt;</span><br><span class="line">   &lt;servlet-mapping&gt;</span><br><span class="line">   	&lt;!-- 已经注册的servlet名称。</span><br><span class="line">   	  注意，必须与注册的名称一致 --&gt;</span><br><span class="line">       &lt;servlet-name&gt;abc&lt;/servlet-name&gt;</span><br><span class="line">       &lt;!-- 访问路径。要求：必须以/开头 --&gt;</span><br><span class="line">       &lt;url-pattern&gt;/quickStartServlet&lt;/url-pattern&gt;</span><br><span class="line">   &lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;标签\<servlet-name>指明采用该访问方式的Servlet的名称，也就是前面\<servlet>里面配置的Servlet的名称。\<url-pattern>配置该Servlet的访问方式。\<url-pattern>值前面加上Web应用程序的路径(根路径，本例为”/servlet”),再加上服务器域名端口号信息就是访问该Servlet的网址。本例中的网址为：<a href="http://localhost:8080/WEB13/quickStartServlet。" target="_blank" rel="noopener">http://localhost:8080/WEB13/quickStartServlet。</a><br>&emsp;&emsp;\<url-pattern>中允许使用通配符“*”与“？”。“*”表示任意长度的字符串，*”表示任意长度的字符。如果\<url-pattern>路径配置为:/quickStartServlet.*,表示使用<a href="http://localhost:8080/WEB13/quickStartServlet.xxx访问quickStartServlet，xxx表示任意文件类型后缀。" target="_blank" rel="noopener">http://localhost:8080/WEB13/quickStartServlet.xxx访问quickStartServlet，xxx表示任意文件类型后缀。</a><br>&emsp;&emsp;url-pattern配置方式共有三种:<br>&emsp;&emsp;1. 完全路径匹配:以/开始，如:/ServletDemo4、/aa/ServletDemo5<br>&emsp;&emsp;2. 目录匹配:以/开始，需要以*结束,如:/aa/<em>(aa目录下的所有)<br>&emsp;&emsp;3. 扩展名匹配:不能以/开始，以\</em>开始。如:/*.do,/*.action<br>&emsp;&emsp;4. 缺省路径  /:通常情况访问html页面时，首先从当前web项目的web.xml文件寻找匹配路径，如果没找到，再从tomcat默认的web.xml匹配。（即当访问资源地址所有的servlet都不匹配时，缺省的servlet负责处理）<br>&emsp;&emsp;tomcat获得匹配路径时，优先级顺序：1&gt;2&gt;3&gt;4(完全路径匹配 &gt; 目录匹配 &gt; 扩展名匹配)<br>&emsp;&emsp;从Java EE5开始，\<servlet-mapping>标签可以配置多个\<url-pattern>。例如：</url-pattern></servlet-mapping></url-pattern></url-pattern></url-pattern></url-pattern></servlet></servlet-name></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet-mapping&gt;</span><br><span class="line">    &lt;servlet-name&gt;abc&lt;/servlet-name&gt;</span><br><span class="line">    &lt;url-pattern&gt;/quickStartServlet.asp&lt;/url-pattern&gt;</span><br><span class="line">    &lt;url-pattern&gt;/quickStartServlet.php&lt;/url-pattern&gt;</span><br><span class="line">    &lt;url-pattern&gt;/quickStartServlet.*&lt;/url-pattern&gt;</span><br><span class="line">&lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;表示可以不加后缀或通过.asp或.php或任意字符来访问FirstServlet（.*和.php/.asp有些重复，这里只是做个例子）。<br>&emsp;&emsp;<font color="red">一个完整的Servlet包括Servlet类、\<serlvet>配置、\<servlet-mapping>配置，缺一不可。利用IDE创建时，一般会自动完成这些配置。</servlet-mapping></serlvet></font>下图是浏览器访问时的执行顺序:<br><img src="/2018/12/07/深入Servlet技术/servlet访问过程2.png" alt="servlet访问过程"></p>
+<h2 id="开发中的路径编写"><a href="#开发中的路径编写" class="headerlink" title="开发中的路径编写"></a>开发中的路径编写</h2><ul>
+<li>相对路径:需要找位置相对关系。不能以/开始<br>&emsp;&emsp;1. &emsp;&emsp;./当前路径 &emsp;&emsp; ../上一级目录<br>&emsp;&emsp;2. 使用相对路径访问:<br>&emsp;&emsp;&emsp;&emsp;如：<a href="http://localhost:8080/day13/demo4-url/demo1.html或者http://localhost:8080/day13/ServletDemo6" target="_blank" rel="noopener">http://localhost:8080/day13/demo4-url/demo1.html或者http://localhost:8080/day13/ServletDemo6</a></li>
+<li>绝对路径:不需要找位置相对关系，以/开始的。<br>&emsp;&emsp;绝对路径中分为客户端路径和服务器端路径:<br>&emsp;&emsp;&emsp;&emsp;客户端路径一定要加工程名。如:/day13/servletDemo6<br>&emsp;&emsp;&emsp;&emsp;服务器端路径不需要加工程名。如:/ServletDemo6</li>
+</ul>
+<h3 id="部署Web程序"><a href="#部署Web程序" class="headerlink" title="部署Web程序"></a>部署Web程序</h3><p>&emsp;&emsp;利用Eclipse将程序部署到Tomcat下。部署完成后，启动服务器，使用配置的路径:<a href="http://localhost:8080/WEB13/quickStartServlet.asp等即可访问。" target="_blank" rel="noopener">http://localhost:8080/WEB13/quickStartServlet.asp等即可访问。</a></p>
+<h2 id="请求与响应"><a href="#请求与响应" class="headerlink" title="请求与响应"></a>请求与响应</h2><p>&emsp;&emsp;客户端浏览器发送一个请求，服务器做出一系列操作后做出一个响应，发送给客户端，完成一次Web过程操作。Web编程的过程就是通过请求分析客户需要什么信息或者进行了什么操作，然后进行一系列的处理，最后通过响应结果显示给客户。</p>
+<h3 id="获取request的变量"><a href="#获取request的变量" class="headerlink" title="获取request的变量"></a>获取request的变量</h3><p>&emsp;&emsp;客户端浏览器发出的请求被封装成为一个HttpServletRequest对象。所有的信息包括请求的地址，请求的参数，提交的数据，上传的文件，客户端的IP地址甚至客户端操作系统都包含在HttpServletRequest对象中。<br>&emsp;&emsp;下面的例子利用HttpServletRequest对象中采集客户端信息输出了一些我个人觉得比较重要的信息：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">protected void doGet(HttpServletRequest request, HttpServletResponse response)</span><br><span class="line">        throws ServletException, IOException &#123;</span><br><span class="line">    System.out.println(&quot;first Demo&quot;);</span><br><span class="line"></span><br><span class="line">    ///customer</span><br><span class="line">    System.out.println(&quot;contextPath是：&quot; + request.getContextPath());</span><br><span class="line"></span><br><span class="line">    //realPath的结果是：/Users/gaojie/IdeaProjects/exerciseweb/customermgr/src/main/webapp</span><br><span class="line">    System.out.println(&quot;realPath: &quot; + request.getRealPath(&quot;/&quot;));</span><br><span class="line"></span><br><span class="line">    //0:0:0:0:0:0:0:1</span><br><span class="line">    System.out.println(request.getRemoteAddr());</span><br><span class="line"></span><br><span class="line">    //url:http://localhost:9080/customer/servlet/HelloServlet</span><br><span class="line">    System.out.println(request.getRequestURL());</span><br><span class="line"></span><br><span class="line">    //uri:/customer/servlet/HelloServlet</span><br><span class="line">    System.out.println(request.getRequestURI());</span><br><span class="line"></span><br><span class="line">    //null</span><br><span class="line">    System.out.println(request.getHeader(&quot;referer&quot;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Request接收请求参数的常用方法：  </p>
+<ul>
+<li>String getParameter(String name):获得指定参数名称的对应值，如果没有返回null，如果值有多个则获得第一个。例如:username=jack  </li>
+<li>String[] getParameterValues(String names):获得指定参数名对应的所有值。如:hobby=抽烟&amp;hobby=喝酒</li>
+<li>Map&lt;String, String[]&gt; getParameterMap():获得所有的请求参数。key为参数名，value为key所对应的所有的值。</li>
+<li>setCharacterEncoding(String env):设置请求体的编码，用于解决POST请求参数乱码问题。  </li>
+</ul>
+<p>form.html的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;.. /demoOlParamServlet&quot; method=&quot;post&quot;&gt;用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;jack&quot; /&gt; &lt;br/&gt;密码：&lt;input type=&quot;text&quot; name=&quot;password&quot; value=&quot;l234&quot; /&gt; &lt;br/&gt;爱好：&lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;抽烟&quot; checked=&quot;checked&quot;/&gt;抽烟       &lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;喝酒&quot; checked=&quot;checked&quot; /&gt;喝酒       &lt;input type=&quot;checkbox&quot; name=&quot;hobby&quot; value=&quot;烫头&quot; /&gt;烫头&lt;br/&gt;&lt;input type=&quot;submit&quot; value=&quot;post提交&quot; /&gt;&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<p>servlet的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class DemoOlParamServlet extends HttpServlet &#123;  private static final long serialVersionUID = lL;  public void doGet(HttpServletRequest request, HttpServletResponse response)     throws ServletException, IOException &#123;		//0请求参数中文乱码		request.setCharacterEncoding(&quot;UTF-8&quot;) ;		//1使用参数名获得一个值		//1.1获得用户名		String username = request.getParameter (&quot;username&quot;) ;		//1. 2获得密码		String password = request.getParameter(&quot;password&quot;);		System. out .println (username + &quot; : &quot; + password);		//2使用参数名获得－组值		String[] hobbies = request.getParameterValues(&quot;hobby&quot;) ;		Sys七em.au七.println(Arrays.toS七ring(hobbies));		//3获得所有数据， 遍历Map		System.au七.println(&quot;---------------&quot;);</span><br><span class="line">		Map&lt;String,String[]&gt; allData = request.getParameterMap(); </span><br><span class="line">		for (Map.Entry&lt;String, String[] &gt; entry : allData.entrySet()) &#123; </span><br><span class="line">			System.out.print(entry.getKey());</span><br><span class="line">			System.out.print(&quot; --&gt; &quot;); </span><br><span class="line">			System. out.println(Arrays.toString(entry.getValue())); </span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br><span class="line">public void doPost(HttpServletRequest request， HttpServletResponse response) </span><br><span class="line">   throws ServletException, IOException &#123; </span><br><span class="line">／＊ 开发中我们发现， doPost和doGet两个方法编写的内容相同 </span><br><span class="line">＊所以常使用一个调用另一个， 此处我们使用doPost调用doGet＊所有的内容都编写在doGet方法中</span><br><span class="line"> */</span><br><span class="line"> doGet(reques七， response);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="response对象"><a href="#response对象" class="headerlink" title="response对象"></a>response对象</h3><p>&emsp;&emsp;服务器对客户端浏览器做出的响应被封装成一个HttpServletResponse对象。要对浏览器进行操作，只需要操作HttpServletResponse对象就可以了。通过HttpServletResponse对象就可以了。通过HttpServletResponse.getWriter()获得一个PrintWriter对象，该对象为OutputStream的子类。然后使用该对象输出信息就可以了。<br>&emsp;&emsp;通过HttpServletResponse获取的PrintWriter对象只能写字符型的数据。如果需要在客户端写二进制数据，可以使用HttpServletResponse.getOutputStream()。方法getWriter()可以看做是方法getOutputStream()的一个封装。<br>&emsp;&emsp;response的获取方式与request类似，创建继承HttpServlet的IdentityServlet（这里不展示代码），在web.xml文件中添加配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;InentityServlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-class&gt;InentityServlet&lt;/servlet-class&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br><span class="line"></span><br><span class="line">&lt;servlet-mapping&gt;</span><br><span class="line">    &lt;servlet-name&gt;InentityServlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;url-pattern&gt;/InentityServlet&lt;/url-pattern&gt;</span><br><span class="line">&lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>然后直接访问该Servlet就可以。  </p>
+<h4 id="一个登录页面的流程图"><a href="#一个登录页面的流程图" class="headerlink" title="一个登录页面的流程图"></a>一个登录页面的流程图</h4><p><img src="/2018/12/07/深入Servlet技术/登录页面的流程.tiff" alt="一个登录的例子"></p>
+<h2 id="读取Web-xml"><a href="#读取Web-xml" class="headerlink" title="读取Web.xml"></a>读取Web.xml</h2><p>&emsp;&emsp;如今在Web开发中，常量信息更倾向于写在某个配置文件中。需求变化时只需要修改一下配置文件即可，而不用修改源程序，也不会重新编译，维护起来比较方便。web.xml提供了设置初始化参数的功能，可以将这些信息配置在web.xml中。  </p>
+<h3 id="初始化参数-init-param"><a href="#初始化参数-init-param" class="headerlink" title="初始化参数(init-param)"></a>初始化参数(init-param)</h3><p>&emsp;&emsp;web.xml中配置Servlet的时候，标签\<servlet>中可以包含标签\<init-param>来配置初始化参数。一个Servlet可以配置0到多个初始化参数。以下用一个例子展示：  </init-param></servlet></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;InitParamServlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-class&gt;InitParamServlet&lt;/servlet-class&gt;</span><br><span class="line">    &lt;!--第一个参数--&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;helloween&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;!--第二个参数--&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;admin&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;admin&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">    &lt;!--第三个参数--&gt;</span><br><span class="line">    &lt;init-param&gt;</span><br><span class="line">        &lt;param-name&gt;babyface&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;babyface&lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br><span class="line"></span><br><span class="line">&lt;servlet-mapping&gt;</span><br><span class="line">    &lt;servlet-name&gt;InitParamServlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;url-pattern&gt;/InitParamServlet&lt;/url-pattern&gt;</span><br><span class="line">&lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;配置完成后，Servlet中提供方法getInitParameter(String param)来获取初始化参数值。如果配置了名为param的参数，则返回参数值，否则返回null。还可以使用getInitParameterNames()方法返回所有的参数名称，返回结果为枚举类型(Enumeration)。<br>&emsp;&emsp;这些初始化参数可以由ServletConfig对象获得。由ServletConfig取初始化参数与Servlet直接取方式一样。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s = getInitParameter(&quot;message&quot;);</span><br><span class="line">String s1 = getServletConfig().getInitParameter(&quot;message&quot;);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;Java Web应用程序的WEB-INF文件夹有一个特性，任何人都不能通过浏览器直接获取下面的文件，即使未被允许访问的人知道文件的准确位置及名称。WEB-INF下的文件是受保护的，这样就保证了文件的安全性。虽然WEB-INF下的文件夹不能通过浏览器直接获取，但可以通过控制程序由一个页面跳转到另一个页面。我们可以通过控制初始化参数保证只有被允许的人访问WEB-INF下的受保护的内容。比如做一个登录页面，只有登录的人才能访问后面的页面，登录的用户名密码可以与初始化参数相比较，相同才能进入，否则不能进入。  </p>
+<h3 id="上下文参数-context-param"><a href="#上下文参数-context-param" class="headerlink" title="上下文参数(context-param)"></a>上下文参数(context-param)</h3><p>&emsp;&emsp;由于init-param是配置在\<servlet>标签里的，只能由这个Servlet来读取，因此他不是全局的参数，不能被其他Servlet读取。<br>&emsp;&emsp;如果需要配置一个所有Servlet都能够读取的参数，就需要用到上下文参数(ContextPath),或者叫文档参数。上下文参数使用标签\<context-param>配置，</context-param></servlet></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE web-app PUBLIC</span><br><span class="line"> &quot;-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN&quot;</span><br><span class="line"> &quot;http://java.sun.com/dtd/web-app_2_3.dtd&quot; &gt;</span><br><span class="line"></span><br><span class="line">&lt;web-app&gt;</span><br><span class="line">  &lt;display-name&gt;Archetype Created Web Application&lt;/display-name&gt;</span><br><span class="line"></span><br><span class="line">    &lt;context-param&gt;</span><br><span class="line">        &lt;param-name&gt;upload folder&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;attachment&lt;/param-value&gt;</span><br><span class="line">    &lt;/context-param&gt;</span><br><span class="line"></span><br><span class="line">    &lt;context-param&gt;</span><br><span class="line">        &lt;param-name&gt;allowed file type&lt;/param-name&gt;</span><br><span class="line">        &lt;param-value&gt;.gif,.jpg,.bmp&lt;/param-value&gt;</span><br><span class="line">    &lt;/context-param&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt;ContextParamServlet&lt;/servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt;ContextParaServlet&lt;/servlet-class&gt;</span><br><span class="line">    &lt;/servlet&gt;</span><br><span class="line"></span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;获取context-param可以使用ServletContext对象。Servlet中通过getServletConfig().getServletContext()来获取一个ServletContext对象，使用ServletContext的getInitParameter()方法来获取指定名称的参数，通过getInitParameterNames()获取所有的context-param参数名称。<br>创建ServletContext的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ServletContext servletContext = getServletConfig().getServletContext();</span><br><span class="line">        </span><br><span class="line">ServletContext servletContext1 = getServletContext();</span><br><span class="line"></span><br><span class="line">ServletContext servletContext2 = this.getServletContext();</span><br><span class="line">        </span><br><span class="line">String uploadFolder = servletContext.getInitParameter(&quot;uploadfolder&quot;);</span><br><span class="line">Enumeration&lt;String&gt; upload = servletContext1.getInitParameterNames();</span><br></pre></td></tr></table></figure>
+<font color="red">&emsp;&emsp;初始化参数与上下文参数只能配置简单的字符串类型的参数。如果需要配置更多更灵活的参数，推荐把参数配置写到xml文件或者properties文件中，然后写程序读取这些文件。</font>
+
+<h3 id="ServletContext对象"><a href="#ServletContext对象" class="headerlink" title="ServletContext对象"></a>ServletContext对象</h3><p>&emsp;&emsp;服务器启动时，为每个WEB应用程序创建一个单独的ServletContext对象，我们可以使用这个对象存取数据，用这个对象存取的数据可以在整个WEB应用中获得。可以使用如下方法向ServletContext中存取数据。</p>
+<ul>
+<li>void setAttribute(String name, Object object),向ServletContext中存数据</li>
+<li>Object getAttribute(String name),从ServletContext中取数据</li>
+<li>void removeAttribute(String name,从ServletContext中移除数据</li>
+</ul>
+<h3 id="ServletConfig-获得Servlet的配置信息"><a href="#ServletConfig-获得Servlet的配置信息" class="headerlink" title="ServletConfig:获得Servlet的配置信息"></a>ServletConfig:获得Servlet的配置信息</h3><p>&emsp;&emsp;常用的有以下几个个方法：  </p>
+<ul>
+<li><ol>
+<li>String getServletName();//获得Servlet在web.xml中配置的name的值</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>String getInitParameter(String name);//获得Servlet初始化参数</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>EnumerationgetInitParameterNames();//获得所有Servlet的初始化参数名称</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>ServletContext getServletContext();//获得ServletContext对象</li>
+</ol>
+</li>
+</ul>
+<h4 id="ServletContext读取WEB工程下的文件"><a href="#ServletContext读取WEB工程下的文件" class="headerlink" title="ServletContext读取WEB工程下的文件"></a>ServletContext读取WEB工程下的文件</h4><p>&emsp;&emsp;ServletContext对象，tomcat为每一个web项目单独创建一个上下文对象。具有功能：</p>
+<ul>
+<li><ol>
+<li>可以在多个servlet之间共享数据<br>&emsp;&emsp;&emsp;&emsp;存放：setAttribute()<br>&emsp;&emsp;&emsp;&emsp;获取：getAttribute()<br>&emsp;&emsp;&emsp;&emsp;删除：removeAttribute()  </li>
+</ol>
+</li>
+<li><ol start="2">
+<li>可以获得当前WEB项目中指定的资源（文件）<br>&emsp;&emsp;&emsp;&emsp;getResourceAsStream(String):InputStream<br>&emsp;&emsp;&emsp;&emsp;getRealPath():String</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>可以进行整个web项目初始化数据设置（context-param）</li>
+</ol>
+</li>
+<li><ol start="4">
+<li>获得web应用中任何资源的绝对路径(<font color="red">重要 重要</font>):String path = context.getRealPath(“相对于该web应用的相对地址”)</li>
+</ol>
+</li>
+<li><ol start="5">
+<li>ServletContext是一个域对象(存储数据的区域就是域对象)，<font color="red">其作用范围是整个web应用（所有web资源都可以随意向servletcontext域中存取数据，数据可以共享）</font></li>
+</ol>
+</li>
+</ul>
+<p>&emsp;&emsp;在实际开发中，有时需要读取Web应用中的一些资源文件，比如配置文件、图片等。为此，在ServletContext接口中定义了一些读取Web资源的方法，这些方法是依赖Servlet容器来实现的。Servlet容器根据资源文件名相对于Web应用的路径，返回关联资源文件的IO流、资源文件在文件系统的绝对路径等。</p>
+<table>
+<thead>
+<tr>
+<th>方法说明</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set getResourcePaths(String path)</td>
+<td>返回一个Set集合，集合中包含资源目录中子目录和文件的路径名称。参数path必须以正斜线(/)开始，指定匹配资源的部分路径</td>
+</tr>
+<tr>
+<td>String getRealPath(String path)</td>
+<td>返回资源文件在服务器文件系统上的真实路径(文件的绝对路径)。参数path代表资源文件的虚拟路径，它应该以正斜线开始(/),”/“表示当前Web应用的根目录，如果Servlet容器不能将虚拟路径转换为文件系统的真实路径，则返回null</td>
+</tr>
+<tr>
+<td>url getResource(String path)</td>
+<td>返回映射到某个资源文件的URL对象。参数path必须以正斜线(/)开始,”/“表示当前Web应用的根目录</td>
+</tr>
+<tr>
+<td>InputStream getResourceAsStream(String path)</td>
+<td>返回映射到某个资源文件的InputStream输入流对象。参数path传递规则和getResource()方法完全一致</td>
+</tr>
+</tbody>
+</table>
+<h4 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h4><ul>
+<li>servlet的初始化参数可以通过ServletConfig对象获得</li>
+<li>整个项目的初始化参数</li>
+</ul>
+<h3 id="资源注射（-Resource）"><a href="#资源注射（-Resource）" class="headerlink" title="资源注射（@Resource）"></a>资源注射（@Resource）</h3><p>&emsp;&emsp;以上例子都是在Servlet里编写程序代码读取web.xml初始化参数。Java EE5提供了一种新的方案叫做资源注射(Resource Injection)，或者叫资源注入。即不需要Servlet主动去读取资源，Tomcat启动时会把web.xml里配置的信息主动”注射”到Servlet中。这个过程是运行时自动完成的，不需要编写任何代码，不需要做任何工作。<br>&emsp;&emsp;资源注射是通过注解(Annotation)完成的。注解是Java5.0里引入的新特性。注解是一种特殊的接口，以“@”符号为标志。用法如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Resource(name=&quot;messageNameInWebXml&quot;)</span><br><span class="line">private String message;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;使用@Resource标注字符串变量message，表示message的值会在Servlet运行时动态注入。然后在web.xml中配置一个名为messageNameInWebXml的参数即可。注解以及变量可以写在一行代码中，看起来更加简洁一些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private @Resource(name=&quot;messageNameInWebXml&quot;) String message;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;一个例子,在一个Servlet中定义这些变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">//注入字符串</span><br><span class="line">private @Resource(name=&quot;hello&quot;) String hello;</span><br><span class="line">//注入整数</span><br><span class="line">private @Resource(name=&quot;i&quot;) int i;</span><br><span class="line"></span><br><span class="line">//另外一种写法（我个人喜欢这种）</span><br><span class="line">@Resource(name=&quot;persons&quot;)</span><br><span class="line">private String persons;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	&lt;!-- 在web.xml中配置变量信息 --&gt;</span><br><span class="line">    &lt;servlet&gt;</span><br><span class="line">        &lt;servlet-name&gt; InjectionServlet &lt;/servlet-name&gt;</span><br><span class="line">        &lt;servlet-class&gt; InjectionServlet &lt;/servlet-class&gt;</span><br><span class="line">    &lt;/servlet&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;servlet-mapping&gt;</span><br><span class="line">        &lt;servlet-name&gt; InjectionServlet &lt;/servlet-name&gt;</span><br><span class="line">        &lt;url-pattern&gt;/InjectionServlet &lt;/url-pattern&gt;</span><br><span class="line">    &lt;/servlet-mapping&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!--资源配置信息--&gt;</span><br><span class="line">    &lt;env-entry&gt;</span><br><span class="line">        &lt;env-entry-name&gt;hello&lt;/env-entry-name&gt;</span><br><span class="line">        &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;</span><br><span class="line">        &lt;env-entry-value&gt;Hello, Weoclme to the JavaEE Injection&lt;/env-entry-value&gt;</span><br><span class="line">    &lt;/env-entry&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;env-entry&gt;</span><br><span class="line">        &lt;env-entry-name&gt;i&lt;/env-entry-name&gt;</span><br><span class="line">        &lt;env-entry-type&gt;java.lang.Integer&lt;/env-entry-type&gt;</span><br><span class="line">        &lt;env-entry-value&gt;10&lt;/env-entry-value&gt;</span><br><span class="line">    &lt;/env-entry&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;env-entry&gt;</span><br><span class="line">        &lt;env-entry-name&gt;persons&lt;/env-entry-name&gt;</span><br><span class="line">        &lt;env-entry-type&gt;java.lang.String&lt;/env-entry-type&gt;</span><br><span class="line">        &lt;env-entry-value&gt;Helloween, Cobain, Roses&lt;/env-entry-value&gt;</span><br><span class="line">    &lt;/env-entry&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="使用JNDI获取资源"><a href="#使用JNDI获取资源" class="headerlink" title="使用JNDI获取资源"></a>使用JNDI获取资源</h3><p>&emsp;&emsp;资源注射的工作原理是JNDI（Java命名与目录接口，Java Naming and Directory Interface）。InjectionServlet实例中使用\<env-entry>配置了名为hello,i,persons的JNDI资源，然后使用@Resource将指定名称的JNDI资源注射到InjectionServlet中。<br>&emsp;&emsp;如果不使用@Resource，通过查找JNDI同样可以获取这三个资源，代码如下：</env-entry></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Context ctx = new InitialContext();</span><br><span class="line">String message = (String)ctx.lookup(&quot;message&quot;);</span><br><span class="line">Integer i = (Integer)ctx.lookup(&quot;i&quot;);</span><br><span class="line">String persons = (String)ctx.lookup(&quot;persons&quot;);</span><br></pre></td></tr></table></figure>
+<h3 id="注射数据源"><a href="#注射数据源" class="headerlink" title="注射数据源"></a>注射数据源</h3><p>&emsp;&emsp;Servlet中不仅可以注射String、Integer等类型的变量，还可以注入自定义的Java Bean以及数据源等复杂类型变量。例如，下面的代码将会注射一个数据源。开发者只要在Tomcat中配置好数据源，然后使用以下代码就可以获取数据源变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Resource(name=&quot;database&quot;)</span><br><span class="line">javax.sql.DataSource dataSource;</span><br><span class="line"></span><br><span class="line">public void getConnection()&#123;</span><br><span class="line">	Connection conn = dataSource.getConnection();</span><br><span class="line">	return conn;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<font color="red"> &emsp;&emsp;注射是利用@注解实现的。JDK5以上支持@注解。资源注射需要服务器的支持，Tomcat6以上是支持的，但某些其他Web服务器或者低版本的Tomcat可能不支持</font><br>## 提交表单信息<br>&emsp;&emsp;Web程序的任务是实现服务器与客户端浏览器之间的信息交互。<br>&emsp;&emsp;提交信息的方式包括GET与POST，分别触发Servlet的doGet方法与doPost方法。GET用于从服务器获取信息（通过提交的参数指定要获取什么样的信息），而POST用于向服务器提交信息。POST方式提交数据包括两种形式，即普通POST提交方式与可以上传文件的POST提交方式。<br>### GET提交方式<br>&emsp;&emsp;GET方式提交表单内容时所有被提交的内容都被显示在浏览器地址栏中。不经过FORM提交数据而直接以输入网址，或者单机链接的方式访问Servlet也被看做是GET方式提交数据。GET方式提交表单的典型应用是搜索引擎。GET提交时URL总长度不能超过255个字符，因此提交过长的内容时也不能使用GET方式。<br>&emsp;&emsp;另外，如果想要搜索中文，需要修改TOMCAT目录下的\conf\server.xml里设定的GET编码方式，否则会出现乱码。下面为server.xml中需要修改的部分。如果不指定UTF-8方式编码，TOMCAT将使用ISO-8859-1编码。<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; </span><br><span class="line">connectionTimeout=&quot;20000&quot; redirectPort=&quot;8443&quot;</span><br><span class="line">URIEncoding=&quot;UTF-8&quot;&gt;</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;使用GET提交表单的方式<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;title&gt;Insert title here&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;	</span><br><span class="line">	&lt;form action=&quot;/WEB13/login&quot; method=&quot;get&quot;&gt;</span><br><span class="line">		用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br/&gt;</span><br><span class="line">		密码：&lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;br/&gt;</span><br><span class="line">		&lt;input type=&quot;submit&quot; value=&quot;登录&quot;&gt;&lt;br/&gt;</span><br><span class="line">	&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure><br><br>### POST提交个人信息<br>&emsp;&emsp;由于GET方式提交表单具有上述的限制，因此需要使用POST方式提交表单。把HTML中FORM的method属性设置为POST，浏览器会以POST方式提交表单内容。<br>&emsp;&emsp;POST方式提交表单时，表单的内容不会显示在浏览器中，浏览器中只显示接受该表单数据的Servlet路径，因此POST可以提交一些敏感信息(如密码等)。POST方式提交表单时也不受内容长度的限制，理论上可以接受大量的数据。<br>&emsp;&emsp;同GET方式一样，Servlet可以通过HttpServletRequest对象的getParameter(String param)方法获取param对应的参数值。不同的是，由于POST方式不会使用”?”以及”&amp;”符号来组织一个QueryString，因此POST时使用getQueryString()将返回null。<br>&emsp;&emsp;使用POST提交表单的方式<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">&lt;title&gt;Insert title here&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;	</span><br><span class="line">	&lt;form action=&quot;/WEB13/login&quot; method=&quot;post&quot;&gt;</span><br><span class="line">		用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot;&gt;&lt;br/&gt;</span><br><span class="line">		密码：&lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;br/&gt;</span><br><span class="line">		&lt;input type=&quot;submit&quot; value=&quot;登录&quot;&gt;&lt;br/&gt;</span><br><span class="line">	&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure><br><br><img src="/2018/12/07/深入Servlet技术/用户登录.png" alt="用户登录图片"><br><br>### 上传文件客户端<br>&emsp;&emsp;除了提交表单，上传文件也是很常见的客户端与Web程序交互的操作。相对于FTP文件上传，Web文件上传速度要慢一些，但使用方便，不需要客户端，仅有一个浏览器就可以，而且权限也比FTP更容易控制。<br>&emsp;&emsp;Web文件上传采用POST方式。上传文件需要设置FORM的enctype属性为multipart/form-data。由于上传的文件会比较大，因此需要设置该参数指定浏览器使用二进制上传。如果不设置，enctype属性默认为application/x-www-form-urlencoded，浏览器将使用ASCII向服务器发送数据，导致发送文件失败。<br>&emsp;&emsp;上传文件要使用文件域(\<int type="file">)，并把FORM的Enctype设置为multipart/form-data，例如：<br>&emsp;&emsp;上传文件的客户端，这里只截取了一部分：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;form action=&quot;servlet/UploadServlet&quot; method=&quot;post&quot; </span><br><span class="line">      enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;input type=&quot;file&quot; name=&quot;file1&quot; class=&quot;text&quot;&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;服务器端的代码要复杂一些。由于上传文件时浏览器是以二进制的方式发送数据，因此Servlet中不能简单地通过HttpServletRequest的getParameter()方法来获取文件域以及文本域的内容。要想获取其中的内容，必须根据HTTP协议所规定的格式解析浏览器提交的Request。<br>&emsp;&emsp;解析二进制数据流比较麻烦。已经有许多类库已经完成了这些工作，例如SmartUpload与Apache Commons Fileupload。SmartUpload是一个商业类库，解析Request过程中数据放在内存里，因此速度较快，但上传文件较大时会发生内存溢出。Apache Commons Fileupload是一个免费的开源类库。Commons Fileupload是Apache Commons众多开源组件中的一员。从Apache官方网站可以下载到，将此jar包引入项目即可使用。新建UploadServlet编写代码即可。<br>&emsp;&emsp;服务端这里不做展示。<br>&emsp;&emsp;上传文件时数据以二进制形式提交，而非ASCII方式提交，因此Servlet不能用request.getParameter()等方式获取提交的文本内容。这里使用Commons-upload解析二进制数据，获取上传的文本内容。<br>## 带进度条的文件上传<br>&emsp;&emsp;上述例子只实现了普通文件上传，并附带普通文本域的提交。如果需要显示上传进度条，实时显示上传速度等，需要配合使用AJAX技术。仍然可以使用Apache的commons-fileupload实现文件上传。<br>### 工作原理<br>&emsp;&emsp;实时显示上传进度的原理是服务器在处理上传文件的同时，将上传进度的信息如文件总长度、已上传多少、传输速率等写入Session中。客户端浏览器使用Ajax技术再新开一个独立的线程从Session中获取上传进度信息，并实施显示。Ajax技术能够不刷新页面获取服务器数据。Session可看做是服务器内存，可用于存放少量的客户信息。<br>&emsp;&emsp;这里只列出来所需要的步骤，不做代码展示：<br><br>- 上传进度条：使用两个\<div>标签实现，通过控制\<div>的css属性可以显示一个HTML版的进度条。\<div>标签连同css样式、JavaScript脚本、Ajax技术，可以实现非常丰富的效果。<br>- 上传监听器：commons-fileupload上传监听，只需要实现一个监听器（ProgressListener，只有一个update(long buytesRead, long contentLength, int items)方法，参数bytesRead表示已经上传的字节数，contentLength表示上传文件的总长度（如果为-1则表示总长度未知），items表示正在上传第几个文件），并把它添加到上传组件即可。添加该监听器后，上传组件在上传文件时，会不断回调该方法，回传这些数据。利用这些数字，就可以计算出文件上传的进度，用进度条实时显示出来。因此需要把这些数据用一个JavaBean保存起来。<br>- 监听上传进度：创建一个Servlet当做监听器。监听负责上传文件的Servlet，把存有上传进度信息的JavaBean对象放进Session。上传文件使用POST方法，因此需要把代码写到doPost（）方法中。<br>- 读取上传进度：上传进度保存在Session中的JavaBean属性中，从该属性中获取JavaBean对象，并将上传进度信息读取出来。上传文件只会使用监听上传进度的Servlet的doPost方法而没有占用doGet（）方法，因此这里使用doGet()方法来读取上传进度。即：如果以doPost方式访问则会执行上传代码;如果以GET方式访问会执行读取上传进度的代码。根据上传开始时间、已上传的字节数、总的字节数等原始数据，可以计算出已传输时间、传输速率、传输总时间、剩余时间，已完成百分比等。这些数据最终被Ajax程序读取，以进度条形式显示，因此最后将它们分隔符“||”分开，便于程序处理。<br>- 显示上传进度：上传文件时，如果不对表单做特别处理，提交表单会转到另一个页面，造成页面的刷新。而且新页面显示之前，浏览器会因等待而显示白屏。如果上传文件较大，白屏时间会很长。因此要对表单做一些特殊处理，使提交表单后原页面内容不变，同时显示进度条，直到文件上传结束，从而避免出现白屏。方法是更改Form表单的target属性。target属性默认为_self。如果target为默认值，则提交后新的页面会在当前窗口显示，造成当前窗口短暂的白屏。注意：将上传文件的表单指定method=“POST”与enctype=“multipart/form-data”。另外为表单添加js事件，该方法显示进度条，使用Ajax读取Session中保存的上传进度，实时刷新进度条。<br>##  Servlet生命周期<br>&emsp;&emsp;每个Servlet都有自己的生命周期，Servlet的生命周期由Web服务器来维护。Servlet规范规定，所有的servlet必须实现java.servlet.Servlet接口。<br>###  Servlet生命周期<br>&emsp;&emsp;在CGI编程中，用户每请求一次CGI程序，服务器就会开辟一个单独的进程来处理请求，处理完之后将进程销毁。这样反复开辟与销毁不仅效率低下，而且会占用很多资源。如果并发请求数（同一时刻请求的数目）很多，CGI程序往往显得力不从心。<br>&emsp;&emsp;Servlet程序解决了这个问题。服务器在启动时（如果load-on-startup为1）或第一次请求Servlet时（如果load-on-startup为0）初始化一个Servlet对象，然后利用这个Servlet去处理所有客户端请求。服务器关闭时才销毁这个Servlet对象。这样省去了开辟与销毁Servlet的开销。当然，这种机制也增加了服务器维护Servlet的复杂度。<br>&emsp;&emsp;Servlet会在服务器启动或第一次请求该Servlet的时候开始生命周期，在服务器结束的时候结束生命周期。无论请求多少次Servlet，最多只有一个Servlet实例。多个客户端并发请求Servlet时，服务器会启动多个线程，分别执行Servlet的service()方法。<br><img src="/2018/12/07/深入Servlet技术/Servlet生命周期.tiff" alt="Servlet生命周期"><br>&emsp;&emsp;在Servlet对象的生命周期中，init(ServletConfig conf)方法与destroy()方法均只会被服务器执行一次，而service()在每次客户端请求Servlet时都会执行。任何一次请求服务器都会创建一个新的线程访问Servlet的service方法，在service方法内部根据请求的方式不同调用doXXX的方法（doGet和doPost）。当Servlet服务器关闭或移除掉，Servlet会被销毁，然后执行destroy方法。<br>&emsp;&emsp;HttpServlet:与Http协议有关的实现。实现service方法，完成与http协议有关的操作。request.getMethod()获得请求方式(get、post)。如果是post，调用doPost();如果是get,调用doGet()。<br>&emsp;&emsp;生命周期：一个对象从创建到销毁的过程。<br>&emsp;&emsp;Servlet生命周期:Servlet从创建到销毁的过程。<br><br>- 何时创建:用户第一次访问Servlet创建Servlet实例(单实例)。(设置\<load-on-startup>1\</load-on-startup>之后，Tomcat启动时会加载所有Servlet)<br>- service(ServletRequest request, ServletResponse response),何时执行:每次请求都会执行，ServletRequest代表请求，认为ServletRequest内部封装的是http请求信息；ServletResponse代表响应，认为要封装的是响应的信息。<br>- 何时销毁:当项目从服务器中移除的时候,或者关闭服务器的时候（servlet销毁的时候执行）。<br><br><br>&emsp;&emsp;Servlet中有时会用到一些需要初始化与销毁的资源，因此可以把初始化资源的代码放入init()方法内，把销毁该资源的代码放入到destroy()方法内，而不需要每次处理请求都要初始化与销毁资源（doGet（）和doPost（）时每次初始化资源）。<br>&emsp;&emsp;对于Servlet的init(ServletConfig conf)方法，HttpServlet提供了一个更简单的不带参数的替代方法init()。HttpServlet加载时会执行这个不带参数的init()方法，因此只需要把代码放置到init()方法中即可。对于原来的ServletConfig参数，仍然可以通过getServletConfig()方法获取到。<br>&emsp;&emsp;<font color="red">Servlet的生命周期顺序是：init()、service()、doGet()\doPost()、destroy()</font>
+
+<h3 id="注解-PostConstruct与注解-PreDestroy"><a href="#注解-PostConstruct与注解-PreDestroy" class="headerlink" title="注解@PostConstruct与注解@PreDestroy"></a>注解@PostConstruct与注解@PreDestroy</h3><p>&emsp;&emsp;从JavaEE5规范开始，Servlet中增加了两个影响Servlet生命周期的注解(@Annotation)@PostConstruct与@PreDestroy。这两个注解被用来修饰一个非静态的void()方法，而且这个方法不能有抛出异常声明。使用注解修饰方法的时候可以写在方法的前面，也可以写在返回类型或者void的后面，也可以分两行写。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@PostConstruct</span><br><span class="line">public void someMethod()&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public @PreDestroy void anotherMethod()&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;被@PostConstruct修饰的方法会在服务器加载Servlet的时候运行，并且只会被服务器调用一次，类似于Servlet的init()方法。被@PostConstruct修饰的方法会在构造函数之后，init()方法之前运行。<br>&emsp;&emsp;被@PreDestroy修饰的方法会在服务器卸载Servlet的时候运行，并且只会被服务器调用一次，类似于Servlet的destroy()方法。被@PreDestroy修饰的方法会在destroy()方法之后运行，在Servlet被彻底之前。PreDestroy的Destroy指的是Servlet的销毁而不是destroy()方法。<br>&emsp;&emsp;注意，注解多少会影响到服务器的启动速度。服务器在启动的时候，会遍历Web应用的WEB-INF/classes下的所有class文件与WEB-INF/lib下的所有jar文件，以检查哪些类使用了注解。而不支持注解的服务器无需这样做。如果应用中没有任何注解，可以在web.xml文件中设置\<web-app>的metadata-complete属性为true来关闭服务器启动实例时运行的注解检查。</web-app></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;web-app xmlns=&quot;//java.sun.com/sml/ns/javaee&quot;</span><br><span class="line">  	version=&quot;2.5&quot; metadata-complete=&quot;true&quot;&gt;</span><br><span class="line">&lt;/web-app&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;支持@PostConstruct与@PreDestroy注解的服务器要支持到Servlet2.5及以上规范。Tomcat6以上才可以。</p>
+<h2 id="Servlet之间的跳转"><a href="#Servlet之间的跳转" class="headerlink" title="Servlet之间的跳转"></a>Servlet之间的跳转</h2><p>&emsp;&emsp;Servlet之间可以相互跳转，从一个Servlet程序跳到下一个Servlet。利用Servlet跳转可以很容易把一个任务按模块分开。<br>&emsp;&emsp;现在的MVC(Model-View-Control)框架中都是用了Servlet跳转。MVC框架把程序分成三个独立模块：业务处理模块（Model）、视图模块（View）、控制模块（Control）。</p>
+<h3 id="转向"><a href="#转向" class="headerlink" title="转向"></a>转向</h3><p>&emsp;&emsp;转向(Forward)是通过RequestDispatcher对象的(HttpServletRequest request, HttpServletResponse response)方法实现的。RequestDispatcher可以通过HttpServletRequest的getRequestDispatcher()方法获得。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RequestDispatcher dispatcher = request.</span><br><span class="line">	getRequestDispatcher(&quot;/servlet/LifeCycleServlet&quot;);</span><br><span class="line">dispatcher.forward(request, response);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;getRequestDispatcher()方法的参数必须为以”/“开始，”/“表示本Web应用程序的根目录。如果要跳转到Servlet为http:localhost:8080/servlet/servlet/LifeCycleServlet,则参数应为”/servlet/LifeCycleServlet”。<br>&emsp;&emsp;Forward不仅可以跳转到本应用的另一个Servlet，JSP页面，也可以跳转到另一个文件，甚至WEB-INF文件夹下的文件。其中，跳转到Servlet与JSP页面是最常见的。<br>&emsp;&emsp;当使用forward形式跳转Servlet时，地址栏会显示跳转前的Servlet访问地址。因为该跳转是在服务器端实现的，客户端浏览器并不知道该跳转动作。也就是说forward跳转对客户端是透明的。<br>&emsp;&emsp;当执行forward动作时不能有任何输出到达客户端，否则会抛出IllegalStateException。也就是说forward之前尽量不要用out.println()语句向客户端输出结果。</p>
+<h3 id="重定向-Redirece"><a href="#重定向-Redirece" class="headerlink" title="重定向(Redirece)"></a>重定向(Redirece)</h3><p>&emsp;&emsp;重定向是利用服务器返回的状态码实现的。客户端浏览器请求服务器的时候，服务器端会返回一个状态码。服务器端通过HttpServletResponse的setStatus(int statuss)方法设置状态码。如果服务器返回301或者302，则浏览器会到新的网址重新请求该资源。  </p>
+<p>HttpServletResponse状态码</p>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1xx</td>
+<td>信息状态码。表示该请求已经被接受，正在被处理</td>
+</tr>
+<tr>
+<td>2xx</td>
+<td>正确状态码。表示该请求被正确请求被处理，没有错误发生。200表示一切正确</td>
+</tr>
+<tr>
+<td>3xx</td>
+<td>重定向状态码。如301、302表示该资源已经不存在或者换了地址，客户端需要重新定向到一个新的资源。服务器响应中会附带这个新资源地址</td>
+</tr>
+<tr>
+<td>4xx</td>
+<td>请求错误。请求错误。例如401表示没有访问权限，404表示资源不存在，405表示访问方式错误(如Servlet只接受GET，但客户端使用POST访问)</td>
+</tr>
+<tr>
+<td>5xx</td>
+<td>服务器错误。例如500表示程序出现异常而中途停止运行</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;301、302都表示重定向，区别是301是永久性重定向，302是临时性重定向。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);//设置状态码</span><br><span class="line">response.setHeader(&quot;Location&quot;, &quot;http://www.helloweenvsfei.com&quot;); //新网址</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;HttpServletResponse类中把常用的状态码封装成了静态的常量。代码中SC_MOVED_TEMPORARILY表示302。HttpServletResponse把setStatus与setHeader方法封装成另一个方法sendRedirect(String location),只需要调用sendRedirection就能实现重定向。<br>&emsp;&emsp;当使用Redirect跳转Servlet时，跳转是在客户端实现的。即客户端浏览器实际上请求了2次服务器，第1次获取了重定向状态码与重定向的网址，第2次访问真实地址。</p>
+<h3 id="自动刷新-Refresh"><a href="#自动刷新-Refresh" class="headerlink" title="自动刷新(Refresh)"></a>自动刷新(Refresh)</h3><p>&emsp;&emsp;自动刷新不仅可以实现一段时间之后自动跳转到另一个页面，还可以实现一段时间之后自动刷新本页面。Servlet中通过HttpServletResponse对象设置Header属性实现自动刷新效果，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.setHeader(&quot;Refresh&quot;, &quot;1000; URL=http://localhost:8080/servlet/example.html&quot;);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;其中1000为时间，单位为毫秒。URL参数指定的网址就是1秒之后跳转的页面。当URL设置的路径为Servlet自己的路径时，就会每隔1秒钟自动刷新本页面一次。<br>&emsp;&emsp;自动刷新与重定向原理差不多。如果把时间设置为0，把URL设为一个网址，效果就是重定向。</p>
+<h2 id="Servlet与线程安全"><a href="#Servlet与线程安全" class="headerlink" title="Servlet与线程安全"></a>Servlet与线程安全</h2><p>&emsp;&emsp;线程安全问题是指在多线程并发执行时，会不会出现问题。如果不出现问题，则是线程安全的;如果出现问题，则是线程不安全的。<br>&emsp;&emsp;由于Servlet只会有一个实例，多个用户同时请求一个Servlet时，Tomcat会派生出多条线程执行Servlet代码，因此Servlet具有线程不安全的隐患。<br>&emsp;&emsp;多线程并发的读写会导致数据的不同步问题，因此，Servlet不是线程安全的。解决的方法是分变量分别定义在doGet()与doPost()方法内。虽然使用synchronized可以解决问题，但会造成线程等待。<br>&emsp;&emsp;多线程并发的读写Servlet会导致数据的不同步。但如果只是并发的读取属性而不写入，则不存在数据不同步问题。因此，Servlet中的只读属性最好是定义为final类型的。</p>
+<h2 id="扩展-类加载器读取文件"><a href="#扩展-类加载器读取文件" class="headerlink" title="扩展:类加载器读取文件"></a>扩展:类加载器读取文件</h2><p>&emsp;&emsp;使用类的加载器来读取文件，类的加载器用来加载class文件，将class文件加载到内存。</p>
+</div></div></div></int>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/servlet/" rel="tag"># servlet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/05/JavaWeb开发环境/" rel="next" title="JavaWeb开发环境">
+                <i class="fa fa-chevron-left"></i> JavaWeb开发环境
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/17/JSP技术/" rel="prev" title="JSP技术">
+                JSP技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入Servlet技术"><span class="nav-number">1.</span> <span class="nav-text">深入Servlet技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET方式查询"><span class="nav-number">1.1.1.</span> <span class="nav-text">GET方式查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP头数据"><span class="nav-number">1.1.2.</span> <span class="nav-text">HTTP头数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST方式提交数据"><span class="nav-number">1.1.3.</span> <span class="nav-text">POST方式提交数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他访问方式"><span class="nav-number">1.1.4.</span> <span class="nav-text">其他访问方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet概述"><span class="nav-number">1.2.</span> <span class="nav-text">Servlet概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet的作用"><span class="nav-number">1.2.1.</span> <span class="nav-text">Servlet的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet工作流程"><span class="nav-number">1.2.2.</span> <span class="nav-text">Servlet工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet接口"><span class="nav-number">1.2.3.</span> <span class="nav-text">Servlet接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-Web目录结构"><span class="nav-number">1.2.4.</span> <span class="nav-text">Java Web目录结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写Servlet"><span class="nav-number">1.3.</span> <span class="nav-text">编写Servlet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现Servlet"><span class="nav-number">1.3.1.</span> <span class="nav-text">实现Servlet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">1.3.2.</span> <span class="nav-text">配置\</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">配置\</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中的路径编写"><span class="nav-number">1.4.</span> <span class="nav-text">开发中的路径编写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#部署Web程序"><span class="nav-number">1.4.1.</span> <span class="nav-text">部署Web程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求与响应"><span class="nav-number">1.5.</span> <span class="nav-text">请求与响应</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取request的变量"><span class="nav-number">1.5.1.</span> <span class="nav-text">获取request的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#response对象"><span class="nav-number">1.5.2.</span> <span class="nav-text">response对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一个登录页面的流程图"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">一个登录页面的流程图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取Web-xml"><span class="nav-number">1.6.</span> <span class="nav-text">读取Web.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化参数-init-param"><span class="nav-number">1.6.1.</span> <span class="nav-text">初始化参数(init-param)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文参数-context-param"><span class="nav-number">1.6.2.</span> <span class="nav-text">上下文参数(context-param)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletContext对象"><span class="nav-number">1.6.3.</span> <span class="nav-text">ServletContext对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletConfig-获得Servlet的配置信息"><span class="nav-number">1.6.4.</span> <span class="nav-text">ServletConfig:获得Servlet的配置信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ServletContext读取WEB工程下的文件"><span class="nav-number">1.6.4.1.</span> <span class="nav-text">ServletContext读取WEB工程下的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化参数"><span class="nav-number">1.6.4.2.</span> <span class="nav-text">初始化参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源注射（-Resource）"><span class="nav-number">1.6.5.</span> <span class="nav-text">资源注射（@Resource）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用JNDI获取资源"><span class="nav-number">1.6.6.</span> <span class="nav-text">使用JNDI获取资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注射数据源"><span class="nav-number">1.6.7.</span> <span class="nav-text">注射数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注解-PostConstruct与注解-PreDestroy"><span class="nav-number">1.6.8.</span> <span class="nav-text">注解@PostConstruct与注解@PreDestroy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet之间的跳转"><span class="nav-number">1.7.</span> <span class="nav-text">Servlet之间的跳转</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转向"><span class="nav-number">1.7.1.</span> <span class="nav-text">转向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向-Redirece"><span class="nav-number">1.7.2.</span> <span class="nav-text">重定向(Redirece)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动刷新-Refresh"><span class="nav-number">1.7.3.</span> <span class="nav-text">自动刷新(Refresh)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet与线程安全"><span class="nav-number">1.8.</span> <span class="nav-text">Servlet与线程安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展-类加载器读取文件"><span class="nav-number">1.9.</span> <span class="nav-text">扩展:类加载器读取文件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

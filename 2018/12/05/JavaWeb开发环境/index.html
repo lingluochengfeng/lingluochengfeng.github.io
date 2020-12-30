@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Java Web开发环境&amp;emsp;&amp;emsp;在开发Java Web应用程序之前，首先需要搭建Java Web的开发和运行环境。  JDK（Java Development kit）：Sun官方的Java开发和运行环境。   Eclipse、MyEclipse或者Idea：目前流行的Java Web集成开发环境（Integrated Develop Environment,简称IDE）   To">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb开发环境">
+<meta property="og:url" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="Java Web开发环境&amp;emsp;&amp;emsp;在开发Java Web应用程序之前，首先需要搭建Java Web的开发和运行环境。  JDK（Java Development kit）：Sun官方的Java开发和运行环境。   Eclipse、MyEclipse或者Idea：目前流行的Java Web集成开发环境（Integrated Develop Environment,简称IDE）   To">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/虚拟目录映射方式.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/Tomcat目录结构.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/web应用目录结构.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/Eclipse工程目录结构.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/部署.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/虚拟目录映射方式.jpg">
+<meta property="og:updated_time" content="2018-12-05T14:50:03.290Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaWeb开发环境">
+<meta name="twitter:description" content="Java Web开发环境&amp;emsp;&amp;emsp;在开发Java Web应用程序之前，首先需要搭建Java Web的开发和运行环境。  JDK（Java Development kit）：Sun官方的Java开发和运行环境。   Eclipse、MyEclipse或者Idea：目前流行的Java Web集成开发环境（Integrated Develop Environment,简称IDE）   To">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/虚拟目录映射方式.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/"/>
+
+
+
+
+
+  <title>JavaWeb开发环境 | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2018/12/05/JavaWeb开发环境/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaWeb开发环境</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-05T16:14:47+08:00">
+                2018-12-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java-Web开发环境"><a href="#Java-Web开发环境" class="headerlink" title="Java Web开发环境"></a>Java Web开发环境</h1><p>&emsp;&emsp;在开发Java Web应用程序之前，首先需要搭建Java Web的开发和运行环境。</p>
+<ul>
+<li>JDK（Java Development kit）：Sun官方的Java开发和运行环境。  </li>
+<li>Eclipse、MyEclipse或者Idea：目前流行的Java Web集成开发环境（Integrated Develop Environment,简称IDE）  </li>
+<li>Tomcat：开源Web应用服务器，也是应用最广的Java服务器。</li>
+</ul>
+<h2 id="开发工具包JDK"><a href="#开发工具包JDK" class="headerlink" title="开发工具包JDK"></a>开发工具包JDK</h2><p>&emsp;&emsp;要运行Java程序，首先要安装Java运行环境，即JRE（Java Runtime Environment）。但作为开发人员，除了需要JRE以外，还需要安装Java的开发环境，即JDK。JDK=JRE+开发工具集（javac等），JRE=JVM（Java Virtual Machine，Java虚拟机）+JavaSE标准类库。</p>
+<h3 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h3><h4 id="下载JDK"><a href="#下载JDK" class="headerlink" title="下载JDK"></a>下载JDK</h4><p>&emsp;&emsp;到sun（oracle）官网下载最新的JDK，然后安装即可使用，安装完jdk之后会提醒你是否安装JRE，要选择“是”。</p>
+<h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>&emsp;&emsp;安装完JDK之后需要配置环境变量。<br>&emsp;&emsp;在MAC下配置Java环境变量可以参考这篇文章:<a href="https://blog.csdn.net/vvv_110/article/details/72897142" target="_blank" rel="noopener">MAC安装JDK及环境变量配置</a><br>&emsp;&emsp;在Windows下配置Java环境变量可以参考菜鸟教程的这篇文章:<a href="http://www.runoob.com/w3cnote/windows10-java-setup.html" target="_blank" rel="noopener">Windows 10 配置Java 环境变量</a></p>
+<h2 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h2><h3 id="下载IDE"><a href="#下载IDE" class="headerlink" title="下载IDE"></a>下载IDE</h3><p>&emsp;&emsp;选择一款自己喜欢的Java编译器，现在流行的有Eclipse、MyEclipse和Idea。Eclipse是很老且一直很流行的的一款编译器，占有大部分市场，我个人觉得Eclipse和MyEclipse差别不大，Eclipse是免费的，而MyEclipse则需要收费，还要自己去找破解方法。Idea是最近几年新流行起来的编译器，其代码提示、项目组织结构比Eclipse更加强大，对Git、Tomcat、Maven等提供了更好的支持，而且提供了对Eclipse快捷键的支持，可以方便程序员进行开发选择。</p>
+<h2 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h2><p>&emsp;&emsp;Tomcat是一个免费，开源的Java Web服务器，属于轻量级应用服务器，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP的首选。Java Web服务器在JavaEE规范中也被称为容器（Container），因为所有的Web应用程序都要部署到容器中运行。<br>&emsp;&emsp;  Apache基金会有两款常用软件：Apache web服务器和Tomcat web服务器  </p>
+<ul>
+<li>Apache web服务器专门处理HTML页面</li>
+<li>Tomcat web服务器，不仅可以处理servlet和jsp，而且也能处理html页面，但不如Apache web服务器。</li>
+<li><p>在开发中，一般使用Tomcat处理servlet和jsp，使用Apache服务器处理html页面，两者经常被整合在一起使用。<br><font color="red">注意：</font></p>
+</li>
+<li><p>下载安装Tomcat之前，需要安装JDK，并配置Java环境变量  </p>
+</li>
+<li>安装版（给客户使用）  </li>
+<li>解压版：解压当前文件夹，目录不能有中文  </li>
+<li>启动服务器：Tomcat路径/bin/startup.bat(启动服务器)  </li>
+<li>访问：<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>  </li>
+<li>关闭服务器：点击关闭按钮，或者执行shutdown.bat  </li>
+</ul>
+<p>  </p>
+<h3 id="下载Tomcat"><a href="#下载Tomcat" class="headerlink" title="下载Tomcat"></a>下载Tomcat</h3><p>&emsp;&emsp;前往Apache的官网:<a href="https://tomcat.apache.org/index.html" target="_blank" rel="noopener">https://tomcat.apache.org/index.html</a>下载不同操作系统所对应的Tomcat版本，Zip版本的Tomcat不需要安装，直接解压并配置环境变量即可使用。</p>
+<h3 id="解压配置Tomcat"><a href="#解压配置Tomcat" class="headerlink" title="解压配置Tomcat"></a>解压配置Tomcat</h3><p>&emsp;&emsp;将下载到的Tomcat的zip文件解压到任意文件夹，解压完成后添加环境变量，添加环境变量可以参考这篇文章：<a href="https://blog.csdn.net/edison_03/article/details/73699328" target="_blank" rel="noopener">Tomcat安装与环境变量的配置</a></p>
+<h3 id="常见启动问题"><a href="#常见启动问题" class="headerlink" title="常见启动问题"></a>常见启动问题</h3><h4 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><p>&emsp;&emsp;windows下启动一闪而过，环境变量没有配置好，要分别配置Java环境变量和Tomcat环境变量。</p>
+<h4 id="端口占用问题"><a href="#端口占用问题" class="headerlink" title="端口占用问题"></a>端口占用问题</h4><p>&emsp;&emsp;java.net.BindException:Address already in use:JVM_Bind<br>&emsp;&emsp;端口被占用</p>
+<h5 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h5><ul>
+<li>结束掉占用端口的应用程序（找到占用端口的应用程序，在控制台通过命令  netstat -ano,在任务管理器中结束程序）  </li>
+<li>修改端口号（修改配置文件，Tomcat路径下的conf/server.xml配置文件）  </li>
+<li>有应用程序占用80端口，使用上述方式解决</li>
+<li>有的WIN7系统自带World wide web publish IIS服务，默认占用80端口，如果有，去服务中，改为手动启动。</li>
+</ul>
+<h3 id="设置Tomcat端口号"><a href="#设置Tomcat端口号" class="headerlink" title="设置Tomcat端口号"></a>设置Tomcat端口号</h3><p>&emsp;&emsp;HTTP协议默认的端口号为80。如果服务器端口为80，则URL中的端口号可以省略，否则必须使用冒号加端口号指明端口。大部分的Web服务器都是80端口的。而Tomcat默认的端口号是8080，而非默认端口，因此在URL中必须指明端口（即：<a href="http://localhost:8080）" target="_blank" rel="noopener">http://localhost:8080）</a><br>&emsp;&emsp;Tomcat的端口号可以在Tomcat路径下的/conf/server.xml中配置。文件中的Connector标签中配置了端口号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Connector port=&quot;8080&quot;   </span><br><span class="line">protocol=&quot;HTTP/1.1&quot; connectionTimeout=&quot;20000&quot;  </span><br><span class="line">redirectPort=&quot;8443&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在port中可以修改为80或其他端口号。建议修改文件前先备份该文件。如果指定的端口号与系统中其他程序冲突，则Tomcat会启动失败。<font color="red">开发模式下建议使用默认端口号8080</font></p>
+<h3 id="设置临时域名"><a href="#设置临时域名" class="headerlink" title="设置临时域名"></a>设置临时域名</h3><p>&emsp;&emsp;由于Tomcat服务器在本机上，因此我们可以通过localhost来访问。localhost表示本机。访问Tomcat服务器的方式有：  </p>
+<ul>
+<li>使用域名localhost访问。仅限于本机，如：<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>  </li>
+<li>使用IP地址127.0.0.1访问。仅限于本机，例如：<a href="http://127.0.0.1:8080。本机IP为保留IP，代表本机。" target="_blank" rel="noopener">http://127.0.0.1:8080。本机IP为保留IP，代表本机。</a></li>
+<li>使用机器名称访问。仅限于本机或者局域网内。例如：http://机器名称:8080  </li>
+<li>使用本机IP进行访问。例如：<a href="http://IP:8080" target="_blank" rel="noopener">http://IP:8080</a></li>
+<li>如果有域名指向该服务器，可以使用域名访问。</li>
+</ul>
+<p>&emsp;&emsp;除了以上的方式以外，Windows还提供了一种机制，为机器设置临时域名。打开C:\WINDOWS\system32\drivers\etc文件夹，编辑下面的文件hosts。在文件的最后添加一个IP地址与对应的主机名称，如：127.0.0.1 <a href="http://www.google.com。表明这个域名指向了该服务器，启动Tomcat之后，可以通过www.google.com:8080访问Tomcat服务器。" target="_blank" rel="noopener">www.google.com。表明这个域名指向了该服务器，启动Tomcat之后，可以通过www.google.com:8080访问Tomcat服务器。</a></p>
+<p><font color="red">不建议修改host文件。仅用于用某域名来测试本机上的Web程序。</font>  </p>
+<h3 id="设置虚拟主机（了解）"><a href="#设置虚拟主机（了解）" class="headerlink" title="设置虚拟主机（了解）"></a>设置虚拟主机（了解）</h3><p>&emsp;&emsp;Tomcat中可以设置虚拟主机，即多个不同域名的网站共存于一个Tomcat中。方法是修改Tomcat路径下的/conf/server.xml。一个Host代表一个虚拟主机、一个域名。例如：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;ren&quot;&gt;</span><br><span class="line">	&lt;Host name=&quot;www.baidu.com&quot;  appBase=&quot;webapps/stip&quot;/&gt;</span><br><span class="line">	&lt;Host name=&quot;www.google.com&quot;  appBase=&quot;webapps/ren&quot;/&gt;</span><br><span class="line">&lt;/Engine&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/12/05/JavaWeb开发环境/虚拟目录映射方式.jpg" alt="虚拟目录映射方式"><br>&emsp;&emsp;Tomcat根据访问的域名不同，自动映射到不同的网站目录中。server.sml是Tomcat中最主要的配置文件，绝大多数的配置都在本文件中，具体配置参见Tomcat自带的文档。</p>
+<h3 id="Tomcat目录结构"><a href="#Tomcat目录结构" class="headerlink" title="Tomcat目录结构"></a>Tomcat目录结构</h3><ul>
+<li>bin(**)  启动项(startup.bat)，关闭项(shuodown.bat)</li>
+<li>conf(<strong>**</strong>) 里面Tomcat配置文件(核心配置文件：server.xml，用户权限配置文件：tomcat-users.xml，所有web项目默认配置文件：web.xml)</li>
+<li>lib(**)  服务器运行使用的jar包</li>
+<li>logs(<em>**) 日志文件，运行时产生的日志(localhost_access_log.\</em>.txt &emsp;&emsp;tomcat记录用户访问信息，星*表示时间)</li>
+<li>temp(**) 运行时临时文件,文件夹内容可任意删除</li>
+<li>webapps(<strong>**</strong>) web applications(web应用)</li>
+<li>work(<strong>**</strong>) JSP翻译成Servlet程序</li>
+</ul>
+<p>如下图所示：<br><img src="/2018/12/05/JavaWeb开发环境/Tomcat目录结构.jpg" alt="Tomcat结构图"></p>
+<h3 id="动态WEB资源目录结构"><a href="#动态WEB资源目录结构" class="headerlink" title="动态WEB资源目录结构"></a>动态WEB资源目录结构</h3><p>&emsp;&emsp;如果是动态的web资源，把WEB资源发布到服务器的webapps目录下时，有固定的目录结构</p>
+<h4 id="静态web资源"><a href="#静态web资源" class="headerlink" title="静态web资源"></a>静态web资源</h4><p>HTML、CSS、JAVASCRIPT</p>
+<h4 id="动态web资源"><a href="#动态web资源" class="headerlink" title="动态web资源"></a>动态web资源</h4><p>包含Servlet/JSP<br>    webRoot<br>&emsp;&emsp;&emsp;&emsp;|    —    存放静态资源 HTML CSS JAVASCRIPT JSP 图片<br>    WEB-INF(不能通过浏览器直接访问)<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|<br>&emsp;&emsp;&emsp;&emsp;web.xml 程序的入口。配置文件（Servlet2.5必须有，3.0可以省略。WEB项目的核心配置）<br>&emsp;&emsp;&emsp;&emsp;classes    文件夹（存放Java源码编译后生成class文件存放的位置），名称固定的  可选的<br>&emsp;&emsp;&emsp;&emsp;lib    文件夹（当前WEB项目所需要的第三方jar的存放位置），名称固定  可选的<br><img src="/2018/12/05/JavaWeb开发环境/web应用目录结构.jpg" alt="web应用目录结构"><br>这里的mail值得是WebRoot</p>
+<h3 id="Tomcat管理员的配置"><a href="#Tomcat管理员的配置" class="headerlink" title="Tomcat管理员的配置"></a>Tomcat管理员的配置</h3><p>&emsp;&emsp;在Tomcat路径下的/conf/tomcat-user.xml中修改  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;role rolename=&quot;manager&quot;/&gt;  </span><br><span class="line">&lt;user username=&quot;admin&quot; password=&quot;admin&quot; roles=&quot;manager&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="第一个Java-Web程序"><a href="#第一个Java-Web程序" class="headerlink" title="第一个Java Web程序"></a>第一个Java Web程序</h2><h3 id="新建一个Web-Project项目"><a href="#新建一个Web-Project项目" class="headerlink" title="新建一个Web Project项目"></a>新建一个Web Project项目</h3><p>&emsp;&emsp;新建Web项目后，项目左侧的导航视图会显示项目结构。<br><img src="/2018/12/05/JavaWeb开发环境/Eclipse工程目录结构.jpg" alt="工程目录结构"><br>&emsp;&emsp;web.xml为编译器自动生成的程序描述文件(Application Descriptor)</p>
+<h3 id="新建Servlet"><a href="#新建Servlet" class="headerlink" title="新建Servlet"></a>新建Servlet</h3><p>&emsp;&emsp;在项目下的src文件夹下右击新建一个Servlet，新建一个Servlet之后，编译器会自动将Servlet相关的配置文件添加到web.xml文件中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;Servlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-class&gt;Servlet&lt;/servlet-class&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br><span class="line"></span><br><span class="line">&lt;servlet-mapping&gt;</span><br><span class="line">    &lt;servlet-name&gt;Servlet&lt;/servlet-name&gt;</span><br><span class="line">    &lt;url-pattern&gt;/servlet/HelloServlet&lt;/url-pattern&gt;</span><br><span class="line">&lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这是web.xml自动添加的内容。servlet指明了Servlet类路径以及名称。servlet-mapping指明了访问指定名称的servlet的URI。此时，我们启动Tomcat之后，可以通过：<a href="http://localhost:8080/项目名/servlet/HelloServlet进行访问Tomcat。" target="_blank" rel="noopener">http://localhost:8080/项目名/servlet/HelloServlet进行访问Tomcat。</a><br>&emsp;&emsp;访问的内容就是Servlet中的内容，这里我们输入一句话，访问Tomcat的这个网址时，会显示这句话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Servlet extends javax.servlet.http.HttpServlet &#123;</span><br><span class="line">    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException &#123;</span><br><span class="line">		doGet(request,response);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException &#123;</span><br><span class="line">        System.out.println(&quot;first Demo&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;默认都是get方式进行访问，post访问方式以后会介绍。也可以不通过手动创建Servlet，可以添加一个继承自HTTPServlet的类，然后把Servlet配置到web.xml中。</p>
+<h2 id="部署到Tomcat"><a href="#部署到Tomcat" class="headerlink" title="部署到Tomcat"></a>部署到Tomcat</h2><p>&emsp;&emsp;部署(Deploy)是指将程序部署到Tomcat下，也就是Web程序的发布。部署时需要部署所有的class文件、web.xml、jar文件、JSP文件等。<br><img src="/2018/12/05/JavaWeb开发环境/部署.jpg" alt="虚拟目录映射方式"></p>
+<h3 id="手动部署"><a href="#手动部署" class="headerlink" title="手动部署"></a>手动部署</h3><p>&emsp;&emsp;在Tomcat目录的webapps下面新建文件夹，取名为firstWeb，然后找到项目工作目录，将该目录firstWeb\WebRoot下的所有内容复制到Tomcat目录下刚刚建好的webapps\firstWeb下，这样就完成了手工部署firstWeb的部署。然后启动Tomcat就可以访问:<a href="http://localhost:8080/firstWeb/servlet/HelloServlet访问上面新建的Servlet。" target="_blank" rel="noopener">http://localhost:8080/firstWeb/servlet/HelloServlet访问上面新建的Servlet。</a></p>
+<h3 id="自动部署"><a href="#自动部署" class="headerlink" title="自动部署"></a>自动部署</h3><p>&emsp;&emsp;在Eclipse、MyEclipse和Idea中都可以对Tomcat进行相关配置，配置完成之后，直接启动Tomcat，然后输入网页URL即可直接访问。<br>关于Eclipse和Idea如何配置Tomcat，可以参考以下文章：<br><a href="https://blog.csdn.net/zs20082012/article/details/79138204" target="_blank" rel="noopener">Eclipse开发JavaWeb项目配置Tomcat，详细教程</a><br><a href="https://www.cnblogs.com/Miracle-Maker/articles/6476687.html" target="_blank" rel="noopener">IntelliJ IDEA配置Tomcat（完整版教程)</a></p>
+<h3 id="通过配置虚拟路径的方式"><a href="#通过配置虚拟路径的方式" class="headerlink" title="通过配置虚拟路径的方式"></a>通过配置虚拟路径的方式</h3><h4 id="直接修改配置文件"><a href="#直接修改配置文件" class="headerlink" title="直接修改配置文件"></a>直接修改配置文件</h4><ul>
+<li>写到tomcat/conf/server.xml  </li>
+<li>找到\<host>标签，配置到Host标签的中间  </host></li>
+<li>目的：通过配置，配置访问路径，准确找到c:\bb的文件<br>&emsp;&emsp;&emsp;&emsp;\<context docbase="文件夹的真实目录" path="虚拟路径（访问路径）">\<context><br>&emsp;&emsp;&emsp;&emsp;例如：\<context docbase="C:\bb" path="/itcast">\</context><br>&emsp;&emsp;&emsp;&emsp;访问：<a href="http://localhost:80/itcast" target="_blank" rel="noopener">http://localhost:80/itcast</a><br><img src="/2018/12/05/JavaWeb开发环境/虚拟目录映射方式.jpg" alt="虚拟目录映射方式"></context></context></li>
+</ul>
+<h4 id="自己编写一个配置文件（格式）（推荐使用）"><a href="#自己编写一个配置文件（格式）（推荐使用）" class="headerlink" title="自己编写一个配置文件（格式）（推荐使用）"></a>自己编写一个配置文件（格式）（推荐使用）</h4><ul>
+<li>自定义xxx.xml结尾文件，在$CATALINA_HOME/conf/[enginename]/[hostname]/ directory.目录下。  </li>
+<li><p>把xxx当成虚拟（访问）路径。</p>
+</li>
+<li><p>在xml的文件中编写。<br>&emsp;&emsp;在哪个目录下： </p>
+</li>
+</ul>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;$CATALINA_HOME/conf/[enginename]/[hostname]/ directory.<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;如果找引擎的名称和主机的名称，在server.xml中找。<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;tomcat/conf/Catalina/localhost/ccc.xml</p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;ccc.xml的文件编写什么内容？<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;\<context docbase="C:\cc">\</context><br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;访问：<a href="http://localhost:80/ccc" target="_blank" rel="noopener">http://localhost:80/ccc</a></p>
+<h3 id="导出为WAR包"><a href="#导出为WAR包" class="headerlink" title="导出为WAR包"></a>导出为WAR包</h3><p>&emsp;&emsp;可以将程序导出为WAR文件。WAR文件就是普通的ZIP文件，只是里面包含一个Web应用程序。WAR的全称为Web Archive。<br>&emsp;&emsp;可以将导出的WAR文件直接放到Tomcat路径下的webapps文件夹下，启动Tomcat，Tomcat默认会自动完成解包、部署等工作。<br>&emsp;&emsp;WAR就是一种为了方便部署而定义的文件。<br><a href="https://blog.csdn.net/imjavaxb/article/details/80703246" target="_blank" rel="noopener">web项目war包的导出（Eclipse）以及使用（Tomcat）</a><br>idea中部署完成项目之后会自动生成一个WAR包，可以不用手动导出WAR包，但这里还是给出一个参考教程：<a href="https://blog.csdn.net/m0_37499059/article/details/78416466" target="_blank" rel="noopener">Intellij idea怎么将项目导出成war包</a></p>
+<h3 id="调试程序DEBUG模式"><a href="#调试程序DEBUG模式" class="headerlink" title="调试程序DEBUG模式"></a>调试程序DEBUG模式</h3><p>&emsp;&emsp;调试（Debug）是程序开发中非常有用的一个工具，使用调试可以分步地执行程序，观察程序执行中的变量值以及执行流程。<br>&emsp;&emsp;DuBug的功能：  </p>
+<ul>
+<li>打断点，选择DeBug As</li>
+<li>Step Over 跳过</li>
+<li>Resume 执行下一个断点，如果没有断点，执行完成。</li>
+<li>Step Into 跳入</li>
+<li>Step Return 跳出</li>
+<li>Drop To Frame 返回最开始的位置  </li>
+</ul>
+<p>&emsp;&emsp;（1）调试前确定Tomcat的启动是不是Debug模式。在要调试的代码行左侧双击鼠标设置一个断点（Breakpoint），打好断点之后，使用Debug As运行项目。（再次双击代码行左侧取消断点）<br>&emsp;&emsp;（2）在浏览器中输入要访问的网址，程序运行到断点处会暂停运行。<br>&emsp;&emsp;（3）此时会转换到Debug视图，程序暂停在断点处，等待调试者调试。可以按“下一步”让程序单步执行，一条语句一条语句查看，同时变量的值也会显示出来，直至程序结束；也可以让程序调到下一个断点进行调试，如果没有下一个断点，则程序直至运行结束。<br>&emsp;&emsp;<font color="red">Debug模式可以中断程序的运行，查看中断点各变量的值。Debug模式是程序开发中常用的调试技巧，是每个开发者必须具备的技能。</font></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>&emsp;&emsp;介绍了如何搭建Java Web开发平台以及Tomcat的简单使用，包括新建项目、将项目部署到Tomcat中启动，最后介绍了如何使用Debug对程序进行调试。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/03/JavaWeb开发概述/" rel="next" title="JavaWeb开发概述">
+                <i class="fa fa-chevron-left"></i> JavaWeb开发概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/07/深入Servlet技术/" rel="prev" title="深入Servlet技术">
+                深入Servlet技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Web开发环境"><span class="nav-number">1.</span> <span class="nav-text">Java Web开发环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开发工具包JDK"><span class="nav-number">1.1.</span> <span class="nav-text">开发工具包JDK</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK"><span class="nav-number">1.1.1.</span> <span class="nav-text">JDK</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载JDK"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">下载JDK</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置环境变量"><span class="nav-number">1.1.2.</span> <span class="nav-text">配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE"><span class="nav-number">1.2.</span> <span class="nav-text">IDE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载IDE"><span class="nav-number">1.2.1.</span> <span class="nav-text">下载IDE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat"><span class="nav-number">1.3.</span> <span class="nav-text">Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载Tomcat"><span class="nav-number">1.3.1.</span> <span class="nav-text">下载Tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压配置Tomcat"><span class="nav-number">1.3.2.</span> <span class="nav-text">解压配置Tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见启动问题"><span class="nav-number">1.3.3.</span> <span class="nav-text">常见启动问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置环境变量-1"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#端口占用问题"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">端口占用问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方法："><span class="nav-number">1.3.3.2.1.</span> <span class="nav-text">解决方法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Tomcat端口号"><span class="nav-number">1.3.4.</span> <span class="nav-text">设置Tomcat端口号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置临时域名"><span class="nav-number">1.3.5.</span> <span class="nav-text">设置临时域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置虚拟主机（了解）"><span class="nav-number">1.3.6.</span> <span class="nav-text">设置虚拟主机（了解）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat目录结构"><span class="nav-number">1.3.7.</span> <span class="nav-text">Tomcat目录结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态WEB资源目录结构"><span class="nav-number">1.3.8.</span> <span class="nav-text">动态WEB资源目录结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态web资源"><span class="nav-number">1.3.8.1.</span> <span class="nav-text">静态web资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态web资源"><span class="nav-number">1.3.8.2.</span> <span class="nav-text">动态web资源</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat管理员的配置"><span class="nav-number">1.3.9.</span> <span class="nav-text">Tomcat管理员的配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个Java-Web程序"><span class="nav-number">1.4.</span> <span class="nav-text">第一个Java Web程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新建一个Web-Project项目"><span class="nav-number">1.4.1.</span> <span class="nav-text">新建一个Web Project项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建Servlet"><span class="nav-number">1.4.2.</span> <span class="nav-text">新建Servlet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署到Tomcat"><span class="nav-number">1.5.</span> <span class="nav-text">部署到Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#手动部署"><span class="nav-number">1.5.1.</span> <span class="nav-text">手动部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动部署"><span class="nav-number">1.5.2.</span> <span class="nav-text">自动部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过配置虚拟路径的方式"><span class="nav-number">1.5.3.</span> <span class="nav-text">通过配置虚拟路径的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接修改配置文件"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">直接修改配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自己编写一个配置文件（格式）（推荐使用）"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">自己编写一个配置文件（格式）（推荐使用）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导出为WAR包"><span class="nav-number">1.5.4.</span> <span class="nav-text">导出为WAR包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试程序DEBUG模式"><span class="nav-number">1.5.5.</span> <span class="nav-text">调试程序DEBUG模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

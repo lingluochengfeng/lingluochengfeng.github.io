@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="database," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="树深时见鹿" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="SpringBoot-数据访问简介JDBC、MyBatis、Spring Data JPA 对于数据访问层，无论是SQL还是NOSQL，SpringBoot默认采用整合Spring Data的方式进行统一处理，添加大量自动配置，屏蔽了很多设置。引入各种XXXTemplate，XXXRepository来简化我们对数据访问层的操作。对我们而言，只需要进行简单的设置即可。  JDBC MyBatis">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot数据访问">
+<meta property="og:url" content="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/index.html">
+<meta property="og:site_name" content="树深时见鹿">
+<meta property="og:description" content="SpringBoot-数据访问简介JDBC、MyBatis、Spring Data JPA 对于数据访问层，无论是SQL还是NOSQL，SpringBoot默认采用整合Spring Data的方式进行统一处理，添加大量自动配置，屏蔽了很多设置。引入各种XXXTemplate，XXXRepository来简化我们对数据访问层的操作。对我们而言，只需要进行简单的设置即可。  JDBC MyBatis">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/MyBatis引入的依赖.jpg">
+<meta property="og:image" content="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/SpringDataJPA.jpg">
+<meta property="og:updated_time" content="2019-08-08T13:33:59.536Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot数据访问">
+<meta name="twitter:description" content="SpringBoot-数据访问简介JDBC、MyBatis、Spring Data JPA 对于数据访问层，无论是SQL还是NOSQL，SpringBoot默认采用整合Spring Data的方式进行统一处理，添加大量自动配置，屏蔽了很多设置。引入各种XXXTemplate，XXXRepository来简化我们对数据访问层的操作。对我们而言，只需要进行简单的设置即可。  JDBC MyBatis">
+<meta name="twitter:image" content="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/MyBatis引入的依赖.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/"/>
+
+
+
+
+
+  <title>SpringBoot数据访问 | 树深时见鹿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/lingluochengfeng" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">树深时见鹿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.letmefly.cc/2019/08/04/SpringBoot数据访问/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="树深时见鹿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot数据访问</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-04T10:15:50+08:00">
+                2019-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SpringBoot-数据访问"><a href="#SpringBoot-数据访问" class="headerlink" title="SpringBoot-数据访问"></a>SpringBoot-数据访问</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>JDBC、MyBatis、Spring Data JPA</p>
+<p>对于数据访问层，无论是SQL还是NOSQL，SpringBoot默认采用整合Spring Data的方式进行统一处理，添加大量自动配置，屏蔽了很多设置。引入各种XXXTemplate，XXXRepository来简化我们对数据访问层的操作。对我们而言，只需要进行简单的设置即可。</p>
+<ul>
+<li>JDBC</li>
+<li>MyBatis</li>
+<li>JPA</li>
+</ul>
+<h2 id="JDBC-amp-自动配置原理"><a href="#JDBC-amp-自动配置原理" class="headerlink" title="JDBC&amp;自动配置原理"></a>JDBC&amp;自动配置原理</h2><h3 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h3><p>默认配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    url: jdbc:mysql://10.211.55.7:3307/jdbc</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br></pre></td></tr></table></figure>
+<p>效果：<br>默认使用org.apache.tomcat.jdbc.pool.DataSource作为数据源<br>数据源的相关配置在DataSourceProperties里面</p>
+<p>自动配置原理：<br><code>org/springframework/boot/spring-boot-autoconfigure/2.1.6.RELEASE/spring-boot-autoconfigure-2.1.6.RELEASE.jar!/org/springframework/boot/autoconfigure/jdbc</code></p>
+<ul>
+<li>1、参考DataSourceConfiguration，根据配置创建数据源，默认使用tomcat连接池；可以使用spring.datasource.type指定自定义的数据源类型；</li>
+<li><p>2、SpringBoot默认可以支持<code>spring.datasource.tomcat</code>,<code>spring.datasource.hikari</code>,<br><code>org.apache.commons.dbcp2.BasicDataSource</code></p>
+</li>
+<li><p>3、自定义数据源类型 <code>spring.datasource.type</code></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Generic DataSource configuration.</span><br><span class="line"> */</span><br><span class="line">@Configuration</span><br><span class="line">@ConditionalOnMissingBean(DataSource.class)</span><br><span class="line">@ConditionalOnProperty(name = &quot;spring.datasource.type&quot;)</span><br><span class="line">static class Generic &#123;</span><br><span class="line"></span><br><span class="line">	@Bean</span><br><span class="line">	public DataSource dataSource(DataSourceProperties properties) &#123;</span><br><span class="line">		// 使用DataSourceBuilder创建数据源，利用反射创建响应type的数据源，并且绑定相关属性</span><br><span class="line">		return properties.initializeDataSourceBuilder().build();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>4、DataSourceInitializer：ApplicationListener<br>作用：  <ul>
+<li>runSchemaScripts();运行建表语句；</li>
+<li>runDataScripts();运行插入数据的sql语句  </li>
+</ul>
+</li>
+</ul>
+<p>默认只需要将文件命名为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">schema-\*.sql、data-\*.sql</span><br><span class="line">默认规则：schema-\*.sql、data-\*.sql</span><br><span class="line">可以使用：</span><br><span class="line">	    schema: classpath:department.sql</span><br><span class="line">      指定位置</span><br></pre></td></tr></table></figure>
+<p>可以读取sql的配置文件，SpringBoot1.x和2.x还是有些差距的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    url: jdbc:mysql://10.211.55.7:3307/jdbc</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    schema: classpath:department.sql</span><br><span class="line">    initialization-mode: always</span><br></pre></td></tr></table></figure>
+<h2 id="整合Druid配置数据源监控"><a href="#整合Druid配置数据源监控" class="headerlink" title="整合Druid配置数据源监控"></a>整合Druid配置数据源监控</h2><p>引入Druid</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--引入Druid--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;druid&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.1.12&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>修改yml文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    url: jdbc:mysql://10.211.55.7:3307/jdbc</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    initialization-mode: always</span><br><span class="line">    type: com.alibaba.druid.pool.DruidDataSource</span><br></pre></td></tr></table></figure>
+<p>Druid的yml配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    url: jdbc:mysql://10.211.55.7:3307/jdbc</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    # schema: classpath:department.sql</span><br><span class="line">    # initialization-mode: always</span><br><span class="line">    type: com.alibaba.druid.pool.DruidDataSource</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # 数据源配置</span><br><span class="line">    initialSize: 5</span><br><span class="line">    minIdle: 5</span><br><span class="line">    maxActive: 20</span><br><span class="line">    maxWait: 60000</span><br><span class="line">    timeBetweenEvictionRunsMillis: 60000</span><br><span class="line">    minEvictableIdleTimeMillis: 300000</span><br><span class="line">    validationQuery: SELECT 1 FROM DUAL</span><br><span class="line">    testWhileIdle: true</span><br><span class="line">    testOnBorrow: false</span><br><span class="line">    testOnReturn: false</span><br><span class="line">    poolPreparedStatements: true</span><br><span class="line">#   配置监控统计拦截的filters，去掉后监控界面sql无法统计，&apos;wall&apos;用于防火墙</span><br><span class="line">	 # filters: stat,wall,log4j # log4j没有引入，会引起报错，这里先注掉</span><br><span class="line">    filters: stat,wall</span><br><span class="line">    maxPoolPreparedStatementPerConnectionSize: 20</span><br><span class="line">    useGlobalDataSourceStat: true</span><br><span class="line">    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500</span><br></pre></td></tr></table></figure>
+<p>Druid的配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.config;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import com.alibaba.druid.pool.DruidDataSource;</span><br><span class="line">import com.alibaba.druid.support.http.StatViewServlet;</span><br><span class="line">import com.alibaba.druid.support.http.WebStatFilter;</span><br><span class="line">import org.springframework.boot.context.properties.ConfigurationProperties;</span><br><span class="line">import org.springframework.boot.web.servlet.FilterRegistrationBean;</span><br><span class="line">import org.springframework.boot.web.servlet.ServletRegistrationBean;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line">import org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line">import javax.servlet.Filter;</span><br><span class="line">import javax.sql.DataSource;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.Map;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">public class DruidConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    @ConfigurationProperties(prefix = &quot;spring.datasource&quot;)</span><br><span class="line">    public DataSource druid()&#123;</span><br><span class="line">        return new DruidDataSource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 配置Druid监控</span><br><span class="line">    // 1、配置一个管理后台的Servlet</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public ServletRegistrationBean statViewServlet() &#123;</span><br><span class="line">        // 这里一开始报错的原因是缺少javax.servlet.http.HttpServlet的类文件，引入servlet-api的jar包即可解决问题</span><br><span class="line">        ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), &quot;/druid/*&quot;);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, String&gt; initParams = new HashMap&lt;&gt;();</span><br><span class="line">        // 初始化参数</span><br><span class="line">        initParams.put(&quot;loginUsername&quot;, &quot;admin&quot;);</span><br><span class="line">        initParams.put(&quot;loginPassword&quot;, &quot;123456&quot;);</span><br><span class="line">        initParams.put(&quot;allow&quot;, &quot;&quot;); // 默认是允许所有访问</span><br><span class="line"></span><br><span class="line">        bean.setInitParameters(initParams);</span><br><span class="line"></span><br><span class="line">        return bean;</span><br><span class="line">    &#125;</span><br><span class="line">    // 2、配置一个监控的filter</span><br><span class="line">    @Bean</span><br><span class="line">    public FilterRegistrationBean webStatFilter()&#123;</span><br><span class="line">        FilterRegistrationBean&lt;Filter&gt; bean = new FilterRegistrationBean&lt;&gt;();</span><br><span class="line">        bean.setFilter(new WebStatFilter());</span><br><span class="line"></span><br><span class="line">        Map&lt;String, String&gt; initParams = new HashMap&lt;&gt;();</span><br><span class="line">        initParams.put(&quot;exclusions&quot;, &quot;*.js, *.css, /druid/*&quot;);</span><br><span class="line"></span><br><span class="line">        bean.setInitParameters(initParams);</span><br><span class="line"></span><br><span class="line">        bean.setUrlPatterns(Arrays.asList(&quot;/*&quot;));</span><br><span class="line"></span><br><span class="line">        return bean;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可惜这个Druid监控页面无法访问。</p>
+<p>以后有机会要再搞搞</p>
+<p>修改之后可以访问Druid监控了</p>
+<p>更改了jar包，增加了一个web的依赖，不知道和webflux会不会有依赖，目前运行正常，如果有错误再进行更改，修改后的pom文件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;parent&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.1.4.RELEASE&lt;/version&gt;</span><br><span class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</span><br><span class="line">    &lt;/parent&gt;</span><br><span class="line">    &lt;groupId&gt;com.usst&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;springboot06&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">    &lt;name&gt;springboot06&lt;/name&gt;</span><br><span class="line">    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;</span><br><span class="line"></span><br><span class="line">    &lt;properties&gt;</span><br><span class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;groupId&gt;javax.servlet&lt;/groupId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;scope&gt;provided&lt;/scope&gt;--&gt;</span><br><span class="line">        &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--引入Druid--&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;druid&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1.8&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;--&gt;</span><br><span class="line">        &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-webflux&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;--&gt;</span><br><span class="line">        &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">            &lt;!--&lt;version&gt;5.1.34&lt;/version&gt;--&gt;</span><br><span class="line">            &lt;scope&gt;runtime&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;groupId&gt;io.projectreactor&lt;/groupId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;artifactId&gt;reactor-test&lt;/artifactId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;scope&gt;test&lt;/scope&gt;--&gt;</span><br><span class="line">        &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!--&lt;dependency&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;groupId&gt;org.mybatis&lt;/groupId&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;--&gt;</span><br><span class="line">        &lt;!--&lt;/dependency&gt;--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+<p>对比web的依赖和webflux的依赖发现，他们引入的依赖有些重合，有些地方又不一样，但是web引入了mvc的依赖而webflux没有，感觉应该是druid依赖mvc才能够正常使用。</p>
+<h2 id="整合MyBatis"><a href="#整合MyBatis" class="headerlink" title="整合MyBatis"></a>整合MyBatis</h2><h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>引入MyBatis的依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/08/04/SpringBoot数据访问/MyBatis引入的依赖.jpg" alt="MyBatis引入的依赖"></p>
+<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><ul>
+<li>1、配置数据源相关属性，这里我们选择的是Druid</li>
+<li>2、数据库建表<br>yml配置文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    username: root</span><br><span class="line">    password: 123456</span><br><span class="line">    url: jdbc:mysql://10.211.55.7:3307/jdbc</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    schema: classpath:sql/department.sql,classpath:sql/employee.sql</span><br><span class="line">    initialization-mode: always</span><br><span class="line">    type: com.alibaba.druid.pool.DruidDataSource</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # 数据源配置</span><br><span class="line">    initialSize: 5</span><br><span class="line">    minIdle: 5</span><br><span class="line">    maxActive: 20</span><br><span class="line">    maxWait: 60000</span><br><span class="line">    timeBetweenEvictionRunsMillis: 60000</span><br><span class="line">    minEvictableIdleTimeMillis: 300000</span><br><span class="line">    validationQuery: SELECT 1 FROM DUAL</span><br><span class="line">    testWhileIdle: true</span><br><span class="line">    testOnBorrow: false</span><br><span class="line">    testOnReturn: false</span><br><span class="line">    poolPreparedStatements: true</span><br><span class="line">#   配置监控统计拦截的filters，去掉后监控界面sql无法统计，&apos;wall&apos;用于防火墙</span><br><span class="line">    filters: stat,wall</span><br><span class="line">    maxPoolPreparedStatementPerConnectionSize: 20</span><br><span class="line">    useGlobalDataSourceStat: true</span><br><span class="line">    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500</span><br></pre></td></tr></table></figure>
+<ul>
+<li>3、创建JavaBean</li>
+</ul>
+<h3 id="注解版"><a href="#注解版" class="headerlink" title="注解版"></a>注解版</h3><p>只需要一个接口即可完成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.mapper;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot06.bean.Department;</span><br><span class="line">import org.apache.ibatis.annotations.*;</span><br><span class="line"></span><br><span class="line">// 指定这是一个操作数据库的Mapper</span><br><span class="line">@Mapper</span><br><span class="line">public interface DepartmentMapper &#123;</span><br><span class="line"></span><br><span class="line">    @Select(&quot;select * from department where id=#&#123;id&#125;&quot;)</span><br><span class="line">    public Department getDeptById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Delete(&quot;delete from department where id=#&#123;id&#125;&quot;)</span><br><span class="line">    public int deleteDeptById(Integer id);</span><br><span class="line"></span><br><span class="line">    @Insert(&quot;insert into department(departmentName) values(#&#123;departmentName&#125;)&quot;)</span><br><span class="line">    @Options(useGeneratedKeys = true, keyProperty = &quot;id&quot;, keyColumn = &quot;id&quot;)</span><br><span class="line">    public int insertDept(Department department);</span><br><span class="line"></span><br><span class="line">    @Update(&quot;update department set departmentName=#&#123;department&#125; where id=#&#123;id&#125;&quot;)</span><br><span class="line">    public int updateDept(Department department);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题：当数据表中的字段和JavaBean的字段不同的时候，无法完成映射</p>
+<p>需要：自定义MyBatis的配置规则；给容器中添加一个ConfigurationCustomizer；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.config;</span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.session.Configuration;</span><br><span class="line">import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;</span><br><span class="line">import org.springframework.context.annotation.Bean;</span><br><span class="line"></span><br><span class="line">// 开启驼峰命名的方式，自定义MyBatis的配置规则</span><br><span class="line">@org.springframework.context.annotation.Configuration</span><br><span class="line">public class MyBatisConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean</span><br><span class="line">    public ConfigurationCustomizer configurationCustomizer()&#123;</span><br><span class="line">        return new ConfigurationCustomizer()&#123;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void customize(Configuration configuration) &#123;</span><br><span class="line">                configuration.setMapUnderscoreToCamelCase(true);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用MapperScan批量扫描所有的Mapper接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.annotations.Mapper;</span><br><span class="line">import org.mybatis.spring.annotation.MapperScan;</span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line"></span><br><span class="line">@MapperScan(value = &quot;com.usst.springboot06.mapper&quot;)</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class Springboot06Application &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Springboot06Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置版"><a href="#配置版" class="headerlink" title="配置版"></a>配置版</h3><p>修改yml文件，增加mybatis配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mybatis:</span><br><span class="line">  config-location: classpath:mybatis/mybatis-config.xml</span><br><span class="line">  mapper-locations: classpath:mybatis/mapper/*.xml</span><br></pre></td></tr></table></figure>
+<p><strong>注意：文件的名称必须以.xml结尾</strong><br>增加两个配置文件分别是mybatis-config.xml和EmployeeMapper.xml。<br>mybatis-config.xml文件中的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span><br><span class="line">&lt;!DOCTYPE configuration</span><br><span class="line">        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span><br><span class="line">        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--配置驼峰命名法,解决bean和数据表字段不匹配的问题--&gt;</span><br><span class="line">    &lt;settings&gt;</span><br><span class="line">        &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;/&gt;</span><br><span class="line">    &lt;/settings&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>EmployeeMapper.xml文件的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper</span><br><span class="line">        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span><br><span class="line">        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.usst.springboot06.mapper.EmployeeMapper&quot;&gt;</span><br><span class="line">   &lt;!--    public Employee getEmpById(Integer id);</span><br><span class="line"></span><br><span class="line">    public void insertEmp(Employee employee);--&gt;</span><br><span class="line">    &lt;select id=&quot;getEmpById&quot; resultType=&quot;com.usst.springboot06.bean.Employee&quot;&gt;</span><br><span class="line">        SELECT * FROM employee WHERE id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line"></span><br><span class="line">    &lt;insert id=&quot;insertEmp&quot;&gt;</span><br><span class="line">        INSERT INTO employee(lastName,email,gender,d_id) VALUES (#&#123;lastName&#125;,#&#123;email&#125;,#&#123;gender&#125;,#&#123;dId&#125;)</span><br><span class="line">    &lt;/insert&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<p>编写Controller和Mapper</p>
+<h2 id="SpringData-JPA简介"><a href="#SpringData-JPA简介" class="headerlink" title="SpringData JPA简介"></a>SpringData JPA简介</h2><h3 id="Spring-Data"><a href="#Spring-Data" class="headerlink" title="Spring Data"></a>Spring Data</h3><p>Java Persistence API（JPA）</p>
+<p>Spring Data 项目的目的是为了简化构建基于 Spring 框架应用的数据访问技术，包括非关系数据库、 Map-Reduce 框架、云数据服务等等;另外也包含对关系数据库的访问支持。</p>
+<p>Spring Data 包含多个子项目:  </p>
+<ul>
+<li>Spring Data Commons</li>
+<li>Spring Data JPA</li>
+<li>Spring Data KeyValue</li>
+<li>Spring Data LDAP</li>
+<li>Spring Data MongoDB</li>
+<li>Spring Data Gemfire</li>
+<li>Spring Data REST</li>
+<li>Spring Data Redis</li>
+<li>Spring Data for Apache Cassandra</li>
+<li>Spring Data for Apache Solr</li>
+<li>Spring Data Couchbase (community module)</li>
+<li>Spring Data Elasticsearch (community module)</li>
+<li>Spring Data Neo4j (community module)</li>
+</ul>
+<p><img src="/2019/08/04/SpringBoot数据访问/SpringDataJPA.jpg" alt="SpringDataJPA"></p>
+<h4 id="SpringData特点"><a href="#SpringData特点" class="headerlink" title="SpringData特点"></a>SpringData特点</h4><p>SpringData为我们提供使用统一的API来对数据访问层进行操作;这主要是Spring Data Commons项目来实现的。Spring Data Commons让我们在使用关系型或者非关系型数据访问 技术时都基于Spring提供的统一标准，标准包含了CRUD(创建、获取、更新、删除)、查询、 排序和分页的相关操作。</p>
+<h4 id="统一的Repository接口"><a href="#统一的Repository接口" class="headerlink" title="统一的Repository接口"></a>统一的Repository接口</h4><p>Repository&lt;T, ID extends Serializable&gt;:统一接口<br>RevisionRepository&lt;T, ID extends Serializable, N extends Number &amp; Comparable<n>&gt;:基于乐观 锁机制<br>CrudRepository&lt;T, ID extends Serializable&gt;:基本CRUD操作 PagingAndSortingRepository&lt;T, ID extends Serializable&gt;:基本CRUD及分页</n></p>
+<h3 id="整合SpringData-JPA"><a href="#整合SpringData-JPA" class="headerlink" title="整合SpringData JPA"></a>整合SpringData JPA</h3><p>JPA：ORM（Object Relational Mapping）：<br>（1）编写一个实体类（bean）和数据表进行映射，并且配置好映射关系；  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.entity;</span><br><span class="line"></span><br><span class="line">import javax.persistence.*;</span><br><span class="line"></span><br><span class="line">// 使用JPA注解配置映射关系</span><br><span class="line">@Entity //告诉JPA这是一个实体类，和数据表映射的类</span><br><span class="line">@Table(name = &quot;tbl_user&quot;) // @Table指定和哪个表对应，如果省略，默认表名就是user；</span><br><span class="line">public class User &#123;</span><br><span class="line">    </span><br><span class="line">    @Id //这是一个主键</span><br><span class="line">    @GeneratedValue(strategy = GenerationType.IDENTITY)</span><br><span class="line">    private Integer id;</span><br><span class="line">    </span><br><span class="line">    @Column(name = &quot;last_name&quot;,length = 50) // 这是和数据表对应的一个列</span><br><span class="line">    private String lastName;</span><br><span class="line">    </span><br><span class="line">    @Column //省略默认列名就是属性名</span><br><span class="line">    private String email;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getLastName() &#123;</span><br><span class="line">        return lastName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setLastName(String lastName) &#123;</span><br><span class="line">        this.lastName = lastName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getEmail() &#123;</span><br><span class="line">        return email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setEmail(String email) &#123;</span><br><span class="line">        this.email = email;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（2）编写一个Dao接口来操作实体类对应的数据表（Repository）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.repository;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot06.entity.User;</span><br><span class="line">import org.springframework.data.jpa.repository.JpaRepository;</span><br><span class="line"></span><br><span class="line">// 两个泛型，第一个表示传递的实体类，第二个表示实体类的主键类型</span><br><span class="line">// 继承JpaRepository来完成对数据库的操作</span><br><span class="line">public interface UserRepository extends JpaRepository&lt;User, Integer&gt; &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（3）基本的配置jpaProperties, yml文件中与jpa相关的部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  jpa:</span><br><span class="line">    hibernate:</span><br><span class="line">#    更新或者创建数据表结构</span><br><span class="line">      ddl-auto: update</span><br><span class="line">#    在控制台显示sql</span><br><span class="line">    show-sql: true</span><br></pre></td></tr></table></figure>
+<p>（4）编写Controller</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">package com.usst.springboot06.controller;</span><br><span class="line"></span><br><span class="line">import com.usst.springboot06.entity.User;</span><br><span class="line">import com.usst.springboot06.repository.UserRepository;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.PathVariable;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import java.util.Optional;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class UserController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/user/&#123;id&#125;&quot;)</span><br><span class="line">    public Optional&lt;User&gt; getUser(@PathVariable(&quot;id&quot;) Integer id)&#123;</span><br><span class="line">        Optional&lt;User&gt; user = userRepository.findById(id);</span><br><span class="line">        return user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/user&quot;)</span><br><span class="line">    public User inserUser(User user)&#123;</span><br><span class="line">        User save = userRepository.save(user);</span><br><span class="line">        return save;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/02/SpringBoot-Docker/" rel="next" title="SpringBoot-Docker">
+                <i class="fa fa-chevron-left"></i> SpringBoot-Docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/09/SpringBoot启动原理/" rel="prev" title="SpringBoot启动原理">
+                SpringBoot启动原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">如果你因错过太阳而流泪，你也将错过群星了</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-数据访问"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot-数据访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDBC-amp-自动配置原理"><span class="nav-number">1.2.</span> <span class="nav-text">JDBC&amp;自动配置原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC"><span class="nav-number">1.2.1.</span> <span class="nav-text">JDBC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合Druid配置数据源监控"><span class="nav-number">1.3.</span> <span class="nav-text">整合Druid配置数据源监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合MyBatis"><span class="nav-number">1.4.</span> <span class="nav-text">整合MyBatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境搭建"><span class="nav-number">1.4.1.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#步骤"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注解版"><span class="nav-number">1.4.2.</span> <span class="nav-text">注解版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置版"><span class="nav-number">1.4.3.</span> <span class="nav-text">配置版</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringData-JPA简介"><span class="nav-number">1.5.</span> <span class="nav-text">SpringData JPA简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Data"><span class="nav-number">1.5.1.</span> <span class="nav-text">Spring Data</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringData特点"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">SpringData特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#统一的Repository接口"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">统一的Repository接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整合SpringData-JPA"><span class="nav-number">1.5.2.</span> <span class="nav-text">整合SpringData JPA</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">树深时见鹿</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
