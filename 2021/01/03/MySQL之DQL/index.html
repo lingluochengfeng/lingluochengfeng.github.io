@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="行百里者半九十">
+<meta name="description" content="MySQL之DQL基础查询语法：SELECT 查询列表 FROM 表名； 1、查询列表可以是：表中的字段、常量值、表达式、函数2、查询的结果是一个虚拟的表格  查询单个字段：SELECT last_name FROM emplooyees    查询多个字段：SELECT last_name, salary, email FROM emplooyees   查询表中所有字段：SELECT * FR">
 <meta name="keywords" content="mysql之DQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL之DQL">
 <meta property="og:url" content="http://blog.letmefly.cc/2021/01/03/MySQL之DQL/index.html">
 <meta property="og:site_name" content="树深时见鹿">
-<meta property="og:description" content="行百里者半九十">
+<meta property="og:description" content="MySQL之DQL基础查询语法：SELECT 查询列表 FROM 表名； 1、查询列表可以是：表中的字段、常量值、表达式、函数2、查询的结果是一个虚拟的表格  查询单个字段：SELECT last_name FROM emplooyees    查询多个字段：SELECT last_name, salary, email FROM emplooyees   查询表中所有字段：SELECT * FR">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2021-01-03T03:21:32.611Z">
+<meta property="og:updated_time" content="2021-01-03T14:06:40.864Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL之DQL">
-<meta name="twitter:description" content="行百里者半九十">
+<meta name="twitter:description" content="MySQL之DQL基础查询语法：SELECT 查询列表 FROM 表名； 1、查询列表可以是：表中的字段、常量值、表达式、函数2、查询的结果是一个虚拟的表格  查询单个字段：SELECT last_name FROM emplooyees    查询多个字段：SELECT last_name, salary, email FROM emplooyees   查询表中所有字段：SELECT * FR">
 
 
 
@@ -355,7 +355,29 @@
       
 
       
-        
+        <h1 id="MySQL之DQL"><a href="#MySQL之DQL" class="headerlink" title="MySQL之DQL"></a>MySQL之DQL</h1><h2 id="基础查询"><a href="#基础查询" class="headerlink" title="基础查询"></a>基础查询</h2><p>语法：<br>SELECT 查询列表 FROM 表名；</p>
+<p>1、查询列表可以是：表中的字段、常量值、表达式、函数<br>2、查询的结果是一个虚拟的表格</p>
+<ol>
+<li>查询单个字段：<code>SELECT last_name FROM emplooyees</code>   </li>
+<li>查询多个字段：<code>SELECT last_name, salary, email FROM emplooyees</code>  </li>
+<li>查询表中所有字段：<code>SELECT * FROM emplooyees</code>    </li>
+<li>查询常量值：<code>SELECT 100</code>, <code>SELECT &#39;john&#39;</code></li>
+<li>查询表达式：<code>SELECT 100 * 98</code></li>
+<li>查询函数：<code>SELECT VERSION()</code></li>
+<li>起别名：<code>SELECT 100 % 98 AS 结果</code>或<code>SELECT 100 % 98 结果</code></li>
+<li>去重：<code>SELECT DISTINCT department_id FROM employees;</code></li>
+<li>+号的作用：运算符  </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT 100 + 90;两个操作数都为数值型，则做加法运算</span><br><span class="line">SELECT &apos;123&apos; + 90;其中一方为字符型，试图将字符型数值转成数值型，如果转换成功，则继续做加法运算；</span><br><span class="line">SELECT &apos;john&apos; + 90；如果转换失败，则将字符型数值转换成0，</span><br><span class="line">SELECT NULL + 10；只要其中一方为null，则结果肯定为null</span><br></pre></td></tr></table></figure>
+<ol start="10">
+<li>使用CONCAT关键字进行拼接：<code>SELECT CONCAT(&#39;A&#39;, &#39;B&#39;, &#39;C&#39;) AS 结果</code></li>
+<li>条件查询</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">	SELECT</span><br><span class="line">		查询列表</span><br><span class="line">	FROM</span><br><span class="line">		表名</span><br><span class="line">	WHERE</span><br><span class="line">		筛选条件</span><br><span class="line">流程：先走表名，然后筛选条件，最后显示查询</span><br><span class="line"></span><br><span class="line">分类：</span><br><span class="line">	一、 按条件表达式筛选</span><br><span class="line">	条件运算符：&gt;、 &lt;、 =、 !=、 &lt;&gt;(不等于，比!=要好)、 &gt;=、 &lt;=</span><br><span class="line">	二、 按逻辑表达式筛选</span><br><span class="line">	逻辑运算符： and、 or、 not</span><br><span class="line">	三、 模糊查询</span><br><span class="line">		like、 between and、 in、 is null</span><br><span class="line">		</span><br><span class="line"># 一、按条件表达式进行筛选</span><br><span class="line"># 查询工资 &gt; 12000 的员工信息</span><br><span class="line">SELECT * FROM employees WHERE salary &gt; 12000;</span><br><span class="line"></span><br><span class="line"># 查询部门编号不等于90号的员工名和部门编号</span><br><span class="line">SELECT last_name, department_id FROM employees WHERE department_id &lt;&gt; 90</span><br><span class="line"></span><br><span class="line"># 二、按逻辑表达式进行筛选</span><br><span class="line"># 工资在10000到20000之间的员工名</span><br><span class="line">SELECT last_name FROM employees WHERE salary &gt;= 10000 and salary &lt;= 20000</span><br><span class="line"></span><br><span class="line"># 三、模糊查询</span><br><span class="line"># 查询员工名中包含a的员工信息</span><br><span class="line">SELECT * FROM employees WHERE last_name like &apos;%a%&apos;; # 默认不区分大小写</span><br><span class="line">like一般和通配符搭配使用</span><br><span class="line">	%：任意多个字符，包括0个字符</span><br><span class="line">	_：任意单个字符</span><br><span class="line"># 查询员工姓名中第三个字符为n，第五个字符为l的员工姓名：</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;__n_l%&apos;;</span><br><span class="line"># 查询员工名中第二个字符为_的员工名</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;_\_%&apos;;</span><br><span class="line">或</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;_$_%&apos; ESCAPE &apos;$&apos;; # 通过ESCAPE将$表示为转义</span><br><span class="line"></span><br><span class="line">between and:</span><br><span class="line">	注意事项：</span><br><span class="line">	可以提高语句的简洁渡</span><br><span class="line">	包含两端的临界值</span><br><span class="line">	两个临界值不能调换顺序</span><br><span class="line">	两个值的类型必须相同</span><br><span class="line"># 查询员工编号在1到100之间的员工信息</span><br><span class="line">SELECT * FROM employees WHERE employee_id BETWEEN 1 AND 100;</span><br><span class="line"></span><br><span class="line">in：</span><br><span class="line">含义：判断某字段的值是否属于in列表中的某一项</span><br><span class="line">特点：</span><br><span class="line">	使用in提高语句简洁度</span><br><span class="line">	in列表的值类型必须一致或兼容</span><br><span class="line"># 查询员工的工种编号是IT_PROG、AD_PRES、AD_VP中的每一个员工名和工种编号</span><br><span class="line">SELECT last_name, job_id FROM employees WHERE job_id in(&apos;IT_PROG&apos;, &apos;AD_PRES&apos;, &apos;AD_VP&apos;)</span><br><span class="line"></span><br><span class="line">is null：</span><br><span class="line">注意：</span><br><span class="line">	= 或 &lt;&gt;不能用于判断NULL 值</span><br><span class="line">	IS NULL 或 IS NOT NULL可以判断NULL值</span><br><span class="line"># 查询(没)有奖金的员工名和奖金率</span><br><span class="line">SELECT last_name, commission_pct FROM employees WHERE commission_pct IS (NOT) NULL</span><br><span class="line"></span><br><span class="line"># 安全等于 &lt;=&gt;</span><br><span class="line">不仅可以判断NULL，也可以判断数值</span><br><span class="line"></span><br><span class="line"># 查询没有奖金的员工名和奖金率</span><br><span class="line">SELECT last_name, commission_pct FROM employees WHERE commission_pct &lt;=&gt; NULL</span><br></pre></td></tr></table></figure>
+<ol start="12">
+<li></li>
+</ol>
+
       
     </div>
     
@@ -394,6 +416,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/03/Promise/" rel="prev" title="Promise">
+                Promise <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -445,8 +471,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -461,7 +496,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +507,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -483,7 +518,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -513,6 +548,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL之DQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL之DQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础查询"><span class="nav-number">1.1.</span> <span class="nav-text">基础查询</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

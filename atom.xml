@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.letmefly.cc/"/>
-  <updated>2021-01-03T03:21:32.611Z</updated>
+  <updated>2021-01-03T14:04:20.629Z</updated>
   <id>http://blog.letmefly.cc/</id>
   
   <author>
@@ -17,13 +17,38 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Promise</title>
+    <link href="http://blog.letmefly.cc/2021/01/03/Promise/"/>
+    <id>http://blog.letmefly.cc/2021/01/03/Promise/</id>
+    <published>2021-01-03T14:03:37.000Z</published>
+    <updated>2021-01-03T14:04:20.629Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="vue" scheme="http://blog.letmefly.cc/categories/vue/"/>
+    
+    
+      <category term="js" scheme="http://blog.letmefly.cc/tags/js/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MySQL之DQL</title>
     <link href="http://blog.letmefly.cc/2021/01/03/MySQL%E4%B9%8BDQL/"/>
     <id>http://blog.letmefly.cc/2021/01/03/MySQL之DQL/</id>
     <published>2021-01-03T03:20:31.000Z</published>
-    <updated>2021-01-03T03:21:32.611Z</updated>
+    <updated>2021-01-03T14:06:40.864Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="MySQL之DQL"><a href="#MySQL之DQL" class="headerlink" title="MySQL之DQL"></a>MySQL之DQL</h1><h2 id="基础查询"><a href="#基础查询" class="headerlink" title="基础查询"></a>基础查询</h2><p>语法：<br>SELECT 查询列表 FROM 表名；</p><p>1、查询列表可以是：表中的字段、常量值、表达式、函数<br>2、查询的结果是一个虚拟的表格</p><ol><li>查询单个字段：<code>SELECT last_name FROM emplooyees</code>   </li><li>查询多个字段：<code>SELECT last_name, salary, email FROM emplooyees</code>  </li><li>查询表中所有字段：<code>SELECT * FROM emplooyees</code>    </li><li>查询常量值：<code>SELECT 100</code>, <code>SELECT &#39;john&#39;</code></li><li>查询表达式：<code>SELECT 100 * 98</code></li><li>查询函数：<code>SELECT VERSION()</code></li><li>起别名：<code>SELECT 100 % 98 AS 结果</code>或<code>SELECT 100 % 98 结果</code></li><li>去重：<code>SELECT DISTINCT department_id FROM employees;</code></li><li>+号的作用：运算符  </li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT 100 + 90;两个操作数都为数值型，则做加法运算</span><br><span class="line">SELECT &apos;123&apos; + 90;其中一方为字符型，试图将字符型数值转成数值型，如果转换成功，则继续做加法运算；</span><br><span class="line">SELECT &apos;john&apos; + 90；如果转换失败，则将字符型数值转换成0，</span><br><span class="line">SELECT NULL + 10；只要其中一方为null，则结果肯定为null</span><br></pre></td></tr></table></figure><ol start="10"><li>使用CONCAT关键字进行拼接：<code>SELECT CONCAT(&#39;A&#39;, &#39;B&#39;, &#39;C&#39;) AS 结果</code></li><li>条件查询</li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">SELECT</span><br><span class="line">查询列表</span><br><span class="line">FROM</span><br><span class="line">表名</span><br><span class="line">WHERE</span><br><span class="line">筛选条件</span><br><span class="line">流程：先走表名，然后筛选条件，最后显示查询</span><br><span class="line"></span><br><span class="line">分类：</span><br><span class="line">一、 按条件表达式筛选</span><br><span class="line">条件运算符：&gt;、 &lt;、 =、 !=、 &lt;&gt;(不等于，比!=要好)、 &gt;=、 &lt;=</span><br><span class="line">二、 按逻辑表达式筛选</span><br><span class="line">逻辑运算符： and、 or、 not</span><br><span class="line">三、 模糊查询</span><br><span class="line">like、 between and、 in、 is null</span><br><span class="line"></span><br><span class="line"># 一、按条件表达式进行筛选</span><br><span class="line"># 查询工资 &gt; 12000 的员工信息</span><br><span class="line">SELECT * FROM employees WHERE salary &gt; 12000;</span><br><span class="line"></span><br><span class="line"># 查询部门编号不等于90号的员工名和部门编号</span><br><span class="line">SELECT last_name, department_id FROM employees WHERE department_id &lt;&gt; 90</span><br><span class="line"></span><br><span class="line"># 二、按逻辑表达式进行筛选</span><br><span class="line"># 工资在10000到20000之间的员工名</span><br><span class="line">SELECT last_name FROM employees WHERE salary &gt;= 10000 and salary &lt;= 20000</span><br><span class="line"></span><br><span class="line"># 三、模糊查询</span><br><span class="line"># 查询员工名中包含a的员工信息</span><br><span class="line">SELECT * FROM employees WHERE last_name like &apos;%a%&apos;; # 默认不区分大小写</span><br><span class="line">like一般和通配符搭配使用</span><br><span class="line">%：任意多个字符，包括0个字符</span><br><span class="line">_：任意单个字符</span><br><span class="line"># 查询员工姓名中第三个字符为n，第五个字符为l的员工姓名：</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;__n_l%&apos;;</span><br><span class="line"># 查询员工名中第二个字符为_的员工名</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;_\_%&apos;;</span><br><span class="line">或</span><br><span class="line">SELECT last_name FROM employees WHERE last_name like &apos;_$_%&apos; ESCAPE &apos;$&apos;; # 通过ESCAPE将$表示为转义</span><br><span class="line"></span><br><span class="line">between and:</span><br><span class="line">注意事项：</span><br><span class="line">可以提高语句的简洁渡</span><br><span class="line">包含两端的临界值</span><br><span class="line">两个临界值不能调换顺序</span><br><span class="line">两个值的类型必须相同</span><br><span class="line"># 查询员工编号在1到100之间的员工信息</span><br><span class="line">SELECT * FROM employees WHERE employee_id BETWEEN 1 AND 100;</span><br><span class="line"></span><br><span class="line">in：</span><br><span class="line">含义：判断某字段的值是否属于in列表中的某一项</span><br><span class="line">特点：</span><br><span class="line">使用in提高语句简洁度</span><br><span class="line">in列表的值类型必须一致或兼容</span><br><span class="line"># 查询员工的工种编号是IT_PROG、AD_PRES、AD_VP中的每一个员工名和工种编号</span><br><span class="line">SELECT last_name, job_id FROM employees WHERE job_id in(&apos;IT_PROG&apos;, &apos;AD_PRES&apos;, &apos;AD_VP&apos;)</span><br><span class="line"></span><br><span class="line">is null：</span><br><span class="line">注意：</span><br><span class="line">= 或 &lt;&gt;不能用于判断NULL 值</span><br><span class="line">IS NULL 或 IS NOT NULL可以判断NULL值</span><br><span class="line"># 查询(没)有奖金的员工名和奖金率</span><br><span class="line">SELECT last_name, commission_pct FROM employees WHERE commission_pct IS (NOT) NULL</span><br><span class="line"></span><br><span class="line"># 安全等于 &lt;=&gt;</span><br><span class="line">不仅可以判断NULL，也可以判断数值</span><br><span class="line"></span><br><span class="line"># 查询没有奖金的员工名和奖金率</span><br><span class="line">SELECT last_name, commission_pct FROM employees WHERE commission_pct &lt;=&gt; NULL</span><br></pre></td></tr></table></figure><ol start="12"><li></li></ol>]]></content>
     
     <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;MySQL之DQL&quot;&gt;&lt;a href=&quot;#MySQL之DQL&quot; class=&quot;headerlink&quot; title=&quot;MySQL之DQL&quot;&gt;&lt;/a&gt;MySQL之DQL&lt;/h1&gt;&lt;h2 id=&quot;基础查询&quot;&gt;&lt;a href=&quot;#基础查询&quot; class=&quot;headerli
+      
     
     </summary>
     
@@ -479,31 +504,6 @@
     
     
       <category term="JSP、JSTL、EL" scheme="http://blog.letmefly.cc/tags/JSP%E3%80%81JSTL%E3%80%81EL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mysql连接错误</title>
-    <link href="http://blog.letmefly.cc/2019/01/05/mysql%E8%BF%9E%E6%8E%A5%E9%94%99%E8%AF%AF/"/>
-    <id>http://blog.letmefly.cc/2019/01/05/mysql连接错误/</id>
-    <published>2019-01-05T04:05:59.000Z</published>
-    <updated>2019-01-14T01:46:21.245Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="MySQL无法连接"><a href="#MySQL无法连接" class="headerlink" title="MySQL无法连接"></a>MySQL无法连接</h1><p>&emsp;&emsp;之前朋友遇到一个问题，mysql8安装完成之后无法连接到数据库。错误如下：<br><img src="/2019/01/05/mysql连接错误/无法连接.png" alt="mysql无法连接"><br>一开始以为是服务没有启动，后来发现服务已经启动了。无奈只能找了网上的教程，网上说要在my.ini文件中加一句：  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># skip_grant_tables</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;一开始的时候没有找到my.ini这个文件，后来在mysql的根目录下创建了一个my.ini的文件。该配置文件的大致内容如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[mysql]</span><br><span class="line"># 设置mysql客户端默认字符集</span><br><span class="line">default-character-set=utf8</span><br><span class="line"> </span><br><span class="line">[mysqld]</span><br><span class="line"># 设置3306端口</span><br><span class="line">port = 3306</span><br><span class="line"># 设置mysql的安装目录</span><br><span class="line">basedir=C:\wamp-all\mysql-5.7.13</span><br><span class="line"># 设置mysql数据库的数据的存放目录</span><br><span class="line">datadir=C:\wamp-all\sqldata</span><br><span class="line"># 允许最大连接数</span><br><span class="line">max_connections=20</span><br><span class="line"># 服务端使用的字符集默认为8比特编码的latin1字符集</span><br><span class="line">character-set-server=utf8</span><br><span class="line"># 创建新表时将使用的默认存储引擎</span><br><span class="line">default-storage-engine=INNODB</span><br><span class="line"></span><br><span class="line"># skip_grant_tables</span><br></pre></td></tr></table></figure><p>&emsp;&emsp;但是加上这句话之后会导致另外一个错误，如下图所示：<br><img src="/2019/01/05/mysql连接错误/拒绝连接.png" alt="mysql无法连接"><br>无奈又把这句话注销掉，后来几经辗转，在网上看到说可以查看mysql的日志，其日志存放在mysql安装目录下的data下的尾缀为err的文件下，同时百度到了一篇由于data文件夹错误引起的mysql无法访问，附上原博客：<br><a href="https://blog.csdn.net/her__0_0/article/details/79181241" target="_blank" rel="noopener">mysql服务无法启动，ERROR 2003 (HY000): Can’t connect to MySQL server on ‘localhost’ (10061)解决办法</a><br>就是这篇博客让我觉得可能是mysql目录下的data文件夹出现了错误，果断把它删除，然后按照下面的博客所提供的方法尝试之后，mysql成功连接。<br><a href="https://blog.csdn.net/chen97_08/article/details/81484286" target="_blank" rel="noopener">MySQL出现：ERROR 2003 (HY000): Can’t connect to MySQL server on ‘localhost’ (10061)问题解决</a> </p><p>我这里也简单记录下我的操作过程，也算是对得起自己捣鼓的这一个多小时。</p><p>1.首先删除原来的mysql服务，输入命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --remove mysql服务器名</span><br></pre></td></tr></table></figure><p>2.安装mysqld服务器，输入命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqld --install</span><br></pre></td></tr></table></figure><p>前两步是我个人觉得这样会更稳妥一些进行的，不知道会不会对结果产生一些影响。 </p><p>3.删除原数据库目录下的data文件<br>4.启动服务器，输入命令：  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">net start mysql</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">5.初始化mysql，输入命令：</span><br></pre></td></tr></table></figure><ol><li>mysqld –initialize-insecure自动生成无密码的root用户，</li><li>mysqld –initialize自动生成带随机密码的root用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这里我执行的是命令1，执行之后再使用</span><br></pre></td></tr></table></figure></li></ol><p>mysql -uroot<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">命令就可以连接上数据库了.  </span><br><span class="line">连上数据库之后可以对密码进行修改。只需要输入命令：</span><br></pre></td></tr></table></figure></p><p>ALTER USER ‘root‘@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘你的密码’;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">设置好密码之后，退出，重新使用账户密码登录即可。</span><br></pre></td></tr></table></figure></p><p>mysql -uroot -p<br><code>`</code></p><p>以上，也就是这次所踩的坑。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;MySQL无法连接&quot;&gt;&lt;a href=&quot;#MySQL无法连接&quot; class=&quot;headerlink&quot; title=&quot;MySQL无法连接&quot;&gt;&lt;/a&gt;MySQL无法连接&lt;/h1&gt;&lt;p&gt;&amp;emsp;&amp;emsp;之前朋友遇到一个问题，mysql8安装完成之后无法连接到数据
-      
-    
-    </summary>
-    
-      <category term="mysql" scheme="http://blog.letmefly.cc/categories/mysql/"/>
-    
-    
-      <category term="mysql" scheme="http://blog.letmefly.cc/tags/mysql/"/>
     
   </entry>
   
