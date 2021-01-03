@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.letmefly.cc/"/>
-  <updated>2021-01-02T03:14:09.550Z</updated>
+  <updated>2021-01-03T03:21:32.611Z</updated>
   <id>http://blog.letmefly.cc/</id>
   
   <author>
@@ -17,30 +17,45 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>MySQL常见命令</title>
-    <link href="http://blog.letmefly.cc/2021/01/02/MySQL%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4-1/"/>
-    <id>http://blog.letmefly.cc/2021/01/02/MySQL常见命令-1/</id>
-    <published>2021-01-02T03:14:09.000Z</published>
-    <updated>2021-01-02T03:14:09.550Z</updated>
+    <title>MySQL之DQL</title>
+    <link href="http://blog.letmefly.cc/2021/01/03/MySQL%E4%B9%8BDQL/"/>
+    <id>http://blog.letmefly.cc/2021/01/03/MySQL之DQL/</id>
+    <published>2021-01-03T03:20:31.000Z</published>
+    <updated>2021-01-03T03:21:32.611Z</updated>
     
     <summary type="html">
     
     </summary>
     
+      <category term="mysql" scheme="http://blog.letmefly.cc/categories/mysql/"/>
+    
+    
+      <category term="mysql之DQL" scheme="http://blog.letmefly.cc/tags/mysql%E4%B9%8BDQL/"/>
     
   </entry>
   
   <entry>
-    <title>MySQL常见命令</title>
-    <link href="http://blog.letmefly.cc/2021/01/02/MySQL%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/"/>
-    <id>http://blog.letmefly.cc/2021/01/02/MySQL常见命令/</id>
-    <published>2021-01-02T03:13:52.000Z</published>
-    <updated>2021-01-02T03:13:52.400Z</updated>
+    <title>MySQL基础知识</title>
+    <link href="http://blog.letmefly.cc/2021/01/01/MySQL%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"/>
+    <id>http://blog.letmefly.cc/2021/01/01/MySQL基础知识/</id>
+    <published>2021-01-01T03:23:15.000Z</published>
+    <updated>2021-01-03T03:21:38.878Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="MySQL基础知识"><a href="#MySQL基础知识" class="headerlink" title="MySQL基础知识"></a>MySQL基础知识</h1><h2 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h2><ul><li>查看数据库：<code>show databases</code>  </li><li>使用某个数据库：<code>use 数据库名</code>   </li><li>查看某个数据库中的数据表：<code>show tables from 数据库名</code></li><li>查看现在使用的数据库：<code>select database()</code></li><li>创建数据表：<code>create table 表名(id int, name varchar(20));</code></li><li>查看表结构：<code>desc 表名</code></li><li>查看表中的数据：<code>select * from 表名</code></li><li>插入数据：<code>insert into 表名(id, name) values(&#39;2&#39;, &#39;rose&#39;)</code></li><li>更新数据：<code>update 表名 set name=&#39;lilei&#39; where id = 1</code></li><li>删除数据：<code>delete from 表名 where id = 1</code></li><li>查看数据库版本：<code>select version()</code></li></ul><h2 id="MySQL语法规范"><a href="#MySQL语法规范" class="headerlink" title="MySQL语法规范"></a>MySQL语法规范</h2><ol><li>不区分大小写，但建议关键字大写，表名、列名小写；</li><li>每条命令最好用分号结尾</li><li>每条命令根据需要可以进行缩进、换行</li><li>注释：单行注释：#注释文字，–注释文字；多行注释：/<em> 注释文字 </em>/</li></ol>]]></content>
     
     <summary type="html">
     
+      
+      
+        &lt;h1 id=&quot;MySQL基础知识&quot;&gt;&lt;a href=&quot;#MySQL基础知识&quot; class=&quot;headerlink&quot; title=&quot;MySQL基础知识&quot;&gt;&lt;/a&gt;MySQL基础知识&lt;/h1&gt;&lt;h2 id=&quot;常见命令&quot;&gt;&lt;a href=&quot;#常见命令&quot; class=&quot;headerli
+      
+    
     </summary>
     
+      <category term="mysql" scheme="http://blog.letmefly.cc/categories/mysql/"/>
+    
+    
+      <category term="mysql常见命令" scheme="http://blog.letmefly.cc/tags/mysql%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/"/>
     
   </entry>
   
